@@ -1,0 +1,28 @@
+#header {
+    width: 826px;
+    margin: 0 auto;
+}
+
+#body {
+    width: 800px;
+    margin: 0 auto;
+}
+
+#footer-container {
+    min-height: 60px;
+    margin-top: 21px;
+    margin-bottom: 21px;
+    padding-top: 21px;
+    padding-bottom: 21px;
+    border-top: 1px solid #eee;
+}
+
+#footer {
+    width: 800px;
+    margin: 0 auto;
+}
+
+.separator {
+    font-size: 0px;
+    height: 10px;
+}
