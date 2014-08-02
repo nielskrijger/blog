@@ -1,6 +1,6 @@
-# @PostConstruct swallows exceptions; catch and log them instead
+# @PostConstruct Swallows Exceptions; Catch and Log Them Instead
 
-While troubleshooting a non-working web service that was deployed on WebLogic 10.3.6. no error was showing up in the logs. This webservice was implemented using an in-only message exchange pattern (e.g. fire & forget) so I didn't have a response message I could verify neither. 
+While troubleshooting a non-working web service that was deployed on WebLogic 10.3.6. no error was showing up in the logs. This webservice was implemented using an in-only message exchange pattern (e.g. fire & forget) so I didn't have a response message I could verify neither.
 
 After a more careful look in the logs I noticed the logging completely stopped after the web service invoked a specific EJB. Unable to debug any further I changed the in-only MEP to an in-out MEP (request & response) and noticed the following error in the response message:
 

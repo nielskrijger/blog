@@ -9,9 +9,9 @@ After experiencing some troubles with blocking sessions in Oracle DB I needed to
 - Average hourly processing time in milliseconds
 - Program memory usage (PGA only)
 
-(tested on Oracle Database 11g Enterprise Edition Release 11.2.0.3.0) 
+(tested on Oracle Database 11g Enterprise Edition Release 11.2.0.3.0)
 
-    WITH 
+    WITH
       sess_time AS (
         SELECT sid, ROUND(SUM(value) / 1000, 0) AS milliseconds
         FROM gv$sess_time_model
@@ -19,10 +19,10 @@ After experiencing some troubles with blocking sessions in Oracle DB I needed to
       sess_io AS (
         SELECT sid, block_gets + consistent_gets + physical_reads + block_changes + consistent_changes + optimized_physical_reads AS io#
         FROM gv$sess_io io)
-    SELECT 
+    SELECT
       p.spid, -- The system process identifier
       s.sid, -- The session identifier
-      s.serial#, 
+      s.serial#,
       /*
         Status:
         - ACTIVE - Session currently executing SQL
@@ -32,9 +32,9 @@ After experiencing some troubles with blocking sessions in Oracle DB I needed to
         - SNIPED - Session inactive, waiting on the client
         */
       s.status,
-      s.machine, 
-      s.username, 
-      s.osuser, 
+      s.machine,
+      s.username,
+      s.osuser,
       s.program, -- The program in process
       /*
         The blocking session status indicates whether there is a blocking session. Values are:
@@ -48,18 +48,17 @@ After experiencing some troubles with blocking sessions in Oracle DB I needed to
       ROUND(sess_io.io#  / (SYSDATE - s.logon_time) / 24, 0) AS "AVG HOURLY IO#",
       ROUND(sess_time.milliseconds  / (SYSDATE - s.logon_time) / 24, 0) AS "AVG HOURLY PROCESS TIME (ms)",
       ROUND(p.pga_used_mem / 1024, 0) AS "PGA USED MEM (kB)" -- Program global area memory space usage in KB
-    FROM 
+    FROM
       gv$session s,
       sess_time,
       gv$process p,
       sess_io
     WHERE
       s.paddr = p.addr
-      AND sess_time.sid = s.sid 
+      AND sess_time.sid = s.sid
       AND sess_io.sid = s.sid
       AND s.type != 'BACKGROUND' -- Exclude BACKGROUND processes, usually they just clutter the result
-    ORDER BY 
+    ORDER BY
       s.status ASC;
 
 Or view on [Github](https://gist.github.com/5419516.git).
-  
