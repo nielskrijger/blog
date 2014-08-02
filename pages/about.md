@@ -1,10 +1,10 @@
 # About
 I am a front-end and back-end developer from Utrecht in The Netherlands.
 
-Most of my time I work with [Node.js](http://nodejs.org/) and do backend development. In my spare time I write software using [Golang](http://golang.org/) and [Apache Cordova](http://cordova.apache.org/). 
+Most of my time I work with [Node.js](http://nodejs.org/) and do backend development. In my spare time I write software using [Golang](http://golang.org/) and [Apache Cordova](http://cordova.apache.org/).
 
 ### IceMobile (2013-present)
-As backend / DevOps engineer I've been working on backend solutions with the following technologies:
+As backend / DevOps engineer I've been working with the following technologies:
 
 - Node.js
 - Chef
@@ -13,6 +13,7 @@ As backend / DevOps engineer I've been working on backend solutions with the fol
 - MongoDB
 - JavaEE + Spring
 - Oracle MiddleWare stack (WLS, Oracle DB)
+- Redis
 
 ### Benian (2001-present)
 My own company. Hosted several high-traffic flash game web portals and developed websites for small companies using the following technologies:
@@ -20,14 +21,15 @@ My own company. Hosted several high-traffic flash game web portals and developed
 - PHP, Python, Node.js
 - HTML
 - SQL / MySQL
+- DynamoDB
 - Various frameworks (Symfony, Zend, Groovy, Express.js and a custom PHP framework)
 - Various CMS (Drupal, Joomla and others)
-
 
 ### Oracle (2011-2013)
 Worked as a junior SOA consultant with the following technologies:
 
 - WebLogic
+- Glassfish
 - Oracle DB
 - JavaEE
 - XSD/SOAP/WSDL (contract-driven)
@@ -36,8 +38,8 @@ Worked as a junior SOA consultant with the following technologies:
 - Oracle APEX
 - Oracle Data Integrator
 
-### Cape Group (2009-2010)
-Cape Group is a systems integrator using web portal products to deliver solutions using the following technologies:
+### CAPE Groep (2009-2010)
+CAPE Groep is a systems integrator using web portal products to deliver solutions using the following technologies:
 
 - Mendix (BPMN-based)
 - Java

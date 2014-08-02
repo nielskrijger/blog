@@ -4,7 +4,7 @@ This post is inspired by a blogpost of Kevin Sookocheff on [choosing a hypermedi
 
 ## What is Hypermedia?
 
-I won't explain Hypermedia in detail, others can do that much better; I particularly like the article of Martin Fowler on [Richardson's REST Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html). In this model the most matured REST API designs include what is referred to as **Hypermedia Controls**. Hypermedia Controls tell the service consumer what it can or should do next. 
+I won't explain Hypermedia in detail, others can do that much better; I particularly like the article of Martin Fowler on [Richardson's REST Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html). In this model the most matured REST API designs include what is referred to as **Hypermedia Controls**. Hypermedia Controls tell the service consumer what it can or should do next.
 
 For example, instead of:
 
@@ -33,18 +33,18 @@ The advantage of these hypermedia controls is the API becomes more easily discov
 In this blogpost I continue with the design of [Kevin](http://sookocheff.com/posts/2014-03-11-on-choosing-a-hypermedia-format/). who used simple player-model to demonstrate the differences between various hypermedia types. The player-representation of this model looks like this (this is taken directly from Kevin's blogpost):
 
 	GET https://api.example.com/player/1234567890
-	
+
 	{
 		"playerId": "1234567890",
    	 	"alias": "soofaloofa",
     	"displayName": "Kevin Sookocheff",
-    	"profilePhotoUrl": "https://api.example.com/player/1234567890/avatar.png" 
+    	"profilePhotoUrl": "https://api.example.com/player/1234567890/avatar.png"
 	}
-	
+
 A collection of players may look like this:
 
 	GET https://api.example.com/player/1234567890/friends
-	
+
 	[
         {
             "playerId": "1895638109",
@@ -59,7 +59,7 @@ A collection of players may look like this:
             "profilePhotoUrl": "https://api.example.com/player/8371023509/avatar.png"
         }
     ]
-    
+
 Checkout the following Gist to compare implementations of this model in JSON-LD, HAL, Collection+JSON and Siren: [https://gist.github.com/soofaloofa/9350847](https://gist.github.com/soofaloofa/9350847).
 
 ## JSON API
@@ -69,7 +69,7 @@ JSON API is a hypermedia specification that works best for smart clients able to
 The single player model would look like this using JSON API:
 
 	GET https://api.example.com/player/1234567890
-	
+
     {
         "players": [{
             "id": "1234567890",
@@ -79,13 +79,13 @@ The single player model would look like this using JSON API:
             "href": "https://api.example.com/player/1234567890",
         }]
     }
-    
+
 Similar to Collection+JSON the player model is wrapped in an array the same way a collection resource would be:
 
 	"players": [{
 		...
 	}]
-	
+
 The advantage of this is the client parser can parse single resources the same way it parses collection resources. The disadvantage is it feels a bit odd to represent a resource in an array if you know there is at most one single resource within an array.
 
 ### Resource identity
@@ -97,35 +97,84 @@ Is this a problem? It might.
 Often you cannot represent a resource using a single [idempotent](http://en.wikipedia.org/wiki/Idempotence) [business/natural key](http://en.wikipedia.org/wiki/Natural_key). For example, you might represent comments on a blogpost as follows:
 
 	GET https://api.example.com/post/51/comments/1
-	
+
     {
         "comments": [{
-            "id": "1", 
+            "id": "1",
             "blogId": "51",
             "message": "This is the first comment"
         }]
     }
-    
+
 In this example the combination of `id` and `blogId` would represent a compound key; only combined they identify the resource. To adapt to JSON API you might change `id` to `commentId` and substitute `id` with a [surrogate key](http://en.wikipedia.org/wiki/Surrogate_key).
 
 So while the `id` in JSON API might appear simple and elegant, its use might be limiting in advanced use cases.
 
-### Players collection
+### JSON API collection
 
 
-	GET https://api.example.com/player/1234567890/friends
-	
     {
-        "players": [{
-            "id": "1234567890",
-            "name": "soofaloofa",
-            "displayName": "Kevin Sookocheff",
-            "profilePhotoUrl": "href": "https://api.example.com/player/1234567890/avatar.png"
-        }, {
-            "id": "9876543210",
-            "name": "Martin Liu",
-            "displayName": "Kevin Sookocheff",
-            "profilePhotoUrl": "href": "https://api.example.com/player/1234567890/avatar.png"
-        }]
+        "friends": [
+            {
+                "id": "1234567890",
+                "name": "soofaloofa",
+                "displayName": "Kevin Sookocheff",
+                "profilePhotoUrl": "https://api.example.com/player/1234567890/avatar.png"
+            },
+            {
+                "id": "9876543210",
+                "name": "Martin Liu",
+                "displayName": "Kevin Sookocheff",
+                "profilePhotoUrl": "https://api.example.com/player/1234567890/avatar.png"
+            }
+        ],
+        "links": {
+
+        },
+        "meta": {
+            "artists": {
+                "page": 1,
+                "page_size": 10,
+                "count": 3,
+                "include": [],
+                "page_count": 1,
+                "previous_page": null,
+                "previous_href": null,
+                "next_page": 2,
+                "next_href": "https://api.example.com/player/1234567890/friends?page=2"
+            }
+        }
     }
 
+
+- Actions
+- Collection metadata
+- Sorting
+- Pagination
+- Keyword style
+
+
+<table class="table table-striped">
+  <tr>
+    <th>Hypermedia Type</th>
+	<th>Links</th>
+	<th>Metadata</th>
+	<th>Keyswords</th>
+	<th>Object wrapper</th>
+	<th>Pagination</th>
+	<th>Sorting</th>
+	<th>Error</th>
+	<th>Matches original</th>
+  </tr>
+  <tr>
+	<td>JSON API</td>
+	<td>Yes</td>
+	<td>No specifics</td>
+	<td>Normal</td>
+	<td>In array</td>
+	<td>No</td>
+	<td>Yes</td>
+	<td>Yes</td>
+	<td>4/5</td>
+  </tr>
+</table>
