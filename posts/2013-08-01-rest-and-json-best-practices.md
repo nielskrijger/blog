@@ -15,14 +15,14 @@ In all guidelines I've assumed the REST service returns JSON because it is the m
 * Use PUT when creating a new resource and the client determines the resource identifier/URI. For example, when the business key is a UUID set by the client, use PUT to create the resource.
 * Use PUT if you want to overwrite an existing resource (e.g. update all properties of /users/bob).
 * Use PATCH if you want to partially update an existing resource (e.g. only update the first and last name of a user entity). While PATCH is supported fairly well, it is not a formal HTTP standard and should be avoided if service consumers are not able to make PATCH requests.
-* Use POST if you want to partially update an existing resource (e.g. change the password of /users/bob but leave the rest intact) 
+* Use POST if you want to partially update an existing resource (e.g. change the password of /users/bob but leave the rest intact)
 * If the client is limited to making POST and GET requests add an additional query parameter to the url, for example /users/bob?method=DELETE. Be warned that this breaks with every principle of HTTP! A perceived safe and idempotent GET request would no longer be safe nor idempotent. Software that is HTTP-aware may no longer work propery, for example caching. Best to avoid this practice at all costs.
 * Avoid custom HTTP headers if they are important for your request; include them in the request body instead to keep a clean interface. If you do decide to include custom HTTP headers do no longer use "X-" as a prefix (e.g. "X-Powered-By"), the "X-" is a convention that is now deprecated.
 
 ### HTTP result codes
 
 The following list contains the more relevant REST-service HTTP status codes.
-A common mistake is to return a 200 OK when something went wrong. REST services ought to utilize what HTTP has on offer. 
+A common mistake is to return a 200 OK when something went wrong. REST services ought to utilize what HTTP has on offer.
 200 OK: when a request was processed successfully, for example when a partial update succeeded.
 
 * 201 CREATED: when creating a new resource instance using POST succeeded. Send the new resource representation in the body.
@@ -44,15 +44,15 @@ A common mistake is to return a 200 OK when something went wrong. REST services 
 
 ### URL format
 
-* Keep the base API url short, for example http://api.example.com.
-* Keep urls lowercase, avoid camelCase (even for slugs!) and use hyphens in your slugs rather than underscores. Treating /users/bob and /users/Bob as two different instances is confusing (and most likely incorrect as well).
+* Keep the base API url short, for example `http://api.example.com`.
+* Keep urls lowercase, avoid camelCase (even for slugs!) and use hyphens in your slugs rather than underscores. Treating `/users/bob` and `/users/Bob` as two different instances is confusing (and most likely incorrect as well).
 * Use nouns in urls, not verbs.
-* Pagination: /users?limit=20&offset=60
-* Search:  /search?q=my+search 
-* Ordering:  /posts?sortByAsc=date and /posts?sortByDesc=date
-* Search within a specific collection: /users/search?q=bob.
-* Versioning: use /v1/users (an alternative is to change the media type but I advise against this; it is too obscure, you would be able to use the same url for two or more different representations)
-* Request partial result: /users/bob?fields=firstName,lastName
+* Pagination: `/users?limit=20&offset=60`
+* Search: `/search?q=my+search`
+* Ordering: `/posts?sort=date` and `/posts?sort=-date` for descending.
+* Search within a specific collection: `/users/search?q=bob`.
+* Versioning: use `/v1/users`, do not change the media type so you guarantee the same url can't be used for different representations.
+* Request partial result: `/users/bob?fields=firstName,lastName`
 * Avoid communicating minor version numbers (like 1.1), minor versions must be backwards compatible and can be published without worrying about consumer compatibility. Only backwards incompatibile changes warrent releasing a new version in the url of your service (also, limiting the number of supported versions reduces the maintenance burden).
 * Don't expose surrogate keys like generated sequence numbers in the interface, use a slug or some other generated string.
 
@@ -60,10 +60,10 @@ A common mistake is to return a 200 OK when something went wrong. REST services 
 
 * Write JSON in camelCase, never snake_case. JSON is most likely consumed by front-end JavaScript and JSON originated from JavaScript; stick to the JavaScript convention.
 * Send as much data as possible about a resource instance, even if the consumer is unlikely to consume it all. Only hide data properties that are security sensitive or used internally only (for example, a surrogate key).
-* Avoid unnecessary data envelopes. The client knows he is requisting a user when the url is `/users/bob`, wrapping it like `{ "user": { "firstName": "Bob" } }` is meaningless. 
+* Avoid unnecessary data envelopes. The client knows he is requisting a user when the url is `/users/bob`, wrapping it like `{ "user": { "firstName": "Bob" } }` is meaningless.
 * Forget about UNIX timestamps, use ISO8601 timestamps without exception in your service protocol. UNIX timestamps do not support timezones nor milliseconds.
 * Every resource instance in a service response must contain a href attribute containing its location. The developer consuming your service should get accustomed to these href attributes as much as possible so he feels comfortable using them to link to other resources.
-* Prefer linking resources to embedding resources unless the linked resource is almost always required while fetching the main resource. This is context-dependent. For example, a GET /users/bob might return the following:
+* Prefer linking resources to embedding resources unless the linked resource is almost always required while fetching the main resource. This is context-dependent. For example, a GET `/users/bob` might return the following:
 
         {
             "firstName": "Bob",
@@ -73,8 +73,8 @@ A common mistake is to return a 200 OK when something went wrong. REST services 
             }
         }
 
-* When accessing the address is fairly uncommon this response works well for service consumers; the client has sufficient details to retrieve the address if it needs to. However, if in say 80% of requests the consumer also requests the user's address you can lower the number of network requests by embedding the resource within the GET /users/bob response body. 
-* When a resource is available under under two different urls (a scenario common when  embedding resources) consider using partial result queries instead (e.g. GET /users/bob?fields=firstName,lastLame. Having two different urls for the same resource may improperly invalidate a HTTP cache causing two different representations of the same resource to exist at the same time. 
+* When accessing the address is fairly uncommon this response works well for service consumers; the client has sufficient details to retrieve the address if it needs to. However, if in say 80% of requests the consumer also requests the user's address you can lower the number of network requests by embedding the resource within the GET /users/bob response body.
+* When a resource is available under under two different urls (a scenario common when  embedding resources) consider using partial result queries instead (e.g. GET /users/bob?fields=firstName,lastLame. Having two different urls for the same resource may improperly invalidate a HTTP cache causing two different representations of the same resource to exist at the same time.
 * Be descriptive in error messages and include a code that can be interpreted by a machine. This is useful for machine interpretation, and internationalization in particular.
 
         {

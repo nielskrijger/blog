@@ -1,6 +1,6 @@
 # Which Hypermedia type to choose? JSON-LD, HAL, Collection+JSON, Siren and JSON API.
 
-This post is inspired by a blogpost of Kevin Sookocheff on [choosing a hypermedia types](http://sookocheff.com/posts/2014-03-11-on-choosing-a-hypermedia-format/). Kevin compares four hypermedia types: [JSON-LD](http://json-ld.org/), [HAL](http://stateless.co/hal_specification.html), [Collection+JSON](http://amundsen.com/media-types/collection/), and [Siren](https://github.com/kevinswiber/siren). Continuing on his work in this blog I review a fifth one: [JSON API](http://jsonapi.org/). Furthermore I want to compare what sets these five different hypermedia types apart to aid you in selecting your preferred hypermedia type or perhaps designing your own.
+This post is inspired by a blogpost of Kevin Sookocheff on [choosing a hypermedia types](http://sookocheff.com/posts/2014-03-11-on-choosing-a-hypermedia-format/). Kevin compares four hypermedia types: [JSON-LD](http://www.w3.org/TR/json-ld/), [HAL](http://stateless.co/hal_specification.html), [Collection+JSON](http://amundsen.com/media-types/collection/), and [Siren](https://github.com/kevinswiber/siren). Continuing on his work in this blog I review a fifth one: [JSON API](http://jsonapi.org/). Furthermore I want to compare what sets these five different hypermedia types apart to aid you in selecting your preferred hypermedia type or perhaps designing your own.
 
 ## What is Hypermedia?
 
@@ -90,7 +90,7 @@ The advantage of this is the client parser can parse single resources the same w
 
 ### Resource identity
 
-A key requirement for any hypermedia type is to be able to link to other resources. JSON API forces you to identify resources with the reserved keyword `id`; as a result in our player model the attribute `playerId` was replaced by `id`.
+A key requirement of any hypermedia type is to be able to link to other resources. JSON API forces you to identify resources with the reserved keyword `id`; as a result in our player model the attribute `playerId` was replaced by `id`.
 
 Is this a problem? It might.
 
@@ -106,7 +106,11 @@ Often you cannot represent a resource using a single [idempotent](http://en.wiki
         }]
     }
 
-In this example the combination of `id` and `blogId` would represent a compound key; only combined they identify the resource. To adapt to JSON API you might change `id` to `commentId` and substitute `id` with a [surrogate key](http://en.wikipedia.org/wiki/Surrogate_key).
+In this example the `comment` maintains a reference to the blogpost it was posted in and the `id` is a sequential number incremented every time a comment is added to the blogpost. While you can argue whether this is good design or not; in practice such relationships are fairly common.
+
+The comment can only be identified by the combination of `id` and `blogId` and forms a compound key. This is incompatible with a single `id`-attribute. To adapt to JSON API you might change `id` to `commentId` and substitute `id` with a [surrogate key](http://en.wikipedia.org/wiki/Surrogate_key).
+
+Also, when using an UUID as an ID supporting requests like `GET http://api.example.com/persons/{id},{id},{id}` might cause you to hit the [2000-character limit](http://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers) for an URL.
 
 So while the `id` in JSON API might appear simple and elegant, its use might be limiting in advanced use cases.
 
@@ -146,35 +150,143 @@ So while the `id` in JSON API might appear simple and elegant, its use might be 
         }
     }
 
+# Hypermedia types comparisons
 
-- Actions
-- Collection metadata
-- Sorting
-- Pagination
-- Keyword style
+In the table below I compare functions and format of the hypermedia types. The table contains the following:
 
+- *Primary keywords*: a list of keywords used in the format.
+- *Embedded resources*: whether resources from another type can be embedded in the result of another type.
+- *Single object wrapper*: whether or not a single resource representation is wrapped (for example `{ persons: [ { name: 'Frank' } ] }` instead of `{ name: 'Frank' }` ).
+- *Pagination*: whether pagination has been specified. To fully support this feature the response should include a size or total so the client knows how many pages are available. If the specification only lists the use of `next/prev`-relationships this is marked as `minimal` supprt.
+- *Sorting*: whether a collection sort standard is specified (e.g. `/persons/?sort=name`).
+- *Error*: whether a standard error format is specified.
+- *Patch*: whether PATCH-requests are supported. PATCH requests allow partial updates of a resource.
+- *Query*: whether the client can determine which queries are supported on a collection resource.
+- *Partial result*: whether the client can filter the result to specific fields.
+- *Matches original*: a subjective measure that expresses how much the hypermedia type resembles the original (vanilla) model specified in the beginning.
+- *Complexity*: a subjective measure that expresses how difficult it is to implement a client and server implementation of the standard.
 
 <table class="table table-striped">
   <tr>
     <th>Hypermedia Type</th>
-	<th>Links</th>
-	<th>Metadata</th>
-	<th>Keyswords</th>
-	<th>Object wrapper</th>
+	<th>Primary keywords</th>
+	<th>Embedded resources</th>
+	<th>Single object wrapper</th>
 	<th>Pagination</th>
 	<th>Sorting</th>
 	<th>Error</th>
+	<th>Patch</th>
+	<th>Query</th>
+	<th>Partial result</th>
 	<th>Matches original</th>
+	<th>Complexity</th>
   </tr>
   <tr>
 	<td>JSON API</td>
+	<td>id, links, meta, linked, type, href</td>
 	<td>Yes</td>
-	<td>No specifics</td>
-	<td>Normal</td>
 	<td>In array</td>
 	<td>No</td>
 	<td>Yes</td>
 	<td>Yes</td>
+	<td>Yes</td>
+	<td>No</td>
+	<td>Yes</td>
+	<td>3/5</td>
+	<td>Medium</td>
+  </tr>
+  <tr>
+	<td>HAL</td>
+	<td>_links, _embedded, curies</td>
+	<td>Yes</td>
+	<td>No</td>
+	<td>Minimal</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
 	<td>4/5</td>
+	<td>Low</td>
+  </tr>
+  <tr>
+	<td>Collection+JSON</td>
+	<td>links, collection, items, href, data, queries, template, version, error</td>
+	<td>No</td>
+	<td>In array</td>
+	<td>No</td>
+	<td>No</td>
+	<td>Yes</td>
+	<td>No</td>
+	<td>Yes</td>
+	<td>No</td>
+	<td>2/5</td>
+	<td>Medium</td>
+  </tr>
+  <tr>
+	<td>Siren</td>
+	<td>class, properties, entities, links, actions, title, rel, href, type</td>
+	<td>Yes</td>
+	<td>In properties</td>
+	<td>Minimal</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>Yes</td>
+	<td>No</td>
+	<td>2/5</td>
+	<td>High</td>
+  </tr>
+  <tr>
+	<td>JSON+LD</td>
+	<td>@context, @id, @value, @language, @type, @container, @list, @graph ...</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>No</td>
+	<td>3/5</td>
+	<td>High</td>
   </tr>
 </table>
+
+In this table I did not include possible extensions to the hypermedia type; Collection + JSON in particular provides many of the above features using [extensions](https://github.com/collection-json/extensions).
+
+#### JSON API 
+JSON API is the only type specifying how to sort, do partial result requests and support PATCH-requests, but it doesn't specify pagination nor querying. So despite JSON-API formalizes a lot other specifications don't, it is not complete.
+
+What sets JSON-API apart from the other specifications is it focusses heavily on an `id`-property.
+
+#### JSON-LD
+JSON-LD looks deceptively simple based on the example from their homepage:
+
+    {
+        "@context": "http://json-ld.org/contexts/person.jsonld",
+        "@id": "http://dbpedia.org/resource/John_Lennon",
+        "name": "John Lennon",
+        "born": "1940-10-09",
+        "spouse": "http://dbpedia.org/resource/Cynthia_Lennon"
+    }
+
+However, supporting all possible ways to structure the linked data (http://www.w3.org/TR/json-ld-api/) is a daunting task. In addition JSON-LD does only one thing really, which is linking resources. Fair enough it does this better than any of the other specifications and enables strict type checking, but given its scope and complexity JSON-LD looks to be more of an academic exercise rather than a current practical solution. 
+
+I cannot beg to question, if you have a use case that requires the formality of JSON-LD, why not use WSDL/SOAP instead?
+
+# Conclusion
+
+Which hypermedia type works for you depends on your use case. In its core a hypermedia type should tell what the client can do next. JSON-LD is the most pure of 
+
+Some hypermedia types go one step further and allow embedding resources within requests to improve efficiency (HAL, JSON-API and Siren). Some types go further still and define how your API should look like (JSON-API, Collection+JSON, Siren); however none of these do so completely and are no substitute for API documentation. 
+
+Siren serves a niche by focussing on representing entities; if you want to hydrate JSON response directly to a persistable entity this might be a good option.
+
+Collection+JSON focusses on a queryable collection which may work for you if your API focusses heavily on search and want to flexibly add new search capabilities.
+
+When designing an API that is going to be consumed by a lot of different types of consumers you likely want to use HAL. HAL leaves most of the original model intact making it easiest to adopt.
+
+Public adoption of hypermedia types has been poor at best. While HAL has been most popular thus far, JSON API provides tool support for [several languages](http://jsonapi.org/examples/). It is unlikely that any of the above hypermedia types offers signficant advantages in most use cases unless you know who the API consumer is and tools are available to both generate and consume that hypermedia type.
+
+If any of the above contexts applies to you and you see significant advantage in using them, go ahead. If not, plain old JSON with proper API documentation works well too.
