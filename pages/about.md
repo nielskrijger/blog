@@ -1,10 +1,10 @@
 # About
-I am a front-end and back-end developer from Utrecht in The Netherlands.
+I am a front- and back-end developer from Utrecht in The Netherlands.
 
-Most of my time I work with [Node.js](http://nodejs.org/) and do backend development. In my spare time I write software using [Golang](http://golang.org/) and [Apache Cordova](http://cordova.apache.org/).
+Professionally I work with [Java](https://www.java.com)/[OracleDB](http://www.oracle.com/us/products/database/overview/index.html) and [Node.js](http://nodejs.org/)/[MongoDB](http://www.mongodb.org/). In my spare time I write software using [Golang](http://golang.org/)/[DynamoDB](http://aws.amazon.com/dynamodb/) and [Apache Cordova](http://cordova.apache.org/).
 
 ### IceMobile (2013-present)
-As backend / DevOps engineer I've been working with the following technologies:
+As back-end / DevOps engineer I've been working with the following technologies:
 
 - Node.js
 - Chef
@@ -13,17 +13,18 @@ As backend / DevOps engineer I've been working with the following technologies:
 - MongoDB
 - JavaEE + Spring
 - Oracle MiddleWare stack (WLS, Oracle DB)
-- Redis
 
 ### Benian (2001-present)
 My own company. Hosted several high-traffic flash game web portals and developed websites for small companies using the following technologies:
 
-- PHP, Python, Node.js
-- HTML
-- SQL / MySQL
-- DynamoDB
-- Various frameworks (Symfony, Zend, Groovy, Express.js and a custom PHP framework)
-- Various CMS (Drupal, Joomla and others)
+- PHP, Python, Ruby, Javascript, Java, Scala
+- HTML/XHTML
+- SQL
+- MySQL, PostgreSQL, Cassandra, DynamoDB
+- Various web frameworks (Symfony, Zend, Grails, Ruby on Rails, Play!, DropWizard, Express.js, a custom PHP framework and Martini)
+- Several PHP CMS systems (Drupal, Joomla)
+
+More recently I've been developing Mobile apps using [Apache Cordova](http://cordova.apache.org/).
 
 ### Oracle (2011-2013)
 Worked as a junior SOA consultant with the following technologies:
@@ -33,16 +34,19 @@ Worked as a junior SOA consultant with the following technologies:
 - Oracle DB
 - JavaEE
 - XSD/SOAP/WSDL (contract-driven)
+- PL/SQL
 - Oracle SOA & BPM Suite
 - Oracle WebCenter Content/Portal/Spaces
 - Oracle APEX
 - Oracle Data Integrator
+- Oracle Business Intelligence Enterprise
 
-### CAPE Groep (2009-2010)
-CAPE Groep is a systems integrator using web portal products to deliver solutions using the following technologies:
+### CAPE Group (2009-2010)
+CAPE Group is a systems integrator using web portal products to deliver solutions using the following technologies:
 
 - Mendix (BPMN-based)
 - Java
+- JasperSoft (BI)
 
 ### Other experience
 Other IT-related jobs I've had were:
