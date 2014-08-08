@@ -34,14 +34,14 @@ The advantage of these hypermedia controls is the API becomes discoverable; all 
 
 In my review of JSON:API I continue with the design of [Kevin](http://sookocheff.com/posts/2014-03-11-on-choosing-a-hypermedia-format/) who uses a simple player-model to demonstrate the differences between various hypermedia types. The player-representation of this model looks like this (this is taken directly from Kevin's blogpost):
 
-	GET https://api.example.com/player/1234567890
+    GET https://api.example.com/player/1234567890
 
-	{
-		"playerId": "1234567890",
-   	 	"alias": "soofaloofa",
-    	"displayName": "Kevin Sookocheff",
-    	"profilePhotoUrl": "https://api.example.com/player/1234567890/avatar.png"
-	}
+    {
+        "playerId": "1234567890",
+        "alias": "soofaloofa",
+        "displayName": "Kevin Sookocheff",
+        "profilePhotoUrl": "https://api.example.com/player/1234567890/avatar.png"
+    }
 
 A naive representation of a collection of players may look like this:
 
@@ -404,8 +404,8 @@ Public adoption of hypermedia types has been poor at best, in fact while researc
 
 Having said that, HAL appears to be the best known and most popular hypermedia type currently (and the easiest to implement), arguably JSON:API comes in second with tool support for [several languages](http://jsonapi.org/examples/). The other hypermedia types feel very much specialized and suitable for niche use cases only. Unless you control both the producer and client implementations be wary about adopting any hypermedia type; support for them is poor and they are frequently misunderstood. Adopting a hypermedia type might very well just complicate your API and cost you a lot of time without delivering actual benefits.
 
-If you do need very strict and rigid API's that ought to be automatically interpreted in a wide range of tools; do appreciate this has already been achieved a decade ago and is called SOAP/WSDL/UDDI. While these technologies work in many business (and controlled) environments these technologies never caught on in the public API space simply because the technology is too complicated and cumbersome to use. Many of hypermedia examples I've seen reminded me of WSDL/SOAP/UDDI. I simply don't believe the more advanced hypermedia types (i.e. all of them except HAL) work unless proper tool support for them is available in a wide range of languages.
+If you do need very strict and rigid API's that ought to be automatically interpreted in a wide range of tools; you should appreciate this has already been achieved a decade ago and is called SOAP/WSDL/UDDI. While these technologies work in many business (and thus controlled) environments these technologies never caught on in the public API space simply because the technology is too complicated and cumbersome to use. Many of the hypermedia examples I've seen reminded me of WSDL/SOAP/UDDI. I simply don't believe the more advanced hypermedia types (i.e. all of them except HAL) work unless proper tool support for them is available in a wide range of programming languages.
 
-Reviewing all these hypermedia types also made me realize that if you'd want to support all possible advanced use cases within a single hypermedia type you'd have to create a monstrosity; an inconceivable mess of features no-one could make sense of. Much like SOAP/WSDL/UDDI in fact.
+Reviewing these hypermedia types also made me realize that if you'd want to support all possible advanced use cases within a single hypermedia type you'd have to create a monstrosity; an inconceivable mess of features no-one could make sense of. Much like SOAP/WSDL/UDDI in fact.
 
-There are definitely use cases where a hypermedia type may way work and provide significant benefits. If you're unsure, plain old JSON with proper API documentation works well too. Just to be safe I'd keep it simple at first and if need be add HAL or JSON-LD on top of your existing API when someone shouts you should support Hypermedia.
+There are definitely use cases where one hypermedia type may way work and provide significant benefits. If you're unsure, plain old JSON with proper API documentation works well too. Just to be safe I'd keep it simple at first and if need be add HAL or JSON-LD on top of your existing API when someone shouts you need Hypermedia controls.
