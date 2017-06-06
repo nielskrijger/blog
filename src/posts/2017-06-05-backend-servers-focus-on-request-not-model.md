@@ -1,29 +1,29 @@
 # Backend Servers: Focus on the request, not the model
 
-Allow me to divide backend web application architectures in two types:
+Allow me to categorize backend web application architectures into two types:
 
 1. Model-Based architectures
 2. Request-Based architectures
 
-This blog discusses the distinction between the two and my (current) position which to use in most scenarios.
+This blog discusses the distinction between the two and my (current) position why you should use request-based architectures most of the time.
 
 ## Model-Based Architecture (MBA)
 
-A model-based architecture's models the business domain in an application layer usually using class-based objects. A user is represented as a "User" object with properties such as "firstName", "roles", etc and has methods to mutate its state. After all business logic has resolved for a request the final state is persisted usually using an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) or [ODM](https://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) implementing a [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html).
+A model-based architecture's models the business domain in an application layer usually using class-based objects. This application user will might have a "User" object with properties such as "firstName", "roles", etc and provide methods to mutate its state. After all business logic has resolved for a request the final state is persisted usually using an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) or [ODM](https://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) implementing a [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html).
 
 This model-based architecture is prevalent in Java and C#, and most other programming languages offer frameworks supporting such an architecture. Many [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)-type frameworks fall into this category.
 
-Strong points:
+**Strong points:**
 
 - Domain objects and their relationship are clearly defined in code
 - Multiple mutations can easily be combined in a single transaction
 - Complex business logic can be centrally enforced
 
-Weak points:
+**Weak points:**
 
 - An ORM/ODM abstracts away data mutation logic and may not be as efficient or as easy to debug as vanilla SQL or NoSQL alternative
 - A shared core with both domain properties and business logic is inheritantly less stable over time than separating request logic
-- Moves focus away from API to the business domain model
+- Moves focus away from API to the business domain model (why this is bad I explain later)
 
 ## Request-Based Architecture (RBA)
 
@@ -33,13 +33,13 @@ The RBA is characterized by a lack of abstractions and a strong focus on the com
 
 Microframeworks (e.g. Sinatra, Flask or Express.js) usually fall into this category and are more common and popular in dynamically typed languages and Golang.
 
-Strong points:
+**Strong points:**
 
 - Focus on API / contract
 - Less complex and shared code makes a request easier to debug and test
 - Software changes are constrained to a fairly limited area of the application
 
-Weak points:
+**Weak points:**
 
 - Difficult to enforce business logic in the entire application
 - More code duplication and boilerplate
@@ -55,15 +55,21 @@ For me the order of priority when building a backend API server is (1) **API** (
 
 Changing **code** is usually fairly easy, particularly when automated testing is in place. Changing **data** is difficult and painful, requiring migration scripts to be run on production systems and lots of testing. Changing **API** contracts however is by far the most painful because all clients depending on that contract will need to change too, often during a (long) migration period.
 
-MBA's tend to focus the application design on the domain model (e.g. [DDD](https://en.wikipedia.org/wiki/Domain-driven_design)) thus focus on a model layer within the application code (least important) rather than the API (e.g. [REST](https://en.wikipedia.org/wiki/Representational_state_transfer).
+MBA's tend to focus the application design on the domain model (e.g. [DDD](https://en.wikipedia.org/wiki/Domain-driven_design)) thus focus on a model layer within the application code (least important) rather than the API (e.g. [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)).
 
 ### Yet another model
 
-MBA's introduce a third model that you have to reason about. Assume a webshop receives a request `POST /orders { ... }`, let's call the model of this request "**REQ**". Eventually the order is persisted in a database; model "**DB**". Because object-oriented languages use objects and relationships in their application design it is intuitive to enforce the relationships between say a `User` and the `Order` in application code. Let's call this model "**APP**".
+MBA's introduce a third model that you have to reason about. Assume a webshop receives a request `POST /orders { ... }`, let's call the model of this request "**REQ**". Eventually the order is persisted in a database; model "**DB**". The MBA introduces a third model capturing relationships between domain object (for example, between a `User` and the `Order`) in the application code. Let's call this model "**APP**".
 
 Now the developer is faced with the challenge to translate **REQ** to **APP** to **DB**... and back again. Commonly "controllers" are used to direct this process. How best to develop controllers has always been a tricky issue evidenced by the numerous discussions on '[Fat](http://blog.joncairns.com/2013/04/fat-model-skinny-controller-is-a-load-of-rubbish/) [models](https://stackoverflow.com/questions/14044681/fat-models-and-skinny-controllers-sounds-like-creating-god-models) [and](https://www.slideshare.net/damiansromek/thin-controllers-fat-models-proper-code-structure-for-mvc) [skinny](http://robdvr.com/fat-models-skinny-controllers-skinny-models-skinny-controllers/) [controllers](http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model)'.
 
-A third model makes it less clear where code responsibilities lie. Is input validation part of **REQ** or enforced centrally in **APP**? An email being unique can only be truly guaranteed by **DB** whereas you might expect such logic in **APP**. For one request you may know immediately upon receiving **REQ** the client is not authorized, whereas for another request domain objects must be retrieved to establish authorization, a responsbility of **APP**.
+A third model makes it less clear where code responsibilities lie. Some examples:
+
+- Input validation can be part of **REQ** or enforced centrally in **APP**
+- An email being unique can only be truly guaranteed by **DB** whereas you might expect such logic in **APP**
+- For one request you know immediately upon receiving **REQ** the client is not authorized, whereas for another request domain objects must be retrieved to establish authorization, a responsibility of **APP**.
+
+Despite the introduction of a third model you will find a lot of shared code does not fit well anywhere and ends up in separate "services".
 
 A software design with just **REQ** and **DB** is more straightforward, in essence becoming a set of scripts, each handling it's own request.
 
@@ -90,9 +96,7 @@ The more recent developments in containerization and cloud technologies to run t
 
 ### Good framework support
 
-There are plenty of frameworks supporting the model-based approach with which developers are familair. Prevalent languages in business software (Java and C#) have made the model-based a defacto standard. Having to adopt a different style may feel awkward and is less opinionated than using a large framework with lots of documentation.
-
-Even when developing an RBA there will be shared code (don't repeat yourself). How to structure that may become a point of discussion.
+There are plenty of frameworks supporting the model-based approach with which developers are familiar. Prevalent languages in business software (Java and C#) consider a model-based architecture almost as. Having to adopt a different style may feel awkward and is less opinionated than using a large framework with lots of documentation.
 
 ### Focus on business logic
 
@@ -102,15 +106,15 @@ This focus on the business logic goes so far that most software architects devel
 
 ## Conclusion
 
-In the past model-based architectures have been useful very large applications where order must be centrally enforced. If your codebase truly grows to a size where that becomes necessity you're better of these days splitting the code into microservices. Microservice architectures in itself are a difficult and complex architecture, but a simpler one to evolve over time than the backend monolith.
+With the rise of microservices the need to centrally enforce business logic within an application has lessened. Microservice architectures in itself are a difficult and complex architecture, but a simpler one to evolve over time than the backend monolith.
 
 The database abstractions and model-based focused frameworks out there all promise you to "develop faster". They don't. They focus on developing nicely looking code and separation of concerns, not building an API. Separate requests in your application code (a simple `post-user.xyz` file) and you have the ultimate separation of concerns: separation of requests.
 
-### Note on front-end apps
+### Note on frontend apps
 
-I should clarify for front-end code I take a different view, particularly for single-page applications (SPA). Front-end apps differ from backend servers in several ways:
+I should clarify for frontend code I take a different view, particularly for single-page applications (SPA). Frontend apps differ from backend servers in several ways:
 
-- A front-end model instance has a much longer lifespan (the duration of a session, minutes or even hours) compared to a brief stateless backend request (milliseconds).
-- A front-end model usually resembles a ViewModel which has a limited application scope (think [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)).
+- A frontend model instance has a much longer lifespan (the duration of a session, minutes or even hours) compared to a brief stateless backend request (milliseconds).
+- A frontend model usually resembles a ViewModel which has a limited application scope (think [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)).
 - SPA's are difficult to split up, few will want to force the useragent to download multiple client apps.
 - Abstractions for REST API's are not that common and those that exist are usually dreadful and useless (I'm looking at you [ngResource](https://docs.angularjs.org/api/ngResource/service/$resource)!).

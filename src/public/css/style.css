@@ -17,7 +17,8 @@ h2 {
 }
 
 * {
-  font-family: 'Open sans', sans-serif;
+  font-family: 'Lato', sans-serif;
+  line-height: 160%;
 }
 
 #footer-container {
