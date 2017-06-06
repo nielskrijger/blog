@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import log from '../utils/logger';
 import moment from 'moment';
 
 /**
@@ -26,17 +25,11 @@ function parseBlogData(filepath, contents) {
   }
 
   // Add post to list
-  log.info('test',{
-    date: date.format('YYYY-MM-DD'),
-    slug: basename.substring(11),
-    title: parseTitle(fileName, contents.toString()),
-    href: `posts/${date.format('YYYY-MM-DD')}/${basename}`,
-  })
   return {
     date: date.format('YYYY-MM-DD'),
     slug: basename.substring(11),
     title: parseTitle(fileName, contents.toString()),
-    href: `posts/${date.format('YYYY-MM-DD')}/${basename}`,
+    href: `posts/${date.format('YYYY-MM-DD')}/${basename.substring(11)}`,
   };
 }
 
@@ -84,11 +77,9 @@ export default (req, res, next) => {
     if (err) {
       return next(err);
     }
-    console.log('BLIEP')
 
     generateResponse(dir, filenames)
       .then((posts) => {
-        console.log(posts)
         res.render('home', {
           posts,
         });

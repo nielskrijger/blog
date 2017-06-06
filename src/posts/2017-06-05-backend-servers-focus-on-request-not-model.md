@@ -1,4 +1,4 @@
-# Backend Servers: Why to focus on the request, not the model
+# Backend Servers: Focus on the request, not the model
 
 Allow me to divide backend web application architectures in two types:
 

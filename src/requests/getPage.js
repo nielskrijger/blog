@@ -11,9 +11,7 @@ export default (req, res, next) => {
     if (err) {
       res.status(404);
     } else {
-      res.render('page', {
-        content: marked(fileContent),
-      });
+      res.render('page', { content: marked(fileContent) });
     }
   });
 }

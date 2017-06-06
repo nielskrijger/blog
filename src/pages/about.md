@@ -1,9 +1,10 @@
 # About
 I am a front- and back-end developer from Utrecht in The Netherlands.
 
-Professionally I work with [Java](https://www.java.com)/[OracleDB](http://www.oracle.com/us/products/database/overview/index.html) and [Node.js](http://nodejs.org/)/[MongoDB](http://www.mongodb.org/). In my spare time I write software using [Golang](http://golang.org/)/[DynamoDB](http://aws.amazon.com/dynamodb/) and [Apache Cordova](http://cordova.apache.org/).
+### oneUp (2017-present)
+Just started :-)
 
-### Nolemmings (2015-present)
+### Nolemmings (2015-2017)
 Working as a full-stack engineer using JavaScript and web technologies mostly. Some stuff I've been using:
 
 - Ionic
