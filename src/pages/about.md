@@ -3,7 +3,18 @@ I am a front- and back-end developer from Utrecht in The Netherlands.
 
 Professionally I work with [Java](https://www.java.com)/[OracleDB](http://www.oracle.com/us/products/database/overview/index.html) and [Node.js](http://nodejs.org/)/[MongoDB](http://www.mongodb.org/). In my spare time I write software using [Golang](http://golang.org/)/[DynamoDB](http://aws.amazon.com/dynamodb/) and [Apache Cordova](http://cordova.apache.org/).
 
-### IceMobile (2013-present)
+### Nolemmings (2015-present)
+Working as a full-stack engineer using JavaScript and web technologies mostly. Some stuff I've been using:
+
+- Ionic
+- Angular
+- React.js
+- Node.js
+- Kubernetus
+- Google Cloud
+- Python
+
+### IceMobile (2013-2015)
 As back-end / DevOps engineer I've been working with the following technologies:
 
 - Node.js

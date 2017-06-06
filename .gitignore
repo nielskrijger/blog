@@ -2,3 +2,4 @@ dist
 .DS_Store
 .awspublish*
 node_modules
+*.env
