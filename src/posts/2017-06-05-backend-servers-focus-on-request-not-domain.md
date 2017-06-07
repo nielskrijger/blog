@@ -2,18 +2,18 @@
 
 Allow me to categorize backend web application architectures into two types:
 
-1. Domain-Based architectures
-2. Protocol-Based architectures
+1. Domain-Driven Architectures
+2. Protocol-Driven Architectures
 
 This blog discusses the distinction between the two and my (current) position why you should consider protocol-based architectures most of the time.
 
-## Domain-Based Architecture (DBA)
+## Domain-Driven Architecture (DDA)
 
-A domain-based architecture models the business environment within the application in a "business layer"; usually using class-based objects. This business layer might have a "User" object with properties such as "firstName", "roles" and provide methods to mutate the user's state.
+A domain-driven architecture models the business environment within the application using a "business layer"; usually using class-based objects. This business layer might have a "User" object with properties such as "firstName", "roles" and provide methods to mutate the entity state.
 
 Usually after a typical backend API request when all business logic has resolved the final state is persisted using an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) or [ODM](https://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) implementing a [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html).
 
-This model-based architecture is prevalent in Java and C#, and most other programming languages offer frameworks supporting such an architecture. Many [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)-type frameworks fall into this category.
+This domain-drive architecture is prevalent in Java and C#, and most other programming languages offer frameworks supporting such an architecture. Many [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)-type frameworks fall into this category.
 
 **Strong points:**
 
@@ -27,13 +27,15 @@ This model-based architecture is prevalent in Java and C#, and most other progra
 - A shared core with both domain properties and business logic is inherently less stable over time than separating request logic
 - Moves focus away from API to the business domain model (why this is bad I explain later)
 
-## Protocol-Based Architecture (PBA)
+## Protocol-Driven Architecture (PBA)
 
 A protocol-based architecture focuses on the request/response (usually HTTP) and the side-effect it wants to achieve.
 
 The PBA is characterized by a lack of abstractions and a strong focus on the communication protocol. It uses plain SQL or NoSQL calls and makes no attempt to capture domain entities and their relationships within application code.
 
-Microframework applications (e.g. [Sinatra](http://www.sinatrarb.com/), [Flask](http://flask.pocoo.org/) or [Express.js](https://expressjs.com/)) usually fall into this category. Interestingly these frameworks are more popular in dynamically typed languages and [Golang](https://golang.org/).
+Microframeworks (e.g. [Sinatra](http://www.sinatrarb.com/), [Flask](http://flask.pocoo.org/) or [Express.js](https://expressjs.com/)) usually fall into this category.
+
+Interestingly these frameworks are more popular in dynamically typed languages and [Golang](https://golang.org/).
 
 **Strong points:**
 
@@ -50,7 +52,7 @@ Microframework applications (e.g. [Sinatra](http://www.sinatrarb.com/), [Flask](
 
 ## Why I prefer Protocol-Based Architectures
 
-For various reasons I have come to favour the protocol-based architecture over a model-based one in many -of not most- situations.
+For various reasons I have come to favour the protocol-based architecture over a domain-driven one in many -of not most- situations.
 
 ### API is number one
 
@@ -60,15 +62,15 @@ For me the order of priority when building a backend API server is (1) **API** (
 
   2) Changing **data** is difficult and painful, requiring migration scripts to be run on production systems and lots of testing.
 
-  1) Changing **API**'s' however is by far the most painful because all clients depending on that contract will need to change too, often during a (long) migration period.
+  1) Changing **API**'s' is by far the most painful because all clients depending on that contract will need to change too, often during a (long) migration period.
 
-DBA's tend to focus the application design on the domain model (e.g. [DDD](https://en.wikipedia.org/wiki/Domain-driven_design)) thus focus on a model layer within the application code (least important) rather than the API (e.g. [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)) or data store.
+DDA's tend to focus the application design on the domain model (e.g. [DDD](https://en.wikipedia.org/wiki/Domain-driven_design)) thus focus on a model layer within the application code rather than the API (e.g. [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)) or data store.
 
-If I learned one thing at oracle (a period I don't like to talk about...), it's they are right in one thing: `business == data`. Don't underestimate how long data survives, applications usually won't.
+If I learned one thing at oracle (a period I don't like to talk about...), it's they are right in one thing: `business == data`. Don't underestimate how long data survives, applications usually don't. Take a 30-year perspective.
 
 ### Yet another model
 
-DBA's introduce a third model that you have to reason about. Assume a webshop receives a request `POST /orders { ... }`, let's call the model of this request "**REQ**". Eventually the order is persisted in a database; model "**DB**". The DBA introduces a third model capturing relationships between domain object (for example, between a `User` and the `Order`) in the application code. Let's call this model "**APP**".
+DDA's introduce a third model that you have to reason about. Assume a webshop receives a request `POST /orders { ... }`, let's call the model of this request "**REQ**". Eventually the order is persisted in a database; model "**DB**". The DDA introduces a third model capturing relationships between domain object (for example, between a `User` and the `Order`) in the application code. Let's call this model "**APP**".
 
 Now the developer is faced with the challenge to translate **REQ** to **APP** to **DB**... and back again. Commonly "controllers" are used to direct this process. How best to develop controllers has always been a tricky issue evidenced by the numerous discussions on '[Fat](http://blog.joncairns.com/2013/04/fat-model-skinny-controller-is-a-load-of-rubbish/) [models](https://stackoverflow.com/questions/14044681/fat-models-and-skinny-controllers-sounds-like-creating-god-models) [and](https://www.slideshare.net/damiansromek/thin-controllers-fat-models-proper-code-structure-for-mvc) [skinny](http://robdvr.com/fat-models-skinny-controllers-skinny-models-skinny-controllers/) [controllers](http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model)'.
 
@@ -84,22 +86,22 @@ A software design with just **REQ** and **DB** is more straightforward, in essen
 
 ### Testability
 
-While working on PBA's I noticed writing fewer unit tests and more component and integration tests compared to DBA's; to the point where I write hardly any unit tests at all in backend code.
+While working on PBA's I noticed writing fewer unit tests and more component and integration tests compared to DDA's; to the point where I write hardly any unit tests at all in backend code.
 
 Component and integration tests provide a lot more confidence that the backend application is actually behaving correctly, with better code coverage in fewer lines of code. This I could do because of two reasons:
 
 1. PBA's are fairly simple to debug, there are few interacting code-paths that may fail in some unexpected way
 2. I switched to languages and tools that make running and developing such tests lightning fast
 
-In contrast, DBA's have more shared pieces of interacting code (e.g. services and models) which require the developer to treat them as an internal API that must remain fairly stable and bugfree. Hence the need to add unit tests for those.
+In contrast, DDA's have more shared pieces of interacting code (e.g. services and models) which require the developer to treat them as an internal API that must remain fairly stable and bugfree. Hence the need to add unit tests for those.
 
 ### Split into microservices
 
-DBA's are a complex solution to solve an even more complex problem; huge applications with hundreds of thousands LoC that must all work together. It is only natural to try and establish some law and order in such an application, the domain model layer is ideal for that.
+DDA's are a complex solution to solve an even more complex problem; huge applications with hundreds of thousands LoC that must all work together. It is only natural to try and establish some law and order in such an application, the domain model layer is ideal for that.
 
 For a long time it was too cumbersome and complex to split such an application into smaller web applications and deploy and operate them together.
 
-The more recent developments in containerization and cloud technologies to run them has changed this. When an application becomes too big and too complex there are few reasons to not try to split them it into multiple backend apps. PBA's are much easier to split up than DBA's.
+The more recent developments in containerization and cloud technologies to run them has changed this. When an application becomes too big and too complex there are few reasons to not try to split them it into multiple backend apps. PBA's are much easier to split up than DDA's.
 
 ## Why keep using Mobel-Based Architectures
 
