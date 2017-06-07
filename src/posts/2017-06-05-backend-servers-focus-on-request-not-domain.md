@@ -5,11 +5,13 @@ Allow me to categorize backend web application architectures into two types:
 1. Domain-Based architectures
 2. Protocol-Based architectures
 
-This blog discusses the distinction between the two and my (current) position why you should use request-based architectures most of the time.
+This blog discusses the distinction between the two and my (current) position why you should consider protocol-based architectures most of the time.
 
 ## Domain-Based Architecture (DBA)
 
-A domain-based architecture models the business environment in an "business layer"; usually using class-based objects. This business layer might have a "User" object with properties such as "firstName", "roles" and provide methods to mutate the user's state. After all business logic has resolved for a request the final state is persisted usually using an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) or [ODM](https://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) implementing a [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html).
+A domain-based architecture models the business environment within the application in a "business layer"; usually using class-based objects. This business layer might have a "User" object with properties such as "firstName", "roles" and provide methods to mutate the user's state.
+
+Usually after a typical backend API request when all business logic has resolved the final state is persisted using an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) or [ODM](https://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) implementing a [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html).
 
 This model-based architecture is prevalent in Java and C#, and most other programming languages offer frameworks supporting such an architecture. Many [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)-type frameworks fall into this category.
 
@@ -21,7 +23,7 @@ This model-based architecture is prevalent in Java and C#, and most other progra
 
 **Weak points:**
 
-- An ORM/ODM abstracts away data mutation logic and may not be as efficient or as easy to debug as vanilla SQL or NoSQL alternative
+- An ORM/ODM abstracts away data mutation logic, making it difficult to debug
 - A shared core with both domain properties and business logic is inherently less stable over time than separating request logic
 - Moves focus away from API to the business domain model (why this is bad I explain later)
 
@@ -29,16 +31,16 @@ This model-based architecture is prevalent in Java and C#, and most other progra
 
 A protocol-based architecture focuses on the request/response (usually HTTP) and the side-effect it wants to achieve.
 
-The pBA is characterized by a lack of abstractions and a strong focus on the communication protocol. It uses plain SQL and makes no attempt to capture domain entities and their relationships within application code.
+The PBA is characterized by a lack of abstractions and a strong focus on the communication protocol. It uses plain SQL or NoSQL calls and makes no attempt to capture domain entities and their relationships within application code.
 
-Microframeworks (e.g. [Sinatra](http://www.sinatrarb.com/), [Flask](http://flask.pocoo.org/) or [Express.js](https://expressjs.com/)) usually fall into this category and are more common and popular in dynamically typed languages and Golang.
+Microframework applications (e.g. [Sinatra](http://www.sinatrarb.com/), [Flask](http://flask.pocoo.org/) or [Express.js](https://expressjs.com/)) usually fall into this category. Interestingly these frameworks are more popular in dynamically typed languages and [Golang](https://golang.org/).
 
 **Strong points:**
 
 - Focus on API / contract
 - Less complex and little shared code makes a request easier to debug and test
-- Software changes are constrained to a limited area of the application
-- Faster than domain-driven frameworks ([src](https://www.techempower.com/benchmarks/))
+- Software changes are constrained to a limited surface area
+- Performance much better than domain-driven frameworks ([src](https://www.techempower.com/benchmarks/))
 
 **Weak points:**
 
@@ -46,17 +48,19 @@ Microframeworks (e.g. [Sinatra](http://www.sinatrarb.com/), [Flask](http://flask
 - More code duplication and boilerplate
 - The domain model is often unclear from code alone (particularly in a dynamically typed language), one has to look at the database schema or documentation
 
-## Why I prefer Request-Based Architectures
+## Why I prefer Protocol-Based Architectures
 
-For various reasons I have come to favour the request-based architecture over a model-based one in many situations, despite having spent more time developing DBA's than PBA's.
+For various reasons I have come to favour the protocol-based architecture over a model-based one in many -of not most- situations.
 
 ### API is number one
 
 For me the order of priority when building a backend API server is (1) **API** (most important), (2) **data** and (3) **code** (least important). The reasoning for this order is one of adaptability.
 
-3. Changing **code** is usually fairly easy, particularly when automated testing is in place.
-2. Changing **data** is difficult and painful, requiring migration scripts to be run on production systems and lots of testing.
-1. Changing **API**'s' however is by far the most painful because all clients depending on that contract will need to change too, often during a (long) migration period.
+  3) Changing **code** is usually fairly easy, particularly when automated testing is in place.
+
+  2) Changing **data** is difficult and painful, requiring migration scripts to be run on production systems and lots of testing.
+
+  1) Changing **API**'s' however is by far the most painful because all clients depending on that contract will need to change too, often during a (long) migration period.
 
 DBA's tend to focus the application design on the domain model (e.g. [DDD](https://en.wikipedia.org/wiki/Domain-driven_design)) thus focus on a model layer within the application code (least important) rather than the API (e.g. [REST](https://en.wikipedia.org/wiki/Representational_state_transfer)) or data store.
 
