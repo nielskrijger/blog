@@ -107,25 +107,27 @@ The more recent developments in containerization and cloud technologies to run t
 
 ### Good framework support
 
-There are plenty of frameworks supporting the domain-based approach with which developers are familiar. Prevalent languages in business software (Java and C#) consider a domain-based architecture almost as. Having to adopt a different style may feel awkward and is less opinionated than using a large framework with lots of documentation.
+There are plenty of frameworks supporting the domain-driven design with which developers are familiar. Prevalent languages in business software (Java and C#) have ecosystems that have evolved to accomodate the domain-driven architecture extremely well.
+
+Having to learn a new framework which is more opinionated allows you to get quicker onboard.
 
 ### Focus on business logic
 
-Most business software is written with models in mind and the vocabularly of functional analists is Domain, not Request-Response. Business analists will discuss business constraints and logic; the home of the domain model layer within an app. They have little knowledge of REST or Queuing API contracts.
+Most business software is written with models in mind and the vocabularly of functional analysts is Domain, not Request-Response. Functional analysts will discuss business constraints and logic; the home of the domain layer in an application. They have little knowledge of REST or Queuing API contracts.
 
 This focus on the business logic goes so far that most software architects developing business software I've met don't care much about API contracts. Going against the grain in such circumstances may be more effort than you'd ever gain.
 
 ### Not a real API server
 
-Many backend servers also process HTML requests for some reason or other which changes the context completely; any homepage will have multiple subcomponents which require state from different domain contexts. Loading this state into memory with all relationships efficiently is a difficult programming challenge; the reason why we adopted MVC and component-based frontend frameworks (and why I love [redux](http://redux.js.org/)).
+Many backend servers also process HTML requests for some reason or other which changes the context completely; any homepage will have multiple subcomponents which require state from different domain contexts. Loading this state into memory with all relationships efficiently is a difficult programming challenge; the reason why we adopted MVC and component-based frontend frameworks in the first place.
 
-When executing requests that stretch multiple domain contexts (to satisfy frontend requirements) a domain-driven design works better.
+When executing requests that stretch multiple domain contexts a domain-driven design works better.
 
 ## Conclusion
 
 With the rise of microservices the need to centrally enforce business logic within an application has lessened. The microservice architectures in itself is a difficult and complex architecture, but a simpler one to evolve over time than the backend monolith.
 
-The database abstractions and domain-based focused frameworks out there all promise you to "develop faster". They don't. They focus on developing nicely looking code and separation of concerns to more easily model a complex business enviroment. They don't focus on building an API. Separate requests in your application code (e.g. a simple `post-user.xyz` file) and you have the ultimate separation of concerns: separation of request.
+The database abstractions and domain-based frameworks out there all promise you to "develop faster". They don't. They focus on developing nicely looking code and separation of concerns to more easily model a complex business environment. They don't focus on building an API. By separating requests in your application code (e.g. a simple `post-user.xyz` file) you establish the ultimate separation of concerns: *separation of request*.
 
 ### Note on frontend apps
 
