@@ -23,15 +23,15 @@ Going from appreciating unit testing to actually using tests to drive your appli
 
 4. **Test before code**: you are writing tests before coding and feel very comfortable refactoring code and tests whenever it feels right. Every code change you consider ought to break a test or -when it doesn't- will cause you to add the missing tests scenarios. Whenever you manually verify behavior it starts feeling dirty; you shouldn't need to.
 
-Phase (1) took me a couple of months when I first started coding, (2) took roughly 3-4 years, and (3) took almost 1.5 years before I reached phase (4). That in total is almost 6(!) years before I considered myself capable of TDD.
+Phase (1) took me a couple of months when I first started coding, (2) took roughly 2-3 years, (3) took almost 1.5 years until I reached phase (4). So in total it took almost 5(!) years before I found myself doing TDD regularly.
 
 ### Acceptance-Test Driven Development
 
-More recently I find myself doing less TDD than focus more on automating integration tests instead.
+More recently I find myself doing less TDD and focus more on automating functional tests instead.
 
 While working with Symfony 2 (a PHP framework) I adopted the view that controllers (in a classic MVC framework) are not worth unit testing; controllers are light weight and designed to glue the components together. As such Symfony 2 promotes writing functional tests rather than unit tests for controllers. Doing so I started to appreciate testing with real context and using a real rather than a mocked database; it is so much simpler and quicker.
 
-Another reason I started focussing more on function tests is that many testers are very bad at automating tests. Poor configuration, code duplication, hard data dependencies, poor test descriptions, unclear test dependencies, even manual setup steps (!) in "automated" tests. Soon the effort to maintain their automated tests will take a significant portion of their -and possibly your- time.
+Another reason I started focussing more on functional tests is that many testers are very bad at automating tests. Poor configuration, code duplication, hard data dependencies, poor test descriptions, unclear test dependencies, even manual setup steps (!) in "automated" tests. Soon the effort to maintain their automated tests will take a significant portion of their -and possibly your- time.
 
 Considering the four phases discussed earlier, I might add a fifth:
 

@@ -1,7 +1,7 @@
 # Javascript Quiz
-Do you know JavaScript well? This JavaScript quiz is designed to test your knowledge of the more intricate details of JavaScript.
+Do you know JavaScript well? This small JavaScript quiz is designed to challenge your knowledge of the more intricate details of JavaScript.
 
-All questions are multiple choice and may have more than one correct answer. If you select all the correct answers you get 1 point for that question. If at least one answer is incorrect you get 0 points for the entire question.
+All questions are multiple choice and often have **multiple correct answers**. If you select all the correct answers you get 1 point for that question. If at least one answer is incorrect you get 0 points for the entire question.
 
 You can assume all JavaScript code snippets are syntactically correct and are executed in global scope.
 
