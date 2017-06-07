@@ -5,7 +5,7 @@ Allow me to categorize backend web application architectures into two types:
 1. Domain-Driven Architectures
 2. Protocol-Driven Architectures
 
-This blog discusses the distinction between the two and my (current) position why you should consider protocol-based architectures most of the time.
+This blog discusses the distinction between the two and my (current) position why you should consider protocol-driven architectures most of the time.
 
 ## Domain-Driven Architecture (DDA)
 
@@ -29,7 +29,7 @@ This domain-drive architecture is prevalent in Java and C#, and most other progr
 
 ## Protocol-Driven Architecture (PBA)
 
-A protocol-based architecture focuses on the request/response (usually HTTP) and the side-effect it wants to achieve.
+A protocol-driven architecture focuses on the request/response (usually HTTP) and the side-effect it wants to achieve.
 
 The PBA is characterized by a lack of abstractions and a strong focus on the communication protocol. It uses plain SQL or NoSQL calls and makes no attempt to capture domain entities and their relationships within application code.
 
@@ -50,9 +50,9 @@ Interestingly these frameworks are more popular in dynamically typed languages a
 - More code duplication and boilerplate
 - The domain model is often unclear from code alone (particularly in a dynamically typed language), one has to look at the database schema or documentation
 
-## Why I prefer Protocol-Based Architectures
+## Why I prefer Protocol-Driven Architectures
 
-For various reasons I have come to favour the protocol-based architecture over a domain-driven one in many -of not most- situations.
+For various reasons I have come to favour the protocol-driven architecture over a domain-driven one in many -of not most- situations.
 
 ### API is number one
 
@@ -103,7 +103,7 @@ For a long time it was too cumbersome and complex to split such an application i
 
 The more recent developments in containerization and cloud technologies to run them has changed this. When an application becomes too big and too complex there are few reasons to not try to split them it into multiple backend apps. PBA's are much easier to split up than DDA's.
 
-## Why keep using Mobel-Based Architectures
+## Why keep using Domain-Driven Architectures
 
 ### Good framework support
 
@@ -127,7 +127,7 @@ When executing requests that stretch multiple domain contexts a domain-driven de
 
 With the rise of microservices the need to centrally enforce business logic within an application has lessened. The microservice architectures in itself is a difficult and complex architecture, but a simpler one to evolve over time than the backend monolith.
 
-The database abstractions and domain-based frameworks out there all promise you to "develop faster". They don't. They focus on developing nicely looking code and separation of concerns to more easily model a complex business environment. They don't focus on building an API. By separating requests in your application code (e.g. a simple `post-user.xyz` file) you establish the ultimate separation of concerns: *separation of request*.
+The database abstractions and domain-driven frameworks out there all promise you to "develop faster". They don't. They focus on developing nicely looking code and separation of concerns to more easily model a complex business environment. They don't focus on building an API. By separating requests in your application code (e.g. a simple `post-user.xyz` file) you establish the ultimate separation of concerns: *separation of request*.
 
 ### Note on frontend apps
 
