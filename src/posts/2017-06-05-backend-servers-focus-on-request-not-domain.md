@@ -54,7 +54,7 @@ Interestingly these frameworks are more popular in dynamically typed languages a
 
 For various reasons I have come to favour the protocol-driven architecture over a domain-driven one in many -of not most- situations.
 
-### API is number one
+#### API is number one
 
 For me the order of priority when building a backend API server is (1) **API** (most important), (2) **data** and (3) **code** (least important). The reasoning for this order is one of adaptability.
 
@@ -68,7 +68,7 @@ DDA's tend to focus the application design on the domain model (e.g. [DDD](https
 
 If I learned one thing at oracle (a period I don't like to talk about...), it's they are right in one thing: `business == data`. Don't underestimate how long data survives, applications usually don't. Take a 30-year perspective.
 
-### Yet another model
+#### Yet another model
 
 DDA's introduce a third model that you have to reason about. Assume a webshop receives a request `POST /orders { ... }`, let's call the model of this request "**REQ**". Eventually the order is persisted in a database; model "**DB**". The DDA introduces a third model capturing relationships between domain object (for example, between a `User` and the `Order`) in the application code. Let's call this model "**APP**".
 
@@ -84,7 +84,7 @@ Despite the introduction of a third model you will find a lot of shared code doe
 
 A software design with just **REQ** and **DB** is more straightforward, in essence becoming a set of scripts, each handling it's own request.
 
-### Testability
+#### Testability
 
 While working on PBA's I noticed writing fewer unit tests and more component and integration tests compared to DDA's; to the point where I write hardly any unit tests at all in backend code.
 
@@ -105,19 +105,19 @@ The more recent developments in containerization and cloud technologies to run t
 
 ## Why keep using Domain-Driven Architectures
 
-### Good framework support
+#### Good framework support
 
 There are plenty of frameworks supporting the domain-driven design with which developers are familiar. Prevalent languages in business software (Java and C#) have ecosystems that have evolved to accomodate the domain-driven architecture extremely well.
 
 Having to learn a new framework which is more opinionated allows you to get quicker onboard.
 
-### Focus on business logic
+#### Focus on business logic
 
 Most business software is written with models in mind and the vocabularly of functional analysts is Domain, not Request-Response. Functional analysts will discuss business constraints and logic; the home of the domain layer in an application. They have little knowledge of REST or Queuing API contracts.
 
 This focus on the business logic goes so far that most software architects developing business software I've met don't care much about API contracts. Going against the grain in such circumstances may be more effort than you'd ever gain.
 
-### Not a real API server
+#### Not a real API server
 
 Many backend servers also process HTML requests for some reason or other which changes the context completely; any homepage will have multiple subcomponents which require state from different domain contexts. Loading this state into memory with all relationships efficiently is a difficult programming challenge; the reason why we adopted MVC and component-based frontend frameworks in the first place.
 
