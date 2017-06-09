@@ -1,6 +1,7 @@
 import marked from 'marked';
 import fs from 'fs';
 import path from 'path';
+import { parseBlogData } from '../utils/metadata';
 
 /**
  * GET /posts/:date/:slug
@@ -11,7 +12,13 @@ export default (req, res, next) => {
     if (err) {
       res.status(404).send();
     } else {
-      res.render('post', { content: marked(fileContent) });
+      const metadata = parseBlogData(filepath, fileContent);
+      res.render('post', {
+        content: marked(fileContent),
+        title: metadata.title,
+        identifier: req.params.slug,
+        url: `http://nielskrijger.com/${metadata.href}`,
+      });
     }
   });
 }

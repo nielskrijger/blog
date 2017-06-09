@@ -7,7 +7,8 @@
     "node": "6"
   },
   "scripts": {
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
   },
   "dependencies": {
     "babel-cli": "^6.24.1",
