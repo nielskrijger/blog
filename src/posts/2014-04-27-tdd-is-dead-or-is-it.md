@@ -37,7 +37,7 @@ Considering the four phases discussed earlier, I might add a fifth:
 
 * **Functional test before coding**: the main focus of your test-driven approach moves from unit testing to automated functional testing. Any unit test whose behavior is properly represented in the functional test is removed to limit test maintenance. Stubbing out dependencies becomes less important.
 
-Basically I more or [ATDD](https://en.wikipedia.org/wiki/Acceptance_test%E2%80%93driven_development) rather than TDD.
+In essence I have come to favour [ATDD](https://en.wikipedia.org/wiki/Acceptance_test%E2%80%93driven_development) over TDD.
 
 I do admit this acceptance-test first approach requires a certain environment, particularly one that is very fast to deploy and run; and with fast I mean all test cases having run within 10 seconds or so.
 

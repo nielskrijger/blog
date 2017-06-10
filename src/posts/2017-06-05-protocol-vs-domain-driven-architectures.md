@@ -99,7 +99,7 @@ Component and integration tests provide a lot more confidence that the backend a
 
 In contrast, DDA's have more shared pieces of interacting code (e.g. services and models) which require the developer to treat them as an internal API that must remain fairly stable. Hence the need to add unit tests for those.
 
-###$ Microservices are viable
+#### Microservices are viable
 
 DDA's are a complex solution to solve an even more complex problem; large applications with tens or hundreds of thousands lines of code that must all work together. It is only natural to try and establish some law and order in such an application, the domain model layer is ideal for that.
 
@@ -125,7 +125,7 @@ This focus on the business logic goes so far that most software architects devel
 
 Many backend servers produce server-side rendered HTML which changes the context completely; any homepage will have multiple subcomponents which require state from different domain contexts. Loading this state into memory with all relationships efficiently is a difficult programming challenge; the reason why we adopted MVC and component-based frontend frameworks in the first place.
 
-When executing requests that stretch multiple domain contexts within a single application a domain-driven design works better.
+When executing requests that stretch multiple domain contexts within a single application a domain-driven design usually works really well.
 
 ## Conclusion
 
@@ -140,4 +140,4 @@ I should clarify for frontend code I take a different view entirely, particularl
 - A frontend model instance has a much longer lifespan (the duration of a session, minutes or even hours) compared to a brief stateless backend request (milliseconds).
 - A frontend model usually resembles a ViewModel which has a limited application scope (think [MVVM](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel)).
 - SPA's are difficult to split up, few will want to force the useragent to download multiple client apps.
-- Abstractions for REST API's are not that common and those that exist are usually dreadful and useless (I'm looking at you [ngResource](https://docs.angularjs.org/api/ngResource/service/$resource)!).
+- Abstractions for REST API's are not that common and those that exist are usually more trouble than they're worth.
