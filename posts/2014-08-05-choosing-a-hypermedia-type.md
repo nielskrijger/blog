@@ -451,7 +451,7 @@ When designing a public API consumed by lots of different consumers you will wan
 
 If a key concern is caching resources within the client while designing a very neat and formal REST service, JSON:API would be my first choice.
 
-# My opinion (What should I do?)
+# Opinion
 
 Public adoption of hypermedia types has been poor at best, in fact while researching for this article I had very little success in finding actual implementations of any of the discussed hypermedia types. As far as I know the big boys (Google, Amazon, Facebook, Twitter) haven't.
 
