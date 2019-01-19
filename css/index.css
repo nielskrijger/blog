@@ -173,7 +173,7 @@ h1.logo a {
 /* Tags */
 .post-tag {
   display: inline-block;
-  vertical-align: text-top;
+  vertical-align: middle;
   text-transform: uppercase;
   font-size: .625em;
   padding: 2px 4px;
