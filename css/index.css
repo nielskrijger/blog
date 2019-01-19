@@ -157,9 +157,6 @@ h1.logo a {
   display: inline-block;
   padding: .25em .1875em;
 }
-.tmpl-home .postlist-link {
-  font-size: 1.1875em;
-}
 
 /* Tags */
 .post-tag {
