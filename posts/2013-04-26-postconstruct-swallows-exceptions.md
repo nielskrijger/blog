@@ -1,5 +1,5 @@
 ---
-title: PostConstruct Swallows Exceptions; Catch and Log Them Instead
+title: PostConstruct Swallows Exceptions
 description: PostConstruct Swallows Exceptions; Catch and Log Them Instead
 date: 2013-04-26
 tags:

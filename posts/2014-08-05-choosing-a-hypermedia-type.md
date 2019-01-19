@@ -1,5 +1,5 @@
 ---
-title: Choosing a Hypermedia Type; HAL vs JSON-LD vs Collection+JSON vs Siren vs JSON API.
+title: Choosing a Hypermedia Type
 description: Choosing a Hypermedia Type; HAL vs JSON-LD vs Collection+JSON vs Siren vs JSON API.
 date: 2014-08-05
 tags:

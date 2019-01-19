@@ -160,6 +160,16 @@ h1.logo a {
   display: inline-block;
   padding: .25em .1875em;
 }
+@media only screen and (max-width: 300px) {
+  .postlist-date {
+    display: none;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .postlist-item .post-tag {
+    display: none;
+  }
+}
 
 /* Tags */
 .post-tag {
