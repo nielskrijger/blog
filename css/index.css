@@ -59,8 +59,7 @@ header {
 }
 pre,
 code {
-  font-family: 'Roboto Mono', monospace;
-  line-height: 1.5;
+  font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier, monospace;
 }
 pre {
   font-size: 14px;
