@@ -10,7 +10,7 @@ tags:
 layout: layouts/post.njk
 ---
 
-When adding a new request to a service I found the following list a fairly common sequence of steps I need to take care:
+When adding a new service request I found the following list a fairly common sequence of steps I need to take care of:
 
 1. <a href="{{ '#1.-routing' | url }}">Routing</a>
 2. <a href="{{ '#2.-authentication' | url }}">Authentication</a>
@@ -22,20 +22,7 @@ When adding a new request to a service I found the following list a fairly commo
 8. <a href="{{ '#8.-side-effects' | url }}">Side-effects</a>
 9. <a href="{{ '#9.-response' | url }}">Response</a>
 
-In this blog I'll walk through all steps of this lifecycle and share some learnings I've had along the way. I'll frequently refer back to the following example-request:
-
-```json
-// POST /articles HTTP/1.1
-// Host: example.com
-// Content-type: application/json
-// Authorization: Bearer 94a1f626d174
-
-{
-  "title": "No hipsters here",
-  "content": "La croix scenester PBR&B drinking vinegar YOLO austin. I'm an Etsy master",
-  "status": "DRAFT"
-}
-```
+In this blog I'll walk through these steps and share some learnings I've had along the way.
 
 ## 1. Routing
 
@@ -56,7 +43,9 @@ Right now I've tend to create a separate file for each request handler, e.g. `ge
 
 ## 2. Authentication
 
-In our `POST /articles`-example the Authorization-header contains a Bearer-type token. There are many ways to identify a client but they all include some identifier that uniquely identifies the client or session. Either the token is invalid and an unauthorized-error is returned, or the token is valid and session details are added to the request context.
+In an HTTP request authentication data is usually stored in a Cookie or Authorization-header. There are many ways to identify a client but they all include some identifier that uniquely identifies the client or session.
+
+Validating these tokens is fairly simple; either the token is invalid and an unauthorized-error is returned, or the token is valid and session details are added to the request context.
 
 Job done.
 
@@ -74,7 +63,22 @@ In such scenarios it is better to treat authentication not as a cross-cutting co
 
 Authorization is arguably one of the most difficult topics and can wreak havoc on your code organization because of its inherit complexity in a growing system.
 
-In our `POST /articles`-request we could start with a simple Role-based mechanism where only users with `role = "WRITER"` are allowed to execute `POST /articles`-requests. A simple check `if user.role != "WRITER"` then returns a ForbiddenError and we're done.
+Imagine the following request:
+
+```json
+// POST /articles HTTP/1.1
+// Host: example.com
+// Content-type: application/json
+// Authorization: Bearer 94a1f626d174
+
+{
+  "title": "No hipsters here",
+  "content": "La croix scenester PBR&B drinking vinegar YOLO austin. I'm an Etsy master",
+  "status": "DRAFT"
+}
+```
+
+For this `POST /articles`-request we could start with a simple role-based mechanism where only users with `role = "WRITER"` are allowed to execute `POST /articles`-requests. A simple check `if request.user.role != "WRITER"` would be sufficient.
 
 This simple role-based authorization logic can be executed immediately after the authentication-step because the primary user details have been added to the request context.
 
@@ -83,8 +87,8 @@ Done. Simple right?
 Now imagine the following scenarios:
 
 - Add a `PATCH /articles/:id`-endpoint which enables authors to update their content. Only writers who authored the content should be allowed to update the article.
-- Only users with "EDITOR" role are allowed to promote the article and publish it, changing the article's status from "DRAFT" to "PUBLISHED".
-- If an article is in "DRAFT" the `GET /articles/:id`-endpoint should return a 404 for unprivileged users.
+- Only users with the "EDITOR" role are allowed to approve an article and publish it, changing the article's status from "DRAFT" to "PUBLISHED".
+- If an article is in "DRAFT"-state the `GET /articles/:id`-endpoint should return a 404 for unprivileged users.
 - The author and any other user with the "EDITOR"-role should be able to send a link to anyone with the "DRAFT" article for proofreading purposes.
 
 With such requirements a basic role based mechanism quickly breaks down, and attribute-based access control and/or ACL come into play.
@@ -160,17 +164,17 @@ Business rules are validations based on (usually) runtime information retrieved 
 
 While there may only be a couple business rules initially, the amount and complexity of these rules can become significant over time, particularly in a mature business domain. When practicing Domain-Driven Design these rules are captured within the domain-layer of your application.
 
-Alternative solutions are Business Rule Engines (BREs) and Workflow Engines which provide a configurable management environment that domain experts can use to flexibly adjust their business processes. These systems are configured either through a visual editor or some Domain-Specific Language.
+Alternative solutions are Business Rule Engines (BREs) and Workflow Engines which provide a configurable management environment that domain experts can use to adjust their business processes on the fly. These systems are configured either through a visual editor or some Domain-Specific Language.
 
-That sounds great but typically these solutions require expert knowledge to operate and reconfigure. Moreover configuration changes are usually poorly tested, let alone automatically covered in end-to-end tests.
+That sounds great but typically these solutions require expert knowledge to operate and reconfigure. Moreover configuration changes are usually poorly tested, let alone covered in automated tests.
 
-Having worked on one BRE & Workflow application and having seen several different ones in use in multiple businesses during my time at Oracle my verdict is simple; avoid for pretty much all your projects. They sound great in principle but the return on investment is very low, if not usually a net loss.
+Having worked on a BRE & Workflow application and een several others ones in use during my time at Oracle my verdict is simple; avoid them for pretty much all your projects. They sound great in principle but the return on investment is very low, if not usually a net loss.
 
 Right now I favour capturing business rule configuration in a headless CMS and programatically process and test these config settings. While not as flexible as a Bussiness Rule or Workflow engine I found it a more cost-effective way to enable domain experts to adjust parameters while also cover them by automated tests.
 
 ## 8. Side-effects
 
-Apart from simple data-retrieval requests most requests will:
+Except for most data-retrieval requests most requests will:
 
 - modify database records/documents
 - invoke external service(s)
