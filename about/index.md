@@ -9,24 +9,47 @@ templateClass: tmpl-post
 
 I am a full-stack web developer from Utrecht (The Netherlands). You can find me on:
 
-- [GitHub](https://github.com/nielskrijger) - I only publish experiments, snippets and temporary stuff on my GitHub profile
 - [LinkedIn](https://www.linkedin.com/in/nielskrijger) - Should be fairly up-to-date
+- [GitHub](https://github.com/nielskrijger) - I only publish experiments, snippets and temporary stuff on my GitHub profile. Rubbish mostly.
 
-### oneUp (2017-present)
+### RTL Videoland (2018)
 
-Just started :-)
+Working as a full-stack engineer with:
+
+- Javascript
+- Python
+- C#
+- Jenkins
+- Fleet
+- Microservices
+- React & Redux
+- Swagger / OpenAPI
+- Loopback, Express, Restify, Koa and saw a little of Fastify as well
+- Postgres
+- Redis
+
+### oneUp (2017 +/- 6 months)
+
+Working as a full-stack engineer with:
+
+- React, React Native & Redux
+- NodeJS
+- Heroku
 
 ### Nolemmings (2015-2017)
 
-Working as a full-stack engineer using JavaScript and web technologies mostly. Some stuff I've been using:
+Working as a full-stack engineer with:
 
+- JavaScript
+- CoffeeScript
+- Python
 - Ionic
-- Angular
-- React.js
-- Node.js
+- Angular 1
+- React & Redux
+- NodeJS
 - Kubernetus
 - Google Cloud
-- Python
+- MongoDB
 
 ### IceMobile (2013-2015)
 
@@ -34,9 +57,14 @@ As back-end / DevOps engineer I've been working with the following technologies:
 
 - Node.js
 - Chef
-- Jenkins/Cloudbees
+- Jenkins
 - Amazon WebServices
 - MongoDB
+- DynamoDB
+- Couchbase
+- Redis
+- Swagger / OpenAPI
+- RabbitMQ
 - JavaEE + Spring
 - Oracle MiddleWare stack (WLS, Oracle DB)
 
