@@ -21,6 +21,7 @@ templateClass: tmpl-post
 var disqus_config = function () {
     this.page.url = "https://nielskrijger.com{{ page.url }}";
     this.page.identifier = "{{ page.fileSlug }}";
+    this.page.title = "{{ title }}";
 };
 (function() {
 var d = document, s = d.createElement('script');
