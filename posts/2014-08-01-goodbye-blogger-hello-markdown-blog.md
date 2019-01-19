@@ -2,6 +2,7 @@
 title: Goodbye Blogger, Hello Static Markdown
 description: Goodbye Blogger, Hello Static Markdown
 date: 2014-08-01
+permalink: /posts/2014-08-01/goodbye-blogger-hello-markdown-blog/index.html
 tags:
   - Blog
 layout: layouts/post.njk

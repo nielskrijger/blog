@@ -2,6 +2,7 @@
 title: The Old Blood and Guts was an Agilist.
 description: This is a post on My Blog about leveraging agile frameworks.
 date: 2012-03-02
+permalink: /posts/2012-03-02/the-old-blood-and-guts-was-an-agilist/index.html
 tags:
   - Agile
 layout: layouts/post.njk

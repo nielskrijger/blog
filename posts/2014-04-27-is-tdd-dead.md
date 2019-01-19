@@ -2,6 +2,7 @@
 title: Is TDD Dead?
 description: Is TDD Dead?
 date: 2014-04-27
+permalink: /posts/2014-04-27/is-tdd-dead/index.html
 tags:
   - Testing
 layout: layouts/post.njk

@@ -2,6 +2,7 @@
 title: Installing Deployable Libraries on WebLogic
 description: Installing Deployable Libraries (e.g. JSF/JSLT) on WebLogic 10.3
 date: 2013-01-04
+permalink: /posts/2013-01-04/installing-deployable-libraries-on-weblogic/index.html
 tags:
   - Java
   - WebLogic

@@ -2,6 +2,7 @@
 title: Oracle DB Session Analysis
 description: Oracle DB Session Analysis
 date: 2013-04-19
+permalink: /posts/2013-04-19/oracle-db-session-analysis/index.html
 tags:
   - Oracle
   - SQL

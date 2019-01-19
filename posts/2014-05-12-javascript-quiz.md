@@ -2,6 +2,7 @@
 title: JavaScript Quiz
 description: JavaScript Quiz
 date: 2014-05-12
+permalink: /posts/2014-05-12/javascript-quiz/index.html
 tags:
   - JavaScript
 layout: layouts/post.njk

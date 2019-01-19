@@ -2,6 +2,7 @@
 title: Some JAVA Strangeness
 description: Some JAVA Strangeness
 date: 2012-11-04
+permalink: /posts/2012-11-04/some-java-peculiarities/index.html
 tags:
   - Java
 layout: layouts/post.njk

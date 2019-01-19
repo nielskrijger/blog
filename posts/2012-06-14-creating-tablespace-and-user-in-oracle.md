@@ -2,6 +2,7 @@
 title: Creating Tablespace and User in Oracle
 description: Creating Tablespace and User in Oracle XE 11g
 date: 2012-06-14
+permalink: /posts/2012-06-14/creating-tablespace-and-user-in-oracle/index.html
 tags:
   - Oracle
 layout: layouts/post.njk

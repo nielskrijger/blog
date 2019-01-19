@@ -2,6 +2,7 @@
 title: API vs Domain-Driven Architecture
 description: API vs Domain-Driven Architecture
 date: 2017-06-05
+permalink: /posts/2017-06-05/api-vs-domain-driven-architectures/index.html
 tags:
   - API
   - Architecture
@@ -10,7 +11,7 @@ layout: layouts/post.njk
 
 I tend to categorize backend architectures into two types:
 
-1. Domain-Driven Systems
+1. <a href="{{ '#1.-routing' | url }}">Routing</a>
 2. API-Driven Systems
 
 While these types are by no means exclusive, and in fact can be complimentary, in practice most backend systems I've seen tend to favour one style over other.

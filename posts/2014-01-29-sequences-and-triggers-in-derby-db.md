@@ -2,6 +2,7 @@
 title: Sequences and Triggers in Derby DB
 description: Sequences and Triggers in Derby DB
 date: 2014-01-29
+permalink: /posts/2014-01-29/sequences-and-triggers-in-derby-db/index.html
 tags:
   - Derby DB
   - SQL

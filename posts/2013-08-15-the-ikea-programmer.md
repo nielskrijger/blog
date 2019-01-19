@@ -2,6 +2,7 @@
 title: The IKEA Programmer
 description: The IKEA Programmer
 date: 2013-08-15
+permalink: /posts/2013-08-15/the-ikea-programmer/index.html
 tags:
   - IKEA effect
 layout: layouts/post.njk

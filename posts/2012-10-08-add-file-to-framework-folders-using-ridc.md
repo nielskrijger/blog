@@ -2,6 +2,7 @@
 title: Add File to Framework Folders using RIDC
 description: Adding a File to Framework Folders in WebCenter Content using RIDC
 date: 2012-10-08
+permalink: /posts/2012-10-08/add-file-to-framework-folders-using-ridc/index.html
 tags:
   - WebCenter Content
   - RIDC

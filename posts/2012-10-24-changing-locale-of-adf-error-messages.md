@@ -2,6 +2,7 @@
 title: Changing Locale of ADF Error Messages
 description: Changing Locale of ADF Error Messages
 date: 2012-10-24
+permalink: /posts/2012-10-24/changing-locale-of-adf-error-messages/index.html
 tags:
   - ADF
 layout: layouts/post.njk

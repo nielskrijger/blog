@@ -2,6 +2,7 @@
 title: REST and JSON Best Practices
 description: REST and JSON Best Practices
 date: 2013-08-01
+permalink: /posts/2013-08-01/rest-and-json-best-practices/index.html
 tags:
   - REST
   - JSON

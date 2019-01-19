@@ -2,6 +2,7 @@
 title: Multitenant System Learnings
 description: Multitenant System Learnings
 date: 2014-01-18
+permalink: /posts/2014-01-18/multitenant-system-learnings/index.html
 tags:
   - Multitenant
 layout: layouts/post.njk
