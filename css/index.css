@@ -19,6 +19,9 @@ body {
   background-color: var(--white);
   letter-spacing: .015em;
 }
+h1 {
+  margin-bottom: .3em;
+}
 h1,
 h2,
 img,
