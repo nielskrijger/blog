@@ -14,16 +14,13 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
   color: var(--tuna);
   background-color: var(--white);
   letter-spacing: .015em;
 }
 h1 {
   margin-bottom: .3em;
-}
-h1, h2, h3 {
-  font-family: 'Roboto', sans-serif;
 }
 h1,
 h2,
