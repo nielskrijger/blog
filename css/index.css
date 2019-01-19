@@ -22,6 +22,9 @@ body {
 h1 {
   margin-bottom: .3em;
 }
+h1, h2, h3 {
+  font-family: 'Roboto', sans-serif;
+}
 h1,
 h2,
 img,
@@ -58,9 +61,7 @@ header {
 }
 pre,
 code {
-  font-family: Consolas, Menlo, Monaco, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter',
-    'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', 'Courier New', Courier,
-    monospace;
+  font-family: 'Roboto Mono', monospace;
   line-height: 1.5;
 }
 pre {
@@ -131,6 +132,7 @@ h1.logo a {
   margin-left: .8em;
 }
 .nav-item {
+  font-family: 'Roboto', sans-serif;
   display: inline-block;
   margin-right: 1em;
 }
