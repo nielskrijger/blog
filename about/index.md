@@ -7,7 +7,7 @@ navtitle: About
 templateClass: tmpl-post
 ---
 
-I am a full-stack web developer from Utrecht (The Netherlands). You can find me on:
+I am a freelance full-stack web developer from Utrecht (The Netherlands). You can find me on:
 
 - [LinkedIn](https://www.linkedin.com/in/nielskrijger) - Should be fairly up-to-date
 - [GitHub](https://github.com/nielskrijger) - I only publish experiments, snippets and temporary stuff on my GitHub profile. Rubbish mostly.
@@ -19,15 +19,16 @@ My own company for which I do work in my free time.
 Right now I'm focusing primarily on [Metrix.io](https://metrix.io) using:
 
 - Golang
-- React
+- React (hooks)
 - Kubernetes
 - Istio
 - Google Cloud
 - PostgreSQL
 - Redis
 - Cassandra
+- PubSub
 
-Betwee 2001-2010 developed and managed several high-traffic game web portals and developed websites for small companies using:
+Between 2001-2010 I developed and managed several high-traffic game web portals and developed websites for small companies using:
 
 - PHP, Python, Ruby, JavaScript, Java, Scala
 - HTML/XHTML
