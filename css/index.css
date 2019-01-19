@@ -26,6 +26,7 @@ h1,
 h2,
 img,
 p,
+#disqus_thread,
 .tmpl-post li {
   max-width: 37.5rem;
 }
