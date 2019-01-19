@@ -1,42 +1,29 @@
 {
   "name": "nielskrijger",
-  "version": "0.0.1",
-  "main": "src/index.js",
-  "private": true,
-  "engines": {
-    "node": "6"
-  },
-  "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "nodemon ./src/index.js"
-  },
-  "dependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-preset-env": "^1.5.1",
-    "babel-register": "^6.24.1",
-    "body-parser": "^1.17.2",
-    "convict": "^3.0.0",
-    "cors": "^2.8.3",
-    "express": "^4.15.3",
-    "express-handlebars": "^3.0.0",
-    "marked": "^0.3.6",
-    "moment": "^2.18.1",
-    "morgan": "^1.8.2",
-    "winston": "^2.3.1"
-  },
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-awspublish": "0.0.20",
-    "gulp-clean": "^0.3.2",
-    "gulp-clean-css": "^2.0.12",
-    "gulp-concat": "^2.6.0",
-    "gulp-declare": "^0.2.0",
-    "gulp-define-module": "^0.1.4",
-    "gulp-handlebars": "^2.2.0",
-    "gulp-markdown": "^0.2.0",
-    "gulp-uglify": "^0.3.2",
-    "gulp-util": "^3.0.0",
-    "run-sequence": "^0.3.7",
-    "through": "^2.3.8"
-  }
+    "@11ty/eleventy": "^0.6.0",
+    "@11ty/eleventy-plugin-rss": "^1.0.5",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^2.0.1",
+    "luxon": "^1.10.0",
+    "markdown-it": "^8.4.2",
+    "markdown-it-anchor": "^5.0.2"
+  },
+  "private": true,
+  "scripts": {
+    "dev": "eleventy --serve",
+    "deploy": "rm -rf ./_site && eleventy && now ./_site && now alias nielskrijger.com && now alias www.nielskrijger.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/nielskrijger/herwijerswank.git"
+  },
+  "author": "Niels Krijger",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://gitlab.com/nielskrijger/herwijerswank/issues"
+  },
+  "homepage": "https://gitlab.com/nielskrijger/herwijerswank#README"
 }

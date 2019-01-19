@@ -1,3 +1,3 @@
 # README
 
-Just my blog.
+My [blog](https://nielskrijger.com).

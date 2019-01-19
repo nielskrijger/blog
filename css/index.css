@@ -1,0 +1,207 @@
+:root {
+  --red: #c5004a;
+  --darkred: #7f0036;
+  --lightgray: #e0e0e0;
+  --white: #fff;
+  --tuna: #3e3f41;
+  --studio: #644BAB;
+  --pomegranate: #F22D1A;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+  color: var(--tuna);
+  background-color: var(--white);
+  letter-spacing: .015em;
+}
+h1,
+h2,
+img,
+p,
+.tmpl-post li {
+  max-width: 37.5rem;
+}
+p:last-child {
+  margin-bottom: 0;
+}
+p,
+.tmpl-post li {
+  line-height: 1.45;
+}
+blockquote {
+  font-style: italic;
+}
+a[href] {
+  color: var(--studio);
+  text-decoration: none;
+}
+a[href]:hover {
+  color: var(--pomegranate);
+}
+main {
+  padding: 0 1rem 1rem 1rem;
+}
+main :first-child {
+  margin-top: 0;
+}
+header {
+  display: flex;
+  align-items: center;
+}
+pre,
+code {
+  font-family: Consolas, Menlo, Monaco, 'Andale Mono WT', 'Andale Mono', 'Lucida Console', 'Lucida Sans Typewriter',
+    'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Liberation Mono', 'Nimbus Mono L', 'Courier New', Courier,
+    monospace;
+  line-height: 1.5;
+}
+pre {
+  font-size: 14px;
+  line-height: 1.375;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  -moz-tab-size: 2;
+  -o-tab-size: 2;
+  tab-size: 2;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+  padding: 1em;
+  margin: .5em 0;
+  background-color: #f6f6f6;
+}
+.highlight-line {
+  display: block;
+  padding: .125em 1em;
+  text-decoration: none; /* override del, ins, mark defaults */
+  color: inherit; /* override del, ins, mark defaults */
+}
+
+/* allow highlighting empty lines */
+.highlight-line:empty:before {
+  content: ' ';
+}
+/* avoid double line breaks when using display: block; */
+.highlight-line + br {
+  display: none;
+}
+
+.highlight-line-isdir {
+  color: #b0b0b0;
+  background-color: #222;
+}
+.highlight-line-active {
+  background-color: #444;
+  background-color: hsla(0, 0%, 27%, .8);
+}
+.highlight-line-add {
+  background-color: #45844b;
+}
+.highlight-line-remove {
+  background-color: #902f2f;
+}
+
+/* Header */
+h1.logo {
+  padding: 0 1rem;
+  margin: 1rem 0;
+  font-size: 2em;
+  letter-spacing: -.3em;
+}
+h1.logo a {
+  color: var(--tuna);
+}
+
+/* Nav */
+.nav {
+  padding: 0;
+  list-style: none;
+  margin-left: .8em;
+}
+.nav-item {
+  display: inline-block;
+  margin-right: 1em;
+}
+.nav-item a[href]:not(:hover) {
+  text-decoration: none;
+}
+.nav-item-active {
+  font-weight: 700;
+}
+.nav-item-active a {
+  color: var(--pomegranate);
+}
+
+/* Post list */
+.postlist {
+  list-style-type: none;
+  padding: 0;
+}
+.postlist-date {
+  font-size: .8125em;
+  color: var(--tuna);
+}
+.postlist-date {
+  word-spacing: -.5px;
+}
+.postlist-link {
+  display: inline-block;
+  padding: .25em .1875em;
+}
+.tmpl-home .postlist-link {
+  font-size: 1.1875em;
+}
+
+/* Tags */
+.post-tag {
+  display: inline-block;
+  vertical-align: text-top;
+  text-transform: uppercase;
+  font-size: .625em;
+  padding: 2px 4px;
+  margin: 0 .2em;
+  background-color: var(--red);
+  color: var(--white);
+  border-radius: .25em;
+  text-decoration: none;
+}
+a[href].post-tag,
+a[href].post-tag:visited {
+  color: #fff;
+}
+
+/* Warning */
+.warning {
+  background-color: #ffc;
+  padding: 1em .625em; /* 16px 10px /16 */
+}
+.warning ol:only-child {
+  margin: 0;
+}
+
+/* Direct Links / Markdown Headers */
+.direct-link {
+  font-family: sans-serif;
+  text-decoration: none;
+  font-style: normal;
+  margin-left: .1em;
+}
+a[href].direct-link,
+a[href].direct-link:visited {
+  color: transparent;
+}
+a[href].direct-link:focus,
+a[href].direct-link:focus:visited,
+:hover > a[href].direct-link,
+:hover > a[href].direct-link:visited {
+  color: #aaa;
+}

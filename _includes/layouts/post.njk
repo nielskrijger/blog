@@ -1,0 +1,17 @@
+---
+layout: layouts/base.njk
+templateClass: tmpl-post
+---
+
+<h1>{{ title }}</h1>
+<time class="postlist-date" datetime="{{ date | htmlDateString }}">{{ date | readableDate }}</time>
+{% for tag in tags %}
+    {%- if tag != "posts" -%}
+    {% set tagUrl %}/tags/{{ tag }}/{% endset %}
+    <a href="{{ tagUrl | url }}" class="post-tag">{{ tag }}</a>
+    {%- endif -%}
+{% endfor %}
+
+{{ content | safe }}
+
+<p><a href="{{ '/' | url }}">← Home</a></p>

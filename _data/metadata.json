@@ -1,0 +1,17 @@
+
+{
+    "title": "Niels Krijger",
+    "url": "https://nielskrijger.com/",
+    "description": "Tech blog about whichever interests currently.",
+    "feed": {
+      "subtitle": "Tech blog about whichever interests currently.",
+      "filename": "feed.xml",
+      "path": "/feed/feed.xml",
+      "url": "https://nielskrijger.com/feed/feed.xml",
+      "id": "https://nielskrijger.com/"
+    },
+    "author": {
+      "name": "Niels Krijger",
+      "email": "niels@kryger.nl"
+    }
+  }
