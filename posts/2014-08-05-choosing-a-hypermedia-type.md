@@ -4,13 +4,21 @@ description: Choosing a Hypermedia Type; HAL vs JSON-LD vs Collection+JSON vs Si
 date: 2014-08-05
 tags:
   - REST
+  - API
   - Hypermedia
 layout: layouts/post.njk
 ---
 
 This post is inspired by a blogpost of Kevin Sookocheff "[on choosing a hypermedia format](http://sookocheff.com/posts/2014-03-11-on-choosing-a-hypermedia-format/)". Kevin compares four hypermedia types: [JSON-LD](http://www.w3.org/TR/json-ld/), [HAL](http://stateless.co/hal_specification.html), [Collection+JSON](http://amundsen.com/media-types/collection/), and [Siren](https://github.com/kevinswiber/siren). Continuing on his work in this blog I review a fifth one: [JSON:API](http://jsonapi.org/). Furthermore I want to compare what sets these five different hypermedia types apart to aid you in selecting your preferred hypermedia type or perhaps help designing your own.
 
-## What is Hypermedia?
+Contents:
+
+1. <a href="{{ '#what-is-hypermedia' | url }}">What is Hypermedia</a>
+2. <a href="{{ '#hypermedia-spec-comparison' | url }}">Hypermedia spec comparison</a>
+3. <a href="{{ '#conclusion' | url }}">Conclusion</a>
+4. <a href="{{ '#opinion' | url }}">Opinion</a>
+
+# What is Hypermedia
 
 I won't explain Hypermedia in detail, others have already done this quite well; I particularly like the article of Martin Fowler on [Richardson's REST Maturity Model](http://martinfowler.com/articles/richardsonMaturityModel.html). In this model the most matured REST API designs include what is referred to as **Hypermedia Controls** ("Level 3" of the REST maturity model). Hypermedia Controls tell the service consumer what it can or should do next.
 
@@ -185,7 +193,7 @@ The JSON:API links can be very powerful; by specifying a link only once the clie
 
 It should be noted JSON:API does not specify how to implement pagination; the "meta" is just an example.
 
-# Hypermedia specification comparison
+# Hypermedia spec comparison
 
 In the table below I compare features and the format of hypermedia types. The table contains the following:
 
@@ -453,12 +461,12 @@ If a key concern is caching resources within the client while designing a very n
 
 # Opinion
 
-Public adoption of hypermedia types has been poor at best, in fact while researching for this article I had very little success in finding actual implementations of any of the discussed hypermedia types. As far as I know the big boys (Google, Amazon, Facebook, Twitter) haven't.
+**For now I'd stick with documenting REST API's using Swagger/OpenAPI with resources being represented in their vanilla format until one of those hypermedia controls becomes really popular across multiple programming languages and frameworks.**
 
-Having said that, HAL appears to be the best known and most popular hypermedia type currently (and the easiest to implement), arguably JSON:API comes in second with tool support for [several languages](http://jsonapi.org/examples/). The other hypermedia types feel very much specialized and suitable for niche use cases only. Unless you control both the producer and client implementations be wary about adopting any hypermedia type; support for them is poor and they are frequently misunderstood. Adopting a hypermedia type might very well just complicate your API and cost you a lot of time without delivering actual benefits.
+Hypermedia controls add significant complexity to your API design and for many clients may provide no benefits at all and simply complicate your API. Support in automated clients is poor and its intent is often misunderstood and not adopted fully. They are not a substitute to documentation as context and business logic cannot be captured in the API specification alone.
 
-If you do need very strict and rigid API's that ought to be automatically interpreted in a wide range of tools; you should appreciate this has already been achieved a decade ago and is called SOAP/WSDL/UDDI. While these technologies work in many business (and thus controlled) environments these technologies never caught on in the public API space simply because the technology is too complicated and cumbersome to use. Many of the hypermedia examples I've seen reminded me of WSDL/SOAP/UDDI. I simply don't believe the more advanced hypermedia types (i.e. all of them except HAL) work unless proper tool support for them is available in a wide range of programming languages.
+Public adoption of hypermedia types has been poor at best, in fact while researching for this article I found few implementations of the discussed hypermedia types.
 
-Reviewing these hypermedia types also made me realize that if you'd want to support all possible advanced use cases within a single hypermedia type you'd have to create a monstrosity; an inconceivable mess of features no-one could make sense of. Much like SOAP/WSDL/UDDI in fact.
+Having said that, HAL appears to be the best known and most popular hypermedia type currently (and the easiest to implement), arguably JSON:API comes in second with tool support for [several languages](http://jsonapi.org/examples/). The other hypermedia types feel very much specialized and suitable for niche use cases only.
 
-There are definitely use cases where one hypermedia type may way work and provide significant benefits. If you're unsure, plain old JSON with proper API documentation works well too. Just to be safe I'd keep it simple at first and if need be add HAL or JSON-LD on top of your existing API when someone shouts you need Hypermedia controls.
+If you do need very strict and rigid API's that ought to be automatically interpreted in a wide range of tools; you should appreciate this has already been achieved more than a a decade ago in the form of SOAP/WSDL/UDDI. While these technologies work well in many business (and thus controlled) environments these technologies never caught on in the public API space simply because the technology is too complicated and cumbersome to use. Many of the hypermedia examples I've seen reminded me of WSDL/SOAP/UDDI; adding a lot of complexity.
