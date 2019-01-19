@@ -28,6 +28,6 @@ Well, not hard at all as it turns out.
 
 Stubbornly I rolled my own solution in a couple of hours, hosted on [S3](http://aws.amazon.com/s3/), deployed with [Gulp](http://gulpjs.com/), and composed entirely from static files.
 
-_Update 2019-01-19: I've since migrated to https://www.11ty.io_
+_Update 2019-01-19: I've since migrated to https://www.11ty.io and https://zeit.co_
 
 You can find the source code of this blog [here](https://github.com/nielskrijger/blog).
