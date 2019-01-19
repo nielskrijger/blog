@@ -3,6 +3,7 @@ title: API vs Domain-Driven Architecture
 description: API vs Domain-Driven Architecture
 date: 2017-06-05
 tags:
+  - API
   - Architecture
 layout: layouts/post.njk
 ---
