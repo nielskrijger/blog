@@ -12,9 +12,33 @@ I am a full-stack web developer from Utrecht (The Netherlands). You can find me 
 - [LinkedIn](https://www.linkedin.com/in/nielskrijger) - Should be fairly up-to-date
 - [GitHub](https://github.com/nielskrijger) - I only publish experiments, snippets and temporary stuff on my GitHub profile. Rubbish mostly.
 
+### Benian (2001-present)
+
+My own company for which I do work in my free time.
+
+Right now I'm focusing primarily on [Metrix.io](https://metrix.io) using:
+
+- Golang
+- React
+- Kubernetes
+- Istio
+- Google Cloud
+- PostgreSQL
+- Redis
+- Cassandra
+
+Betwee 2001-2010 developed and managed several high-traffic game web portals and developed websites for small companies using:
+
+- PHP, Python, Ruby, JavaScript, Java, Scala
+- HTML/XHTML
+- SQL
+- MySQL, PostgreSQL, DynamoDB
+- Various web frameworks (Symfony, Zend, Grails, Ruby on Rails, Play!, DropWizard, Express.js, a custom PHP framework and Martini)
+- Drupal, Joomla
+
 ### RTL Videoland (2018)
 
-Working as a full-stack engineer with:
+Worked as a full-stack engineer in the Onboarding-team with:
 
 - Javascript
 - Python
@@ -30,7 +54,7 @@ Working as a full-stack engineer with:
 
 ### oneUp (2017 +/- 6 months)
 
-Working as a full-stack engineer with:
+Worked as a full-stack engineer in the PVH/Tommy-team with:
 
 - React, React Native & Redux
 - NodeJS
@@ -38,7 +62,7 @@ Working as a full-stack engineer with:
 
 ### Nolemmings (2015-2017)
 
-Working as a full-stack engineer with:
+Worked as a full-stack engineer on various projects with:
 
 - JavaScript
 - CoffeeScript
@@ -53,9 +77,12 @@ Working as a full-stack engineer with:
 
 ### IceMobile (2013-2015)
 
-As back-end / DevOps engineer I've been working with the following technologies:
+Worked as a back-end & DevOps engineer on BrandLoyalty's digital loyalty program using:
 
-- Node.js
+- Java
+- NodeJS
+- J2EE
+- Spring
 - Chef
 - Jenkins
 - Amazon WebServices
@@ -65,25 +92,12 @@ As back-end / DevOps engineer I've been working with the following technologies:
 - Redis
 - Swagger / OpenAPI
 - RabbitMQ
-- JavaEE + Spring
-- Oracle MiddleWare stack (WLS, Oracle DB)
-
-### Benian (2001-present)
-
-My own company. Hosted several high-traffic flash game web portals and developed websites for small companies using the following technologies:
-
-- PHP, Python, Ruby, Javascript, Java, Scala
-- HTML/XHTML
-- SQL
-- MySQL, PostgreSQL, Cassandra, DynamoDB
-- Various web frameworks (Symfony, Zend, Grails, Ruby on Rails, Play!, DropWizard, Express.js, a custom PHP framework and Martini)
-- Several PHP CMS systems (Drupal, Joomla)
-
-More recently I've been developing Mobile apps using [Apache Cordova](http://cordova.apache.org/).
+- OracleDB
+- Oracle MiddleWare stack (WebLogic)
 
 ### Oracle (2011-2013)
 
-Worked as a junior SOA consultant with the following technologies:
+Worked as a junior SOA consultant with:
 
 - WebLogic
 - Glassfish
@@ -99,9 +113,9 @@ Worked as a junior SOA consultant with the following technologies:
 
 ### CAPE Group (2009-2010)
 
-CAPE Group is a systems integrator using web portal products to deliver solutions using the following technologies:
+Worked as a junior systems integrator with:
 
-- Mendix (BPMN-based)
+- Mendix (BPMN-based tool)
 - Java
 - JasperSoft (BI)
 
