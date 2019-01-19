@@ -14,7 +14,8 @@
   "private": true,
   "scripts": {
     "dev": "eleventy --serve",
-    "deploy": "rm -rf ./_site && eleventy && now ./_site && now alias nielskrijger.com && now alias www.nielskrijger.com"
+    "now-build": "npx eleventy",
+    "manual-deploy": "rm -rf ./_site && eleventy && now ./_site && now alias nielskrijger.com && now alias www.nielskrijger.com"
   },
   "repository": {
     "type": "git",
