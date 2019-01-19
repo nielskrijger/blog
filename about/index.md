@@ -78,7 +78,7 @@ Worked as a full-stack engineer on various projects with:
 
 ### IceMobile (2013-2015)
 
-Worked as a back-end & DevOps engineer on BrandLoyalty's digital loyalty program using:
+Worked as a senior back-end & DevOps engineer on BrandLoyalty's digital loyalty program using:
 
 - Java
 - NodeJS
