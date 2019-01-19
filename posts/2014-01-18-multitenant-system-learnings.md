@@ -9,7 +9,7 @@ layout: layouts/post.njk
 
 Having worked on a couple of multi-tenant projects I thought I'd share my experiences with them.
 
-For those unfamiliar with multitenant systems; the idea is to have a single production platform servicing multiple clients (tenants) at the same time rather than setting up a new production platform for each one of them. Mulit-tenancy promises better economies of scale and simplify deployment at the expense of additional development complexity. When the application is being developed to run on (expensive) application servers and databases it makes sense to utilize them fully before scaling out. Not having to deploy your application for every customer will save money.
+A multitenant system services multiple clients (tenants) at the same time from a single production. This type of system avoids setting up and maintaining a different production environment for each new client. Multi-tenancy promises better economies of scale and simplify deployment at the expense of additional development complexity.
 
 The trade-off is development complexity. Here is a list of challenges you might face when implementing multi-tenancy:
 

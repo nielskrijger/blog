@@ -46,13 +46,16 @@ you might get the following response:
 }
 ```
 
-The property `links` adds to two resource locations: 1) the current location of the returned person resource in a `self`-link and 2) a link where the manager resource can be retrieved.
+The property `links` adds two resource locations:
+
+1. the current location of the returned person resource in a `self`-link and
+2. a link where the manager resource can be retrieved.
 
 The advantage of these hypermedia controls is the API becomes discoverable; all resources can be found by traversing the links-hierarchy. In addition if all clients make use of this hierarchy rather than hardcode endpoints it is possible to dynamically change these urls on the server-side when necessary.
 
 ## The example "vanilla" model
 
-In my review of JSON:API I continue with the design of [Kevin](http://sookocheff.com/posts/2014-03-11-on-choosing-a-hypermedia-format/) who uses a simple player-model to demonstrate the differences between various hypermedia types. The player-representation of this model looks like this (this is taken directly from Kevin's blogpost):
+In my review of JSON:API I continued with the design of [Kevin](http://sookocheff.com/posts/2014-03-11-on-choosing-a-hypermedia-format/) who uses a simple player-model to demonstrate the differences between various hypermedia types. The player-representation of this model looks like this (this is taken directly from Kevin's blogpost):
 
 ```json
 // GET https://api.example.com/player/1234567890
