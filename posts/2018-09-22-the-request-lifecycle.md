@@ -10,7 +10,7 @@ tags:
 layout: layouts/post.njk
 ---
 
-When adding a new service request I found the following list a fairly common sequence of steps I need to take care of:
+When adding a new service request I've found the following list a fairly common sequence of steps I should take care of:
 
 1. <a href="{{ '#1.-routing' | url }}">Routing</a>
 2. <a href="{{ '#2.-authentication' | url }}">Authentication</a>
@@ -18,9 +18,11 @@ When adding a new service request I found the following list a fairly common seq
 4. <a href="{{ '#4.-deserialize-payload' | url }}">Deserialize payload</a>
 5. <a href="{{ '#5.-input-validation' | url }}">Syntax validation</a>
 6. <a href="{{ '#6.-retrieve-domain-objects' | url }}">Retrieve domain objects</a>
-7. <a href="{{ '#7.-semantic-validation-(business-rules)' | url }}">Semantic validation</a>
+7. <a href="{{ '#7.-business-rules-(semantic-validation)' | url }}">Business rules</a>
 8. <a href="{{ '#8.-side-effects' | url }}">Side-effects</a>
 9. <a href="{{ '#9.-response' | url }}">Response</a>
+
+While the order of these steps vary and some are optional depending on the context, the list is roughly the same for all protocols, frameworks and languages.
 
 In this blog I'll walk through these steps and share some learnings I've had along the way.
 
@@ -28,9 +30,9 @@ In this blog I'll walk through these steps and share some learnings I've had alo
 
 The application receives the request and makes it available in some form of Request object. Either you the programmer or the framework you're using determines which pieces of code will receive and process this request. The receiver is usually a Controller or RequestHandler.
 
-**The choice of using either a Controller or a RequestHandler is actually a major architectural decision for your codebase.**
+**The choice of using either a Controller or a RequestHandler is an architectural decision for your codebase.**
 
-RequestHandlers tend to process a single type of request fully and only delegate where applicable. Controllers however delegate as much as possible and focus on the interaction of the different parts of the codebase to fulfill a variety of requests (e.g. all `GET DELETE POST /user` requests).
+RequestHandlers tend to process a single type of request fully and only delegate where applicable. Controllers however delegate as much as possible and focus on the interaction of the different parts of your codebase to fulfill a variety of requests (e.g. all `GET DELETE POST /user` requests).
 
 I've come to favour RequestHandlers because I feel there is little coupling Between different types of requests for the same resource. Consider:
 
@@ -39,7 +41,7 @@ I've come to favour RequestHandlers because I feel there is little coupling Betw
 
 The main thing these two endpoints share is the response format, but nothing else. From a code-perspective these two endpoints together are not a meaninigful unit. As your controllers grow (which they tend to do), consider splitting this up into separate request handlers.
 
-Right now I've tend to create a separate file for each request handler, e.g. `get_user.xy` and `post_user.xy` and organize reusable code as I see fit. This is a simple basic approach that scales out well.
+Right now I tend to create a separate file for each request type, e.g. `get_user.xy` and `post_user.xy` and organize reusable code as I see fit. This is a simple basic approach that scales out well.
 
 ## 2. Authentication
 
@@ -51,11 +53,11 @@ Job done.
 
 Because authentication-handling logic is very similar across all your backend endpoints it is usually performed before anything else within middleware, a decorator or request interceptor. Some challenges with this approach are:
 
-- Ignore/disable authentication for public endpoints (the `GET /articles/123` is a public endpoint)
+- Disabling authentication for public endpoints (the `GET /articles/123` is a public endpoint)
 - Multiple types of sessions token (e.g. Session ID's and JWTs).
 - Different ways to send a token (Cookie vs Header).
 
-I've come across a codebase that had 4 types of authentication where within a request handler it was terribly difficult to work out what was mandatory or not. I resorted to writing lots of tests simply to find out what's happing.
+I've come across a codebase that had 4 types of authentication and used various lists to whitelist and blacklist endpoint for each authentication methdo. It was terribly difficult to work out which authentication methods actually applied to an individual request handler. I resorted to writing lots of tests simply to find out what's happing.
 
 In such scenarios it is better to treat authentication not as a cross-cutting concern but as part of the request handler itself (i.e. after routing). This might cause some boilerplate but the reverse is much worse: magic.
 
@@ -78,48 +80,52 @@ Imagine the following request:
 }
 ```
 
-For this `POST /articles`-request we could start with a simple role-based mechanism where only users with `role = "WRITER"` are allowed to execute `POST /articles`-requests. A simple check `if request.user.role != "WRITER"` would be sufficient.
+For this `POST /articles`-request we could start with a simple role-based mechanism where users with `role = "WRITER"` are allowed to execute `POST /articles`-requests. A simple check `if request.user.role == "WRITER"` would be sufficient.
 
-This simple role-based authorization logic can be executed immediately after the authentication-step because the primary user details have been added to the request context.
+This simple role-based authorization logic can be executed immediately after the authentication-step because the primary user details have been added to the request context after authentication.
 
-Done. Simple right?
+Done.
 
-Now imagine the following scenarios:
+Now imagine the following use cases:
 
 - Add a `PATCH /articles/:id`-endpoint which enables authors to update their content. Only writers who authored the content should be allowed to update the article.
 - Only users with the "EDITOR" role are allowed to approve an article and publish it, changing the article's status from "DRAFT" to "PUBLISHED".
 - If an article is in "DRAFT"-state the `GET /articles/:id`-endpoint should return a 404 for unprivileged users.
-- The author and any other user with the "EDITOR"-role should be able to send a link to anyone with the "DRAFT" article for proofreading purposes.
+- The author should be able to send a link to anyone with a "DRAFT" article for proofreading purposes.
 
 With such requirements a basic role based mechanism quickly breaks down, and attribute-based access control and/or ACL come into play.
 
 You can try to keep authorization as a single step within the request-lifecycle but it is common for evolving systems to start spreading around their authorization logic across various steps.
 
-Try to get a good idea about your security requirements before you start designing the application and consider the available options within your framework and ecosystem. If you are able to keep authorization simple and standardised it will definitely pay of in development speed, readability and future maintenance. I have never been fully satisfied with the authorization logic of any systems I've worked on; trade-offs need to be made.
+Try to get a good idea about your security requirements before you start designing the application and consider the available options within your framework and ecosystem (you should also read [this article on authorization models](https://dinolai.com/notes/others/authorization-models-acl-dac-mac-rbac-abac.html)).
+
+If you are able to keep authorization simple and standardised it will definitely pay of in development speed, readability and future maintenance. I have never been fully satisfied with the authorization logic of any systems I've worked on; trade-offs need to be made.
 
 ## 4. Deserialize payload
 
-Ruby, JavaScript, Python and PHP developers may wonder what this step is all about as translating a JSON request payload into usable application code is automagic within a dynamically typed language. It's a big time-saver over statically-typed languages; JSON is simply translated to a single variable with data contents mimicking the received payload.
+One of the main advantages of a dynamically typed language is you don't have to waste your time with typecasting; so Ruby, JavaScript, Python and PHP developers can simply skip this section and feel smug.
 
 In statically typed languages I've done either of the following:
 
 - map the payload to a data-type according to a user-defined mapping using either annotations, tags, PO\*O object converters or some other type of mapping specification;
-- or load the payload into an raw object and use reflection to access the payload.
+- or load the payload into a raw object and use reflection to access its fields.
 
-The latter foregoes some of the static typing goodness in which case a dynamically typed language might make more sense... hence I prefer to statically cast it into an well-defined type and simplify the rest of the codebase.
+The latter foregoes some of the static typing goodness hence I generally prefer to statically cast it into a well-defined type.
 
 Usually the framework/language does the heavy lifting but this may cause issues by itself:
 
-- It is often difficult to transform errors thrown during deserialization (e.g. malformed JSON) to your own error-response.
+- It is often difficult to transform errors thrown during deserialization (e.g. malformed JSON) to your own error-format.
 - Unwanted conversions may occur, e.g. a string "123" being cast to an int automatically without you knowing. While this may sound convenient it is much cleaner to stick to strict conversions.
 
-These two issues alone have made me reject two different frameworks; it was just to cumbersome to bend it to my will.
+These two issues alone have made me give up on two different frameworks; it was just to cumbersome to bend deserialization to my will.
 
 ## 5. Input validation
 
 Input or syntax validation can be done in several ways. The naive approach is to check each input field for their associated type and basic requirements. To reduce boilerplate libraries and/or utility functions are used.
 
-One of the tools I've used a lot is JSON Schema:
+After all these years I still use this naive approach regularly, particularly for microservices.
+
+One of my favourite tools is [JSON schema](https://json-schema.org/) which specifies validation rules like so:
 
 ```json
 {
@@ -142,19 +148,19 @@ One of the tools I've used a lot is JSON Schema:
 
 Parsing and validating your object against a JSON schema requires a powerful library, but makes for very readable and clearly spearated validation specs. It is part of Swagger/OpenAPI as well.
 
-Within statically typed languages input validation is usually part of the deserialisation mapping using annotations or something similar. I found these solutions are generally not as comprehensive or flexible as JSON schema or custom validators and require quite some customization to craft a consistent API.
+Within statically typed languages input validation is usually part of the deserialisation mapping using annotations or something similar. I found these solutions are generally not as comprehensive or flexible as JSON schema or custom functions; I usually end up adding quite a bit of customization and boilerplate to capture all input validation rules using these mappers.
 
 ## 6. Retrieve domain objects
 
 Most backend requests require additional data from external sources (db, cache, third-party service, ...) to process business logic.
 
-If your primary dependency is a single database and you're using an ORM that resolves relationships automatically you have little to do further. Do be aware most (if not all) ORMs resolve relationships lazily; I once debugged a slow JPA-based system and it turned out the logic ended up resolving 7 select queries sequentially (i.e 7 times the app-DB latency, which in itself was 20-30ms I recall). A couple of eager annotations fixed the issue.
+If your primary dependency is a single database and you're using an ORM that resolves relationships automatically you have little to do further. Do be aware most (if not all) ORMs resolve relationships lazily; I once debugged a slow JPA-based system and it turned out the logic ended up resolving 7 select queries sequentially (i.e 7 times the app-DB latency, which for this system was significant). A couple of eager annotations fixed this issue.
 
 However, due to the rise of distributed cloud apps and microservices it has become less common your app primarily interacts with just a single database.
 
-When accessing multiple datasources and services I tend to fetch all data in parallel before doing anything else; and store long-living data in the application context object (or create one manually if my framework doesn't supply one). That way the average response time is lower and your business logic can be processed synchronously which simplifies code in most languages and frameworks; particularly JavaScript-based languages, Python and C# suffer from red-colored functions (read [What color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) for an explanation).
+When accessing multiple datasources and services I tend to fetch all data in parallel before doing anything else; and store long-living data in an application context object. That way the average response time is lower and your business logic can be processed synchronously which simplifies code in most languages and frameworks. Particularly JavaScript-based languages, Python and C# suffer from red-colored functions (read [What color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) for an explanation).
 
-## 7. Semantic validation (business rules)
+## 7. Business rules (semantic validation)
 
 Business rules are validations based on (usually) runtime information retrieved from domain objects. Some examples:
 
@@ -168,29 +174,30 @@ Alternative solutions are Business Rule Engines (BREs) and Workflow Engines whic
 
 That sounds great but typically these solutions require expert knowledge to operate and reconfigure. Moreover configuration changes are usually poorly tested, let alone covered in automated tests.
 
-Having worked on a BRE & Workflow application and een several others ones in use during my time at Oracle my verdict is simple; avoid them for pretty much all your projects. They sound great in principle but the return on investment is very low, if not usually a net loss.
+Having worked on a BRE & Workflow application and seen several others used in practice my verdict is simple; avoid them for pretty much all your projects. They sound great in principle but the return on investment is very low, if not usually a net loss.
 
-Right now I favour capturing business rule configuration in a headless CMS and programatically process and test these config settings. While not as flexible as a Bussiness Rule or Workflow engine I found it a more cost-effective way to enable domain experts to adjust parameters while also cover them by automated tests.
+Right now I favour capturing business rule configuration in a headless CMS and programatically process and test these config settings. While not as flexible as a Bussiness Rule or Workflow engine I found it a more cost-effective way to enable domain experts to adjust parameters while also covering them by automated tests.
 
 ## 8. Side-effects
 
-Except for most data-retrieval requests most requests will:
+Except for data-retrieval requests most requests will stuff like:
 
 - modify database records/documents
 - invoke external service(s)
 - push messages to queues & topics
+- ...
 
-When executing multiple side-effects you should carefully consider the order and transactionality of those effects. A relational database can guarantee you an [all-or-nothing transaction](https://en.wikipedia.org/wiki/Atomic_commit) while most NoSQL databases cannot.
+When executing multiple side-effects you should carefully consider the order and transactionality of those effects. A relational database can guarantee you an [all-or-nothing transaction](https://en.wikipedia.org/wiki/Atomic_commit) but most NoSQL databases cannot.
 
-I often end up asking the question; _"How bad is it that this fails?"_
+I often end up asking the question; _"How bad is it if this fails?"_
 
 In an advanced application framework you might have built-in transactions across databases, requests and queues; but this is rare. Usually you don't have any guarantees and such mechanisms are complex to build yourself (and never 100% fail-safe). In these scenarios I tend to order side-effects synchronously in the following order:
 
-1. **Primary side-effects**. These are the most important and cannot be recovered from when failing.
-2. **Secondary side-effects**. These are very difficult or painful to recover from. This I'll usually implement through an extremely high-available queue-based service that is unlikely to fail; or when I can easily rollback the primary side-effect.
+1. **Primary side-effects**. These are the most important and cannot be recovered from when failing. The service returns an error.
+2. **Secondary side-effects**. These are difficult to recover from when failing, usually requiring technical intervention to resolve. This I'll usually implement by either rolling back the primary side-effect or trust an extremely high-available queue-based service.
 3. **Tertiary side-effects**. These are recoverable effects through good UX, automated recovery mechanisms or have only limited impact when they fail. These effects never affect the response at all (i.e. an error is logged when they fail but the eror doesn't bubble up).
 
-In practice most of my side-effects are either primary or tertiary side-effects while I'll avoid secondary effects as much as I can. This mainly because I do not want to invest time in developing and testing the complex mechanisms required for secondary side-effects to work properly, let alone I'll trust those mechanisms for all possible scenarios.
+In practice most of my side-effects are either primary or tertiary side-effects while I'll avoid secondary effects as much as I can. This mainly because I do not want to invest time in developing and testing the complex mechanisms required for secondary side-effects to work properly, let alone I'll trust those mechanisms in all possible scenarios.
 
 For example; a new user makes a `POST /users`-request which executes a database transaction (the primary side-effect) and sends a verification email through a third-party email service afterwards. That verification email is either a:
 
@@ -203,7 +210,7 @@ It makes much more sense to upgrade a secondary side-effect to a tertiary side-e
 
 This is by far the most important aspect of your API design and ―in contrast to most other steps― is often reused across different types of requests.
 
-The main problem with response messages is backwards compatibility. It is safe to assume any status code, error message, typo... any outdated behaviour by the service a client will now rely upon.
+The main problem with response messages is backwards compatibility. It is safe to assume any status code, error message, typo... any outdated behaviour by the service a client will rely upon when the system has been in production for a while.
 
 While backwards-incompatible changes are manageable through incrementing the API-version they too are fraught with problems, primarily because in practice it takes a lot of overhead and time to update all clients to this new API version. It is not uncommon for a third-party client to take years before getting upgraded.
 
