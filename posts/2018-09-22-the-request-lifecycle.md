@@ -25,7 +25,7 @@ When adding a new backend request I've found the following list a fairly common 
 9. <a href="{{ '#9.-side-effects' | url }}">Side-effects</a>
 10. <a href="{{ '#10.-response' | url }}">Response</a>
 
-The order of these steps vary and some are optional depending on the type of request and environment, but this list is fairly similar for all protocols, frameworks, languages and environments I've worked in thus far.
+The order of these steps vary and some are optional depending on the type of request and environment, but this list is fairly similar for all protocols, frameworks, languages and environments I've worked with thus far.
 
 In this blog I'll walk through these steps and share some learnings I've had along the way.
 
