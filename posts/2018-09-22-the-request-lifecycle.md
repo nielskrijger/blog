@@ -19,7 +19,7 @@ When adding a new backend request I've found the following list a fairly common 
 3. <a href="{{ '#3.-authentication' | url }}">Authentication</a>
 4. <a href="{{ '#4.-authorization' | url }}">Authorization</a>
 5. <a href="{{ '#5.-deserialize-payload' | url }}">Deserialize payload</a>
-6. <a href="{{ '#6.-syntax-validation' | url }}">Syntax validation</a>
+6. <a href="{{ '#6.-request-validation' | url }}">Request validation</a>
 7. <a href="{{ '#7.-retrieve-domain-objects' | url }}">Retrieve domain objects</a>
 8. <a href="{{ '#8.-business-rules-(semantic-validation)' | url }}">Business rules</a>
 9. <a href="{{ '#9.-side-effects' | url }}">Side-effects</a>
@@ -149,11 +149,11 @@ Usually the framework/language does the heavy lifting but this may cause issues 
 
 These two issues alone have made me give up on two different frameworks; it was just to cumbersome to bend deserialization to my will.
 
-## 6. Syntax validation
+## 6. Request validation
 
-Input / syntax validation can be done in several ways.
+Server-side request validation can be done in several ways.
 
-The naive approach is to check each input field for their associated type and basic requirements. To reduce boilerplate libraries and/or utility functions are used. After all these years I still use this naive approach regularly, particularly for microservices.
+The naive approach is to check each field for their associated type and basic requirements "manually". To reduce boilerplate libraries and/or utility functions are used. After all these years I still use this naive approach regularly, particularly for microservices.
 
 One of my favourite tools is <a href="https://json-schema.org/" target="_blank">JSON schema</a> which specifies validation rules like so:
 
@@ -178,7 +178,7 @@ One of my favourite tools is <a href="https://json-schema.org/" target="_blank">
 
 Parsing and validating your object against a JSON schema requires a powerful library but makes for very readable validation specs. It is part of Swagger/OpenAPI as well. 
 
-Within statically typed languages input validation requirements are often part of the deserialisation mapping using annotations or something similar. I found these solutions are generally not as comprehensive or flexible compared to JSON schema or custom functions. I usually end up adding quite a bit of customization and boilerplate to capture all input validation rules using these mappers. The great thing about this approach  is it is usually well understood by other developers and don't require additional third-party libraries.
+Within statically typed languages request validation is often part of the deserialisation mapping using annotations or something similar. I found these solutions are generally not as comprehensive or flexible compared to JSON schema or custom functions. I usually end up adding quite a bit of customization and boilerplate to capture all request validation rules using these mappers. The great thing about this approach  is it is usually well understood by other developers and don't require additional third-party libraries.
 
 ## 7. Retrieve domain objects
 
