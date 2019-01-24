@@ -10,23 +10,53 @@ tags:
 layout: layouts/post.njk
 ---
 
-When adding a new service request I've found the following list a fairly common sequence of steps I should take care of:
+When adding a new backend request I've found the following list a fairly common sequence of steps I should take care of:
 
-1. <a href="{{ '#1.-routing' | url }}">Routing</a>
-2. <a href="{{ '#2.-authentication' | url }}">Authentication</a>
-3. <a href="{{ '#3.-authorization' | url }}">Authorization</a>
-4. <a href="{{ '#4.-deserialize-payload' | url }}">Deserialize payload</a>
-5. <a href="{{ '#5.-input-validation' | url }}">Syntax validation</a>
-6. <a href="{{ '#6.-retrieve-domain-objects' | url }}">Retrieve domain objects</a>
-7. <a href="{{ '#7.-business-rules-(semantic-validation)' | url }}">Business rules</a>
-8. <a href="{{ '#8.-side-effects' | url }}">Side-effects</a>
-9. <a href="{{ '#9.-response' | url }}">Response</a>
+1. <a href="{{ '#1.-request' | url }}">Request</a>
+2. <a href="{{ '#2.-routing' | url }}">Routing</a>
+3. <a href="{{ '#3.-authentication' | url }}">Authentication</a>
+4. <a href="{{ '#4.-authorization' | url }}">Authorization</a>
+5. <a href="{{ '#5.-deserialize-payload' | url }}">Deserialize payload</a>
+6. <a href="{{ '#6.-input-validation' | url }}">Input validation</a>
+7. <a href="{{ '#7.-retrieve-domain-objects' | url }}">Retrieve domain objects</a>
+8. <a href="{{ '#8.-business-rules-(semantic-validation)' | url }}">Business rules</a>
+9. <a href="{{ '#9.-side-effects' | url }}">Side-effects</a>
+10. <a href="{{ '#10.-response' | url }}">Response</a>
 
 The order of these steps vary and some are optional depending on the type of request and environment, but this list is fairly similar for all protocols, frameworks, languages and environments I've worked in thus far.
 
 In this blog I'll walk through these steps and share some learnings I've had along the way.
 
-## 1. Routing
+## 1. Request
+
+The first thing to consider when designing an API  is to select a protocol. While a comparison between protocols is a blogpost in itself, I'll quickly go through the protocols I've used or experimented with:
+
+1. **REST / JSON.** Used for most API's these days and relies on the fundamental principles of HTTP (how it was originally intended). Despite its popularity weirdly I've come acros very few custom REST API's that are designed well, most struggling to reach even level 1 on the  <a href="https://martinfowler.com/articles/richardsonMaturityModel.html" target="_blank">Richardson Maturity Model</a> (I should note, I'm not a fan of <a href="https://nielskrijger.com/posts/2014-08-05/choosing-a-hypermedia-type/" target="_blank">level 3</a> myself myself). That is not surprising because REST is not very strict, something I struggled with in the past <a href="https://nielskrijger.com/posts/2013-08-01/rest-and-json-best-practices/" target="_blank">as well</a>. In a business environment REST API's go well together with <a href="https://swagger.io/" target="_blank">Swagger/OpenAPI</a>.
+2. **gRPC / Protobufs.** A binary protocol that is much more efficient than REST / JSON. It relies on <a href="https://developers.google.com/protocol-buffers/" target="_blank">protobufs</a> which require you to specify the API as follows:
+
+    ```protobuf
+    message Person {
+      string name = 1;
+      int32 id = 2;
+      string email = 3;
+    }
+
+    message AddressBook {
+      repeated Person people = 1;
+    }
+    ```
+
+    Using this specification you then generate your client and server code (the <a href="https://en.wikipedia.org/wiki/Stub_(distributed_computing)" target="_blank">stubs</a>) using a code generation tool. For a long time gRPC was only available as a backend technology and thus limited to service-to-service communication. As of October 2018 <a href="https://github.com/grpc/grpc-web" target="_blank">gRPC-Web</a> became public which enables JavaScript-based frontend gRPC communication, so you should be able to build gRPC-based web services as well now. 
+3. **GraphQL.** I've only briefly played with <a href="https://en.wikipedia.org/wiki/GraphQL" target="_blank">GraphQL</a> but several co-workers have tried it out on production systems and their results were mixed, usually negative. GraphQL is much more flexible protocol compared to REST / JSON and gRPC, but in practice for most use cases you do not want flexibility at all. Creating a user, resetting a password, changing a subscription; these types of commands are a better fit for an RPC or REST-based API. Because GraphQL is the new kid on the block people tend to overuse it and create monstrously complex code; don't expect it to be the hammer that elegently solves your API problems. However if your use case does require a very flexible query-based API then GraphQL is very interesting; for example when lots of different clients have different requirements across a broad dataset.
+4. **Messaging protocols.** Publish-subscribe, queues and topics provide asynchronous communication and are usually a more reliable/predictable way of communication compared to standard REST/HTTP. It's a good way to decouple services and ensure when backend services go down messages don't get lost. Various protocols are in use, <a href="https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol" target="_blank">AMQP</a> and <a href="https://en.wikipedia.org/wiki/MQTT" target="_blank">MQTT</a> are some well-known standards. In practice I usually use proprietary cloud protocols (<a href="https://aws.amazon.com/sqs/" target="_blank">AWS SQS</a>/<a href="https://aws.amazon.com/sns/" target="_blank">SNS</a> or <a href="https://cloud.google.com/pubsub/docs/overview" target="_blank">Google PubSub</a>). If quality of service is not your main concern but instead you want a decoupled, efficient high-throughput event-based communication protocol you can use memory-based pubsub services as well, e.g. <a href="https://redis.io/topics/pubsub" target="_blank">Redis</a> or <a href="https://en.wikipedia.org/wiki/NATS_Messaging" target="_blank">NATS</a> (haven't used NATS yet, but looks interesting).
+5. **Websockets.** Provides two-way communication between frontend and backend.  <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Websockets</a> are commonly used for use cases where real-time frontend updates are a requirement. Websockets work nicely with an in-memory pubsub protocol in the backend, e.g. Redis or NATS. Because websockets are a bit trickier to setup and manage (each connection becomes stateful rather than a stateless REST API) I have frequently resorted to use polling over REST instead. Given HTTP/2 + gRPC-Web also support this use case they may be considered an alternative.
+6. **SOAP / XML**. Just... don't.
+
+Which protocol to use strongly depends on your use case and business context. I would advise to select only one or two protocols for your system; tools, best practices, system behaviour, documentation, logging and testing all tend to be different for each protocol.
+
+Because REST/JSON is the most common I'll use that as an example in the rest of this blog.
+
+## 2. Routing
 
 The application receiving a request makes it available in some form of a Request object. Either you the programmer or the framework you're using determines which pieces of code will receive and process this request object and return a response. This receiver is usually a Controller or RequestHandler.
 
@@ -43,7 +73,7 @@ The main thing these two endpoints share is the response format, but nothing els
 
 Right now I tend to create a separate file for each request type, e.g. `get_user.xy` and `post_user.xy` and organize reusable code as I see fit. This is a simple basic approach that scales out well.
 
-## 2. Authentication
+## 3. Authentication
 
 In an HTTP request authentication information is usually stored in a Cookie or Authorization-header. There are many ways to identify a client but they all include some identifier that uniquely identifies the client or session.
 
@@ -61,7 +91,7 @@ I've come across a codebase that had 4 types of authentication and used various 
 
 In such scenarios it is better to treat authentication not as a cross-cutting concern but as part of the request handler itself (i.e. after routing). This might cause some boilerplate but the reverse is much worse: magic.
 
-## 3. Authorization
+## 4. Authorization
 
 Authorization is arguably one of the most difficult topics and can wreak havoc on your code organization because of its inherit complexity in a growing system.
 
@@ -97,7 +127,7 @@ Try to get a good idea about your security requirements before you start designi
 
 If you are able to keep authorization simple and standardised it will definitely pay of in development speed, readability and future maintenance. I have never been fully satisfied with the authorization logic of any systems I've worked on; trade-offs between complexity and flexibility have to be made.
 
-## 4. Deserialize payload
+## 5. Deserialize payload
 
 One of the main advantages of a dynamically typed language is you don't have to waste your time with typecasting; so Ruby, JavaScript, Python and PHP developers can simply skip this section and feel smug.
 
@@ -115,7 +145,7 @@ Usually the framework/language does the heavy lifting but this may cause issues 
 
 These two issues alone have made me give up on two different frameworks; it was just to cumbersome to bend deserialization to my will.
 
-## 5. Input validation
+## 6. Input validation
 
 Input or syntax validation can be done in several ways.
 
@@ -146,7 +176,7 @@ Parsing and validating your object against a JSON schema requires a powerful lib
 
 Within statically typed languages input validation requirements are often part of the deserialisation mapping using annotations or something similar. I found these solutions are generally not as comprehensive or flexible as JSON schema or custom functions. I usually end up adding quite a bit of customization and boilerplate to capture all input validation rules using these mappers. The great thing about this approach is it's usually well understood by other developers, is simple and avoids boilerplate.
 
-## 6. Retrieve domain objects
+## 7. Retrieve domain objects
 
 Most backend requests require additional data from external sources (db, cache, third-party service, ...) during their processing.
 
@@ -156,7 +186,7 @@ However, due to the rise of distributed cloud apps and microservices it has beco
 
 When accessing multiple datasources and services I tend to fetch all data in parallel before doing any real processing. Pre-fetching dependant domain objects significantly reduces your average response time and as a bonus it renders semantic validation a synchronous operation keeping your functions "blue" (read [What color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) for an explanation).
 
-## 7. Business rules (semantic validation)
+## 8. Business rules (semantic validation)
 
 Business rules are validations based on (usually) runtime information retrieved from domain objects. Some examples:
 
@@ -174,7 +204,7 @@ Having worked on a BRE & Workflow application and seen several others used in pr
 
 Right now I favour capturing business rule configuration in a headless CMS and programatically process and test these config settings. While not as flexible as a BRE or Workflow engine I found it a more cost-effective way to enable domain experts to adjust parameters while also covering them by automated tests.
 
-## 8. Side-effects
+## 9. Side-effects
 
 Except for data-retrieval requests most requests will do stuff like:
 
@@ -202,11 +232,9 @@ For example; a new user makes a `POST /users`-request which executes a database 
 
 It makes much more sense to upgrade a secondary side-effect to a tertiary side-effect most of the time; on the web nothing is ever guaranteed.
 
-## 9. Response
+## 10. Response
 
-This is the most important aspect of your API design and ―in contrast to most other steps― is often reused across different types of requests and by different systems.
-
-The main problem with response messages is backwards compatibility. It is safe to assume any status code, error message, typo... any outdated behaviour by the service a client will now rely upon when the system has been in production for a while.
+The main problem with API design is backwards compatibility. It is safe to assume any status code, error message, typo... any outdated behaviour by the service a client will be relied upon when the system has been in production for a while.
 
 While backwards-incompatible changes are manageable through incrementing the API-version they too are fraught with problems, primarily because in practice it takes a lot of overhead and time to update all clients to this new API version. It is not uncommon for a third-party client to take years before getting upgraded.
 
