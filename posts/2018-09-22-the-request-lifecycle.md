@@ -62,9 +62,9 @@ The application receiving a request makes it available in some form of a Request
 
 **The choice of using either a Controller or a RequestHandler is an architectural decision for your codebase.**
 
-RequestHandlers tend to process a single type of request fully and only delegate where applicable. Controllers however delegate as much as possible and focus only on the interaction of subsystems. Usually a single controller fulfills several requests (e.g. all `GET DELETE POST /users` requests).
+RequestHandlers tend to process a single type of request fully and only delegate where applicable. Controllers however delegate as much as possible and focus on the interaction of subsystems. Usually a single controller fulfills several requests (e.g. all `GET`, `DELETE` and `POST /users` requests).
 
-I've come to favour RequestHandlers because I feel there is little coupling Between different types of requests for the same resource. Consider:
+I've come to favour RequestHandlers for most use cases because I feel there is little coupling between different types of requests for the same resource. Consider:
 
 - `GET /users/3` requires authentication and authorization before fetching the database record and sending back a response.
 - `POST /users` is a public endpoint that validates the JSON request body, encrypts the user's password, checks if the email is already in use, creates a database record, sends an activation email to the recipient and sends back a response.
@@ -81,7 +81,7 @@ Validating these tokens is fairly simple; either the token is invalid and an una
 
 Job done. Authentication is only concerned with identitying the user/subject but should not make any claims whether he is authorized.
 
-Because authentication-handling logic is very similar across all your backend endpoints it is usually performed before anything else within middleware, a decorator or request interceptor. It is a [cross-cutting concern](https://en.wikipedia.org/wiki/Cross-cutting_concern). Some challenges with such a global setup are:
+Because authentication-handling logic is very similar across all your backend endpoints it is usually performed before anything else within middleware, a decorator or request interceptor. It is a <a href="https://en.wikipedia.org/wiki/Cross-cutting_concern" target="_blank">cross-cutting concern</a>. Some challenges with such a global setup are:
 
 - Disabling authentication for public endpoints (the `GET /articles/123` is a public endpoint)
 - Multiple types of session tokens (e.g. Session ID's and JWTs).
@@ -123,7 +123,7 @@ With such requirements a basic role based mechanism quickly breaks down, and att
 
 You can try to keep authorization as a single step within the request-lifecycle but it is common for evolving systems to start spreading around their authorization logic across various steps.
 
-Try to get a good idea about your security requirements before you start designing the application and consider the available options within your framework and ecosystem (you should also read [this article on authorization models](https://dinolai.com/notes/others/authorization-models-acl-dac-mac-rbac-abac.html)).
+Try to get a good idea about your security requirements before you start designing the application and consider the available options within your framework and ecosystem (you should also read <a href="https://dinolai.com/notes/others/authorization-models-acl-dac-mac-rbac-abac.html" target="_blank">this article on authorization models</a>).
 
 If you are able to keep authorization simple and standardised it will definitely pay of in development speed, readability and future maintenance. I have never been fully satisfied with the authorization logic of any systems I've worked on; trade-offs between complexity and flexibility have to be made.
 
@@ -151,7 +151,7 @@ Input or syntax validation can be done in several ways.
 
 The naive approach is to check each input field for their associated type and basic requirements. To reduce boilerplate libraries and/or utility functions are used. After all these years I still use this naive approach regularly, particularly for microservices.
 
-One of my favourite tools is [JSON schema](https://json-schema.org/) which specifies validation rules like so:
+One of my favourite tools is <a href="https://json-schema.org/" target="_blank">JSON schema</a> which specifies validation rules like so:
 
 ```json
 {
@@ -184,7 +184,7 @@ If your primary dependency is a single database and you're using an ORM that res
 
 However, due to the rise of distributed cloud apps and microservices it has become less common your app primarily interacts with just a single database.
 
-When accessing multiple datasources and services I tend to fetch all data in parallel before doing any real processing. Pre-fetching dependant domain objects significantly reduces your average response time and as a bonus it renders semantic validation a synchronous operation keeping your functions "blue" (read [What color is your function](http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/) for an explanation).
+When accessing multiple datasources and services I tend to fetch all data in parallel before doing any real processing. Pre-fetching dependant domain objects significantly reduces your average response time and as a bonus it renders semantic validation a synchronous operation keeping your functions "blue" (read <a href="(http://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/" target="_blank">What color is your function</a>) for an explanation).
 
 ## 8. Business rules (semantic validation)
 
@@ -213,7 +213,7 @@ Except for data-retrieval requests most requests will do stuff like:
 - push messages to queues & topics
 - ...
 
-When executing multiple side-effects you should carefully consider the order and transactionality of those effects. A relational database can guarantee you an [all-or-nothing transaction](https://en.wikipedia.org/wiki/Atomic_commit) but most other side-effects cannot.
+When executing multiple side-effects you should carefully consider the order and transactionality of those effects. A relational database can guarantee you an <a href="https://en.wikipedia.org/wiki/Atomic_commit" target="_blank">all-or-nothing transaction</a> but most other side-effects cannot.
 
 I often end up asking the question; _"How bad is it if this fails?"_
 
@@ -234,11 +234,13 @@ It makes much more sense to upgrade a secondary side-effect to a tertiary side-e
 
 ## 10. Response
 
-The main problem with API design is backwards compatibility. It is safe to assume any status code, error message, typo... any outdated behaviour by the service a client will be relied upon when the system has been in production for a while.
+First a word of caution: **your response is seldom a 1-to-1 mapping of your domain, database or third-party service**. It is not uncommon for dynamic languages in particular to passthrough an object directly as the response. While sometimes this makes sense, think carefully before you do. Some fields may not be optimized for your clients, some fields should be hidden (e.g. password hashes), and others may not be consistenly named. The "R" in REST stands for Representational; i.e. it represents but is not necessarily identical to the server state.
+
+Having said that, my main concern with API design is backwards compatibility, even when designing a completely new API. It is safe to assume any status code, error message, typo... any behaviour of a service eventually some client will rely upon when in production.
 
 While backwards-incompatible changes are manageable through incrementing the API-version they too are fraught with problems, primarily because in practice it takes a lot of overhead and time to update all clients to this new API version. It is not uncommon for a third-party client to take years before getting upgraded.
 
-Therefore usually I'll try to implement changes within an existing API to save a lot of overhead.
+Therefore I usually try to implement changes within an existing API to save a lot of overhead.
 
 Changes that are usually safe are:
 
@@ -255,4 +257,4 @@ Changes that are usually unsafe are:
 - Changing existing values.
 - Changing field types.
 
-Given it is so difficult to guarantee backwards-compatibility it pays off to invest extra time in your initial API design. This usually involves a lot of research and collaboration. One rule of thumb: add as few fields as possible to your response and only incrementally add new ones when the need arises. While annoying and slow, the reverse is usually much more painful.
+Given it is so difficult to guarantee backwards-compatibility it pays off to invest extra time in your initial API design. This usually involves a lot of research and collaboration. I usually end up googling similar API's on the web and compare them with my own design. One rule of thumb: add as few fields as possible to your response and only incrementally add new ones when the need arises. While annoying and slow, the reverse is usually much more painful.
