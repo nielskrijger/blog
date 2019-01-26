@@ -11,8 +11,8 @@ layout: layouts/post.njk
 
 I tend to categorize backend architectures into two types:
 
-1. <a href="{{ '#1.-routing' | url }}">Routing</a>
-2. API-Driven Systems
+1. Domain-Driven Architecture
+2. API-Driven Architecture
 
 While these types are by no means exclusive, and in fact can be complimentary, in practice most backend systems I've seen tend to favour one style over other.
 
@@ -36,11 +36,11 @@ This domain-drive architecture is prevalent in Java and C#, and most other progr
 - Potential side-effects are hard to predict when mutating a shared core with both domain properties and business logic
 - Moves focus away from the API to the business domain model
 
-## API-driven Architecture (ADA)
+## API-Driven Architecture (ADA)
 
 An API-Driven Architecture focuses on the request/response (usually HTTP, RPC or pubsub messages).
 
-The ADA is characterized by a lack of abstractions and a strong focus on the communication protocol. It uses plain SQL or NoSQL calls and makes no or little attempt to capture domain entities and their relationships within application code.
+The ADA is characterized by a lack of abstractions and a stronger focus on the communication protocol. It uses plain SQL or NoSQL calls and makes no or little attempt to capture domain entities and their relationships within application code.
 
 These backend services are usually smallen and adopt microframeworks (e.g. [Sinatra](http://www.sinatrarb.com/), [Flask](http://flask.pocoo.org/) or [Express.js](https://expressjs.com/)) or no framework at all.
 
