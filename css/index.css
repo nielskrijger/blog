@@ -19,16 +19,17 @@ body {
   background-color: var(--white);
   letter-spacing: .015em;
 }
+body {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
 h1 {
   margin-bottom: .3em;
 }
-h1,
-h2,
-img,
-p,
-#disqus_thread,
-.tmpl-post li {
+.container {
   max-width: 37.5rem;
+  width: 100%;
 }
 p:last-child {
   margin-bottom: 0;
@@ -43,6 +44,7 @@ blockquote {
 a[href] {
   color: var(--studio);
   text-decoration: none;
+  word-break: break-all;
 }
 a[href]:hover {
   color: var(--pomegranate);
