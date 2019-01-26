@@ -184,7 +184,7 @@ A more heavy-duty approach is <a href="https://json-schema.org/" target="_blank"
 
 Parsing and validating your object against a JSON schema requires a powerful library but makes for very readable validation specs. It is part of Swagger/OpenAPI as well. I've used JSON schemas in many projects with great satisfaction.
 
-A third approach is to add valdation annotations/properties to the deserialisation specification or domain model. Most opinionated frameworks will promote this validation method. For example:
+A third approach is to add validation annotations/properties to the deserialisation specification or domain model. Most opinionated frameworks will promote this validation method. For example:
 
 ```csharp
 public class Movie
@@ -199,7 +199,7 @@ public class Movie
  }
 ```
 
-While usually not as powerful as JSON schema or as flexible as custom functions this approach is usually well understood by other developers and don't require additional third-party libraries. Over the years I've begun to use this method less and less, primarily because I've come to favour microframeworks which do not offer this validation out-of-the-box in which case I prefer custom functions or more powerful JSON schemas.
+While usually not as powerful as JSON schema or as flexible as custom functions this approach is usually well understood by other developers and don't require additional third-party libraries. Over the years I've begun to use this method less and less, primarily because I've come to favour microframeworks which do not offer this validation out-of-the-box in which case I prefer using custom functions or more powerful JSON schemas.
 
 ## 7. Retrieve domain objects
 
@@ -242,9 +242,9 @@ When executing multiple side effects you should carefully consider the order and
 
 I often end up asking the question; _"How bad is it if this fails?"_
 
-In an advanced application framework you might have built-in transactions across databases, requests and queues rolling back everything if something failed. But this is rare. Usually you don't have any guarantees and such mechanisms are complex to build yourself (and never 100% fail-safe). In these scenarios I tend to order side effects synchronously in the following order:
+In an advanced application framework you might have built-in transactions across databases, requests and queues rolling back everything if something failed. But this is rare. Usually you don't have any guarantees and such mechanisms are complex to build yourself (and never 100% fail-safe). In these scenarios I tend to execute side effects *synchronously* in the following order:
 
-1. **Primary side effects**. This is the most important side effect and cannot be recovered from when failing. The service simply returns an error.
+1. **Primary side effect**. This is the most important side effect and cannot be recovered from when failing. The service simply returns an error.
 2. **Secondary side effects**. These side effects are very difficult to recover from when failing, usually requiring technical intervention to resolve. This I'll usually implement by either rolling back the primary side effect (if at all possible at that point), put my faith in an extremely high-available queues; or accept it as very unlikely to fail and simply log the error. At a minimum I'll log an error and sometimes return an error response.
 3. **Tertiary side effects**. These are recoverable effects through good UX, automated recovery mechanisms or have only limited impact when they fail. These effects never affect the response at all; I'll log an error but the eror doesn't bubble up).
 
