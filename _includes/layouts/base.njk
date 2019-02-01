@@ -32,15 +32,15 @@
     <script>
       var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
       if (dnt != "1" && dnt != "yes") {
-        var script = document.createElement('script');
-        script.onload = function () {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'UA-53446236-1');
-        };
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=UA-53446236-1';
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        gtag('config', 'UA-53446236-1');
 
+        var script = document.createElement('script');
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=UA-53446236-1';
         document.head.appendChild(script);
       }
     </script>
