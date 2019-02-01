@@ -10,13 +10,6 @@
     <link rel="stylesheet" href="{{ '/css/github-icon.css' | url }}" />
     <link rel="stylesheet" href="{{ '/css/syntax-highlighting.css' | url }}" />
     <link rel="alternate" href="{{ metadata.feed.path | url }}" type="application/atom+xml" title="{{ metadata.title }}">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53446236-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-53446236-1');
-    </script>
   </head>
   <body>
     <div class="container">
@@ -36,5 +29,20 @@
 
       <footer></footer>
     </div>
+    <script>
+      var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      if (dnt != "1" && dnt != "yes") {
+        var script = document.createElement('script');
+        script.onload = function () {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-53446236-1');
+        };
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=UA-53446236-1';
+
+        document.head.appendChild(script);
+      }
+    </script>
   </body>
 </html>
