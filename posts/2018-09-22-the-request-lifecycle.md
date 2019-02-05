@@ -34,7 +34,8 @@ In this blog I'll walk through these steps and share some learnings I've had alo
 The first thing to consider when designing an API  is to select a protocol or API-style. While a comparison between all available options is a blogpost in itself, I'll quickly go through the protocols and API-styles I've used or experimented with:
 
 1. **REST / JSON.** Used for most API's these days and relies on the fundamental principles of HTTP (how it was originally intended). Despite its popularity weirdly I've come acros very few custom REST API's that are designed well, most struggling to reach even level 1 on the  <a href="https://martinfowler.com/articles/richardsonMaturityModel.html" target="_blank">Richardson Maturity Model</a> (I should note, I'm not a fan of <a href="https://nielskrijger.com/posts/2014-08-05/choosing-a-hypermedia-type/" target="_blank">level 3</a> myself). This is not surprising because REST is not strict but more like a convention, something I struggled with in the past <a href="https://nielskrijger.com/posts/2013-08-01/rest-and-json-best-practices/" target="_blank">as well</a>. In a business environment REST API's go well together with <a href="https://swagger.io/" target="_blank">Swagger/OpenAPI</a>.
-2. **gRPC / Protobufs.** A binary RPC protocol that is much more efficient compared to REST / JSON. It relies on <a href="https://developers.google.com/protocol-buffers/" target="_blank">protobufs</a> which requires you to specify an API as follows:
+
+2. **gRPC / Protobufs.** gRPC is a binary RPC protocol over HTTP/2 that is more efficient compared to REST / JSON over HTTP. It relies on <a href="https://developers.google.com/protocol-buffers/" target="_blank">protobufs</a> which requires you to specify an API as follows:
 
     ```protobuf
     message Person {
@@ -42,21 +43,41 @@ The first thing to consider when designing an API  is to select a protocol or AP
       int32 id = 2;
       string email = 3;
     }
-
+    
     message AddressBook {
       repeated Person people = 1;
     }
-
+    
     service AccountService {
       rpc GetAddressBook () returns (AddressBook) {}
     }
     ```
 
     Using this specification you then generate your client and server code (the <a href="https://en.wikipedia.org/wiki/Stub_(distributed_computing)" target="_blank">stubs</a>) using a code generation tool. For a long time gRPC was only available as a backend technology and thus limited to service-to-service communication. As of October 2018 <a href="https://github.com/grpc/grpc-web" target="_blank">gRPC-Web</a> became public which enables JavaScript-based frontend gRPC communication; so you should be able to build gRPC-based web services as well now. 
-3. **GraphQL.** I've only briefly played with <a href="https://en.wikipedia.org/wiki/GraphQL" target="_blank">GraphQL</a> but several co-workers have tried it out on production systems and their results were mixed, usually negative. GraphQL is a much more flexible protocol compared to REST / JSON and gRPC, but in practice for most use cases you do not want flexibility at all. Creating a user, resetting a password, changing a subscription; these types of commands are a better fit for an RPC or REST-based API. Because GraphQL is the new kid on the block people tend to overuse it and create monstrously complex code; don't expect it to be the hammer that elegently solves your API problems. However if your use case does require a very flexible query-based API then GraphQL is very interesting; for example when lots of different clients have different requirements across a broad dataset.
-4. **Messaging protocols.** Publish-subscribe, queues and topics provide asynchronous communication and are usually a more reliable/predictable way of communication compared to standard REST/HTTP. It's a good way to decouple services and ensure when backend services go down messages don't get lost. Various standardized protocols are available, <a href="https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol" target="_blank">AMQP</a> and <a href="https://en.wikipedia.org/wiki/MQTT" target="_blank">MQTT</a> I've used in the past. These days I usually go for a proprietary cloud service with non-standard protocols (<a href="https://aws.amazon.com/sqs/" target="_blank">AWS SQS</a>/<a href="https://aws.amazon.com/sns/" target="_blank">SNS</a> or <a href="https://cloud.google.com/pubsub/docs/overview" target="_blank">Google PubSub</a>) because they offer high reliability and very low maintenance. If quality of service is not your main concern but instead you want a decoupled, efficient high-throughput event-based communication protocol you can use memory-based pubsub services as well, e.g. <a href="https://redis.io/topics/pubsub" target="_blank">Redis</a> or <a href="https://en.wikipedia.org/wiki/NATS_Messaging" target="_blank">NATS</a> (haven't used NATS yet, but looks interesting).
-5. **Websockets.** Provides two-way communication between frontend and backend.  <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Websockets</a> are commonly used for use cases where real-time frontend updates are a requirement. Websockets work nicely with an in-memory pubsub protocol in the backend, e.g. Redis or NATS. Because websockets are a bit trickier to setup and manage (each connection becomes stateful rather than a stateless REST API) I have frequently resorted to use polling over REST instead. Given HTTP/2 + gRPC-Web also support this use case they may be considered an alternative.
-6. **SOAP / XML**. Just... don't.
+
+3. **GraphQL.** <a href="https://en.wikipedia.org/wiki/GraphQL" target="_blank">GraphQL</a>  is an alternative to REST / RPC and enables clients to query exactly the data they need and nothing more. This in contrast to REST and RPC which return (usually) pre-defined sets of data and may require multiple requests for the same use case.
+
+    I've only briefly played with GraphQL but several co-workers have tried it out on production systems and their results were mixed. Their critiques varied but one that stuck with me the most is the extra complexity required in both client and server in comparison to REST and RPC. Clients require a fairly complex query-access layer (<a href="https://github.com/apollographql/fullstack-tutorial/blob/master/final/client/src/containers/book-trips.js" target="_blank">example</a> from apollo graphql tutorial) and within the server authentication, caching and performance become non-trivial because of query flexibility. The GraphQL ecosystem is thriving and offers solutions for these problems, but it is still in flux meaning it may take some effort before you get it right.
+
+    I'm personally not sold on GraphQL's biggest selling point; flexibility. The use cases where I wanted a powerful query language for my API are very few (only one really). Often you're not looking for API flexibility; creating a user, resetting a password, changing a subscription, adding a product to a shopping cart, fullfilling a payment; these types of requests are likely easier to implement in a traditional REST or RPC API. 
+
+    Having said that, when different clients access a complex dataset for primarily informational purposes GraphQL is a great choice, for example accessing a movie-catalog or querying a social network.
+
+4. **Messaging protocols.** Messaging protocols enable asynchronous communication by having both the client and server communicate through an intermediary. Messages are delivered to the intermediary and consumed by the receiver shortly thereafter. Email is an example. Messaging allows decoupling services and is often more reliable and predictable compared to REST and RPC.
+
+    Various standardized protocols are available for server-to-service communication; <a href="https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol" target="_blank">AMQP</a> and <a href="https://en.wikipedia.org/wiki/MQTT" target="_blank">MQTT</a> I've used in the past. These days I usually go for a proprietary cloud service with non-standard protocols (<a href="https://aws.amazon.com/sqs/" target="_blank">AWS SQS</a>/<a href="https://aws.amazon.com/sns/" target="_blank">SNS</a> or <a href="https://cloud.google.com/pubsub/docs/overview" target="_blank">Google PubSub</a>) because they offer high reliability, low maintenance and are very cheap.
+
+    When you do not need extra reliability but simply want a decoupled, efficient high-throughput messaging protocol memory-based pubsub services are an alternative, e.g. <a href="https://redis.io/topics/pubsub" target="_blank">Redis</a> or <a href="https://en.wikipedia.org/wiki/NATS_Messaging" target="_blank">NATS</a> (haven't used NATS yet, but looks interesting).
+
+5. **Websockets.** Provides two-way communication between frontend and backend.  <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Websockets</a> are commonly used for use cases where real-time frontend updates are required. Websockets work nicely with an in-memory pubsub protocol in the backend (e.g. Redis or NATS).
+
+    Because websockets are a bit trickier to setup and manage (each connection becomes stateful rather than a stateless REST API) I have frequently resorted to do polling over REST instead despite its drawbacks. Given HTTP/2 + gRPC-Web also support bi-directional communication which I'm not very likely to use websockets right now.
+
+6. **SOAP / XML**. Just... don't. No really.
+
+    SOAP / XML was the more popular protocol before REST and JSON became prominent. While some companies still use SOAP and XML it's not common for a greenfield project these days. REST / JSON is a more flexible, readable and simpler API compared to the WSDLs, XSDs, XML and dozens of WS* standards.
+
+    Having said that, when compared to REST / JSON I do miss some qualities of WSDLs and XSDs. The overhead of Swagger/OpenAPI, the variety of API styles (<a href="https://jsonapi.org/" target="_blank">JSON:API</a>, <a href="https://en.wikipedia.org/wiki/JSON-LD" target="_blank">JSON-LD</a>, <a href="https://en.wikipedia.org/wiki/Hypertext_Application_Language" target="_blank">HAL</a> to name a few) and the dozens of best practice blogs I've read in the past showcase what makes REST / JSON so tricky: a lack of structure. Thankfully GraphQL and gRPC have filled this hole the last couple of years.
 
 Which protocol to use strongly depends on your use case and business context. I would advise to select only one or two protocols for your system; tools, best practices, system behaviour, documentation, logging and testing all tend to be different for each protocol.
 
