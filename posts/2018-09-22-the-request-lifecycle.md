@@ -69,9 +69,9 @@ The first thing to consider when designing an API  is to select a protocol or AP
 
     When you do not need extra reliability but simply want a decoupled, efficient high-throughput messaging protocol memory-based pubsub services are an alternative, e.g. <a href="https://redis.io/topics/pubsub" target="_blank">Redis</a> or <a href="https://en.wikipedia.org/wiki/NATS_Messaging" target="_blank">NATS</a> (haven't used NATS yet, but looks interesting).
 
-5. **Websockets.** Provides two-way communication between frontend and backend.  <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Websockets</a> are commonly used for use cases where real-time frontend updates are required. Websockets work nicely with an in-memory pubsub protocol in the backend (e.g. Redis or NATS).
+5. **Websockets.** Websockets provide two-way communication between client and server.  <a href="https://en.wikipedia.org/wiki/WebSocket" target="_blank">Websockets</a> are commonly used when real-time client updates are needed. Because Websockets are long-lived and have server state WebSockets work well with an in-memory pubsub protocol in the backend (e.g. Redis or NATS).
 
-    Because websockets are a bit trickier to setup and manage (each connection becomes stateful rather than a stateless REST API) I have frequently resorted to do polling over REST instead despite its drawbacks. Given HTTP/2 + gRPC-Web also support bi-directional communication which I'm not very likely to use websockets right now.
+    Because websockets are a trickier to setup and manage I have frequently resorted to polling over REST instead despite its drawbacks. Given HTTP/2 + gRPC-Web also support bi-directional communication it's not likely I'll be using websockets anytime soon.
 
 6. **SOAP / XML**. Just... don't. No really.
 
