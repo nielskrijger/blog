@@ -100,7 +100,7 @@ I've come to favour RequestHandlers for most use cases because I feel there is l
 
 The main thing these two endpoints share is the response format, but nothing else. From a code-perspective these two endpoints together are not a meaninigful unit. As your controller grows (which they tend to do), consider splitting this up into separate request handlers.
 
-Right now I tend to create a separate file for each request type, e.g. `get_user.xy` and `post_user.xy` and organize reusable code as I see fit. This is a simple basic approach that scales out well.
+Right now I tend to create a separate file for each request handler, e.g. `get_user.xy` and `post_user.xy` and organize reusable code as I see fit. This is a simple basic approach that scales out well.
 
 ## 3. Authentication
 
