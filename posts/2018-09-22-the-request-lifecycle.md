@@ -222,6 +222,10 @@ public class Movie
 
 While usually not as powerful as JSON schema or as flexible as custom functions this approach is usually well understood by other developers and don't require additional third-party libraries. Over the years I've begun to use this method less and less, primarily because I've come to favour microframeworks which do not offer this validation out-of-the-box in which case I prefer using custom functions or more powerful JSON schemas.
 
+So what about sanitization, for example trimming whitespaces from request fields? Well; **don't**. Not in the backend at least unless you have very good reason. For the most part providing valid input is the responsibility of the client app. If whitespace isn't allowed make sure your API validation rules don't accept it.
+
+Similarly don't i18n backend error messages; showing a good error message to the end-user is the client app's responsibility. For SPA's and mobile apps it's common for client-side validation to trigger even before any request; your beautifully i18n backend API responses will go to waste. 
+
 ## 7. Retrieve domain objects
 
 Most backend requests require additional data from external sources (db, cache, third-party service, ...) during their processing.
