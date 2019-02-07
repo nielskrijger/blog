@@ -224,7 +224,7 @@ While usually not as powerful as JSON schema or as flexible as custom functions 
 
 So what about sanitization, for example trimming whitespaces from request fields? Well; **don't**. Not in the backend at least unless you have very good reason. Providing valid input is the responsibility of the client app. If whitespace isn't allowed make sure your API validation rules don't accept it.
 
-Similarly don't i18n backend error messages; showing a good error message to the end-user is better left to the client app. Error messages are often tailored to the type of device (e.g. a shorter error message on mobile). For SPA's and mobile apps it's common for client-side validation to trigger even before any request is made; your beautifully i18n backend API responses will go to waste. Also, having full control over i18n in your client app and removing it from the backend greatly simplifies matters.
+Similarly don't i18n backend error messages; showing a good error message to the end-user is better left to the client app. SPA's and mobile apps commonly run client-side validation before any request is made; your beautifully i18n backend API responses will go to waste. Similarly error messages are often tailored to the type of app (e.g. a shorter error message on mobile). Also, having full control over i18n in your client app and removing it from the backend greatly simplifies matters.
 
 ## 7. Retrieve domain objects
 
