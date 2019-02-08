@@ -174,7 +174,7 @@ Usually the framework/language does the heavy lifting but this may cause issues 
 
 These two issues alone have made me give up on two different frameworks; it was just to cumbersome to bend deserialization to my will.
 
-While the former section primarily applies to REST/JSON, protocols with statically typed messages (e.g. gRPC or XML/XSD) are easier to implement in a statically typed language. One of my worst coding experiences was integrating a (complex) SOAP/XML service in Nodejs; never again.
+While this section primarily applies to REST/JSON, API's with statically typed messages (e.g. gRPC or XML/XSD) are easier to implement in a statically typed language. One of my worst coding experiences was integrating a (complex) SOAP/XML service in Nodejs... the horror.
 
 ## 6. Request validation
 
