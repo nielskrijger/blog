@@ -61,11 +61,13 @@ The first thing to consider when designing an API  is to select a protocol or AP
 
 3. **GraphQL.** <a href="https://en.wikipedia.org/wiki/GraphQL" target="_blank">GraphQL</a>  is an alternative to REST / RPC and enables clients to query exactly the data they need and nothing more. This in contrast to REST and RPC which return (usually) pre-defined sets of data and may require multiple requests for the same use case.
 
-    I've only briefly played with GraphQL but several co-workers have tried it out on production systems and their results were mixed. Their critiques varied but one that stuck with me the most is the extra complexity required in both client and server in comparison to REST and RPC. Clients require a fairly complex query-access layer (<a href="https://github.com/apollographql/fullstack-tutorial/blob/master/final/client/src/containers/book-trips.js" target="_blank">example</a> from apollo graphql tutorial) and within the server authentication, caching and performance become non-trivial because of query flexibility. The GraphQL ecosystem is thriving and offers solutions for these problems, but it is still in flux meaning it may take some effort before you get it right.
+    I've only briefly played with GraphQL but several co-workers have tried it out on production systems and their results were mixed. Their critiques varied but one that stuck with me the most is the extra complexity required in both client and server compared to REST and RPC. Clients require a fairly complex query-access layer (<a href="https://github.com/apollographql/fullstack-tutorial/blob/master/final/client/src/containers/book-trips.js" target="_blank">example</a> from apollo graphql tutorial). Within the server authentication, caching and performance become non-trivial because of query flexibility.
+
+    The GraphQL ecosystem is thriving and offers solutions for these problems, but it is still in flux meaning it may take some effort before you get it right.
 
     I'm personally not sold on GraphQL's biggest selling point; flexibility. The use cases where I wanted a powerful query language for my API are very few (only one really). Often you're not looking for API flexibility; creating a user, resetting a password, changing a subscription, adding a product to a shopping cart, fullfilling a payment; these types of requests are likely easier to implement in a traditional REST or RPC API. 
 
-    Having said that, when different clients access a complex dataset for primarily informational purposes GraphQL is a great choice, for example accessing a movie-catalog or querying a social network.
+    Having said that, when different clients access a complex dataset GraphQL is a great choice, for example querying a movie-catalog or a social network.
 
 4. **Messaging protocols.** Messaging protocols enable asynchronous communication by having both the client and server communicate through an intermediary. Messages are delivered to the intermediary and consumed by the receiver shortly thereafter. Email is an example. Messaging allows decoupling services and is often more reliable and predictable compared to REST and RPC.
 
