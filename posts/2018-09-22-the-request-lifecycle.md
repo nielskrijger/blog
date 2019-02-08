@@ -33,7 +33,9 @@ In this blog I'll walk through these steps and share some learnings I've had alo
 
 The first thing to consider when designing an API  is to select a protocol or API-style. While a comparison between all available options is a blogpost in itself, I'll quickly go through the protocols and API-styles I've used or experimented with:
 
-1. **REST / JSON.** Used for most API's these days and relies on the fundamental principles of HTTP (how it was originally intended). Despite its popularity weirdly I've come acros very few custom REST API's that are designed well, most struggling to reach even level 1 on the  <a href="https://martinfowler.com/articles/richardsonMaturityModel.html" target="_blank">Richardson Maturity Model</a> (I should note, I'm not a fan of <a href="https://nielskrijger.com/posts/2014-08-05/choosing-a-hypermedia-type/" target="_blank">level 3</a> myself). This is not surprising because REST is not strict but more like a convention, something I struggled with in the past <a href="https://nielskrijger.com/posts/2013-08-01/rest-and-json-best-practices/" target="_blank">as well</a>. In a business environment REST API's go well together with <a href="https://swagger.io/" target="_blank">Swagger/OpenAPI</a>.
+1. **REST / JSON.** Used for most API's these days and relies on the fundamental principles of HTTP (how it was originally intended). I'll assume you already know how to build a REST / JSON API.
+
+    Despite its popularity weirdly I've come acros few proprietary REST API's that are designed well, most struggling to reach even level 1 on the  <a href="https://martinfowler.com/articles/richardsonMaturityModel.html" target="_blank">Richardson Maturity Model</a> (I should note, I'm not a fan of <a href="https://nielskrijger.com/posts/2014-08-05/choosing-a-hypermedia-type/" target="_blank">level 3</a> myself). This is not surprising because REST is more like a convention, something I struggled with in the past <a href="https://nielskrijger.com/posts/2013-08-01/rest-and-json-best-practices/" target="_blank">as well</a>. 
 
 2. **gRPC / Protobufs.** gRPC is a binary RPC protocol over HTTP/2 that is more efficient compared to REST / JSON over HTTP. It relies on <a href="https://developers.google.com/protocol-buffers/" target="_blank">protobufs</a> which requires you to specify an API as follows:
 
@@ -53,7 +55,9 @@ The first thing to consider when designing an API  is to select a protocol or AP
     }
     ```
 
-    Using this specification you then generate your client and server code (the <a href="https://en.wikipedia.org/wiki/Stub_(distributed_computing)" target="_blank">stubs</a>) using a code generation tool. For a long time gRPC was only available as a backend technology and thus limited to service-to-service communication. As of October 2018 <a href="https://github.com/grpc/grpc-web" target="_blank">gRPC-Web</a> became public which enables JavaScript-based frontend gRPC communication; so you should be able to build gRPC-based web services as well now. 
+    Using this specification you then generate your client and server code (the <a href="https://en.wikipedia.org/wiki/Stub_(distributed_computing)" target="_blank">stubs</a>) using a code generation tool. For a long time gRPC was only available as a backend technology and thus limited to service-to-service communication. As of October 2018 <a href="https://github.com/grpc/grpc-web" target="_blank">gRPC-Web</a> became public which enables JavaScript-based frontend gRPC communication; so you should be able to build gRPC-based web services as well now.
+
+    gRPC is said to be <a href="https://auth0.com/blog/beating-json-performance-with-protobuf/" target="_blank">up to 6 times faster</a> compared to a JSON API.
 
 3. **GraphQL.** <a href="https://en.wikipedia.org/wiki/GraphQL" target="_blank">GraphQL</a>  is an alternative to REST / RPC and enables clients to query exactly the data they need and nothing more. This in contrast to REST and RPC which return (usually) pre-defined sets of data and may require multiple requests for the same use case.
 
