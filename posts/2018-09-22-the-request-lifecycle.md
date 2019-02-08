@@ -158,7 +158,7 @@ If you are able to keep authorization simple and standardised it will definitely
 
 ## 5. Deserialize payload
 
-One of the main advantages of a dynamically typed language is you don't have to waste your time typecasting; so Ruby, JavaScript, Python and PHP developers implementing REST/JSON may simply skip this section and feel smug.
+One of the main advantages of a dynamically typed language is you don't have to waste your time typecasting when parsing JSON. So if you are a Ruby, JavaScript, Python or PHP developer you can simply skip this section and feel smug.
 
 In statically typed languages I've done either of the following:
 
@@ -169,12 +169,12 @@ The latter foregoes much of the static typing goodness hence I generally prefer 
 
 Usually the framework/language does the heavy lifting but this may cause issues by itself:
 
-- It is often difficult to transform errors thrown during deserialization (e.g. malformed JSON) to your own error-format.
+- It can be difficult to transform errors thrown during deserialization (e.g. malformed JSON) to your own error-format.
 - Unwanted conversions may occur, e.g. a string "123" being cast to an int automatically without you knowing. While this may sound convenient it is much cleaner to stick to strict conversions.
 
 These two issues alone have made me give up on two different frameworks; it was just to cumbersome to bend deserialization to my will.
 
-While the former section primarily applies to REST/JSON, protocols with statically typed messages (e.g. gRPC or SOAP/XML) are usually easier to implement in a statically typed language.
+While the former section primarily applies to REST/JSON, protocols with statically typed messages (e.g. gRPC or XML/XSD) are easier to implement in a statically typed language. One of my worst coding experiences was integrating a (complex) SOAP/XML service in Nodejs; never again.
 
 ## 6. Request validation
 
