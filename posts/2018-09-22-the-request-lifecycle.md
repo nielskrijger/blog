@@ -25,7 +25,7 @@ When adding a new backend request I've found the following list a fairly common 
 9. <a href="{{ '#9.-side-effects' | url }}">Side effects</a>
 10. <a href="{{ '#10.-response' | url }}">Response</a>
 
-The order of these steps vary and some are optional depending on the type of request and environment, but this list is fairly similar for all protocols, frameworks, languages and environments I've worked with thus far.
+The order of these steps vary and not all steps apply for each type of request, nevertheless this list has served me as a good checklist for most protocols and frameworks I've used in the past.
 
 In this blog I'll walk through these steps and share some learnings I've had along the way.
 
@@ -33,9 +33,9 @@ In this blog I'll walk through these steps and share some learnings I've had alo
 
 The first thing to consider when designing an API  is to select a protocol or API-style. While a comparison between all available options is a blogpost in itself, I'll quickly go through the protocols and API-styles I've used or experimented with:
 
-1. **REST / JSON.** Used for most API's these days and relies on the fundamental principles of HTTP (how it was originally intended). I'll assume you already know how to build a REST / JSON API.
+1. **REST / JSON.** Used for most API's these days and relies on the fundamental principles of HTTP. I'll assume you are already familiar with REST / JSON APIs.
 
-    Despite its popularity weirdly I've come acros few proprietary REST API's that are designed well, most struggling to reach even level 1 on the  <a href="https://martinfowler.com/articles/richardsonMaturityModel.html" target="_blank">Richardson Maturity Model</a> (I should note, I'm not a fan of <a href="https://nielskrijger.com/posts/2014-08-05/choosing-a-hypermedia-type/" target="_blank">level 3</a> myself). This is not surprising because REST is more like a convention, something I struggled with in the past <a href="https://nielskrijger.com/posts/2013-08-01/rest-and-json-best-practices/" target="_blank">as well</a>. 
+    Despite its popularity I've come across few small-scale REST API's that are designed well, most struggling to reach beyond level 1 on the  <a href="https://martinfowler.com/articles/richardsonMaturityModel.html" target="_blank">Richardson Maturity Model</a> (I should note, I'm not a fan of <a href="https://nielskrijger.com/posts/2014-08-05/choosing-a-hypermedia-type/" target="_blank">level 3</a> myself). This is not surprising because REST is generally poorly understood nor does it enforce correctness in any way, something I struggled with in the past <a href="https://nielskrijger.com/posts/2013-08-01/rest-and-json-best-practices/" target="_blank">as well</a>.
 
 2. **gRPC / Protobufs.** gRPC is a binary RPC protocol over HTTP/2 that is more efficient compared to REST / JSON over HTTP. It relies on <a href="https://developers.google.com/protocol-buffers/" target="_blank">protobufs</a> which requires you to specify an API as follows:
 
@@ -55,19 +55,19 @@ The first thing to consider when designing an API  is to select a protocol or AP
     }
     ```
 
-    Using this specification you then generate your client and server code (the <a href="https://en.wikipedia.org/wiki/Stub_(distributed_computing)" target="_blank">stubs</a>) using a code generation tool. For a long time gRPC was only available as a backend technology and thus limited to service-to-service communication. As of October 2018 <a href="https://github.com/grpc/grpc-web" target="_blank">gRPC-Web</a> became public which enables JavaScript-based frontend gRPC communication; so you should be able to build gRPC-based web services as well now.
+    Using this specification you then generate your client and server code (the <a href="https://en.wikipedia.org/wiki/Stub_(distributed_computing)" target="_blank">stubs</a>) using a code generation tool.
+    
+    For a long time gRPC was only available as a backend technology and thus limited to service-to-service communication. As of October 2018 <a href="https://github.com/grpc/grpc-web" target="_blank">gRPC-Web</a> became public which enables JavaScript-based frontend gRPC communication; so you should be able to build gRPC-based web services as well now.
 
-    gRPC is said to be <a href="https://auth0.com/blog/beating-json-performance-with-protobuf/" target="_blank">up to 6 times faster</a> compared to a JSON API.
+    Compared to JSON/REST gRPC is said to be significantly more performant, from  <a href="https://auth0.com/blog/beating-json-performance-with-protobuf/" target="_blank">6 times faster</a> to <a href="https://dev.to/plutov/benchmarking-grpc-and-rest-in-go-565" target="_blank">10 times faster</a> for similar tasks. When developing chatty microservices the overall performance gain could be quite significant.
 
-3. **GraphQL.** <a href="https://en.wikipedia.org/wiki/GraphQL" target="_blank">GraphQL</a>  is an alternative to REST / RPC and enables clients to query exactly the data they need and nothing more. This in contrast to REST and RPC which return (usually) pre-defined sets of data and may require multiple requests for the same use case.
+3. **GraphQL.** <a href="https://en.wikipedia.org/wiki/GraphQL" target="_blank">GraphQL</a> enables clients to query exactly the data they need and nothing more. This in contrast to REST and RPC which return (usually) pre-defined sets of data and may require multiple requests for the same use case.
 
     I've only briefly played with GraphQL but several co-workers have tried it out on production systems and their results were mixed. Their critiques varied but one that stuck with me the most is the extra complexity required in both client and server compared to REST and RPC. Clients require a fairly complex query-access layer (<a href="https://github.com/apollographql/fullstack-tutorial/blob/master/final/client/src/containers/book-trips.js" target="_blank">example</a> from apollo graphql tutorial). Within the server authentication, caching and performance become non-trivial because of query flexibility.
 
     The GraphQL ecosystem is thriving and offers solutions for these problems, but it is still in flux meaning it may take some effort before you get it right.
 
-    I'm personally not sold on GraphQL's biggest selling point; flexibility. The use cases where I wanted a powerful query language for my API are very few (only one really). Often you're not looking for API flexibility; creating a user, resetting a password, changing a subscription, adding a product to a shopping cart, fullfilling a payment; these types of requests are likely easier to implement in a traditional REST or RPC API. 
-
-    Having said that, when different clients access a complex dataset GraphQL is a great choice, for example querying a movie-catalog or a social network.
+    For now I'm set on using GraphQL only when I encounter a use case in need of a flexible API. Thus far I've not found a good excuse for it yet; creating a user, resetting a password, changing a subscription, adding a product to a shopping cart, fullfilling a payment; these types of requests are likely easier to implement in a traditional REST or RPC API. Use cases where I'd consider GraphQL include querying a movie-catalog, product database or crawling a social network.
 
 4. **Messaging protocols.** Messaging protocols enable asynchronous communication by having both the client and server communicate through an intermediary. Messages are delivered to the intermediary and consumed by the receiver shortly thereafter. Email is an example. Messaging allows decoupling services and is often more reliable and predictable compared to REST and RPC.
 
@@ -85,7 +85,7 @@ The first thing to consider when designing an API  is to select a protocol or AP
 
     Having said that, when compared to REST / JSON I do miss some qualities of WSDLs and XSDs. The overhead of Swagger/OpenAPI, the variety of API styles (<a href="https://jsonapi.org/" target="_blank">JSON:API</a>, <a href="https://en.wikipedia.org/wiki/JSON-LD" target="_blank">JSON-LD</a>, <a href="https://en.wikipedia.org/wiki/Hypertext_Application_Language" target="_blank">HAL</a> to name a few) and the dozens of best practice blogs I've read in the past showcase what makes REST / JSON so tricky: a lack of structure. Thankfully GraphQL and gRPC have filled this hole the last couple of years.
 
-Which protocol to use strongly depends on your use case and business context. I would advise to select only one or two protocols for your system; tools, best practices, system behaviour, documentation, logging and testing all tend to be different for each protocol.
+Which protocol to use strongly depends on your use case and business context. It's best to stick to only one or two different protocols for your system; tools, best practices, system behaviour, documentation, logging and testing all tend to be different for each protocol.
 
 Because REST/JSON is the most common I'll use that as an example in the rest of this blog.
 
