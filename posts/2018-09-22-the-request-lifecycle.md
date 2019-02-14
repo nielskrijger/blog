@@ -25,7 +25,7 @@ When adding a new backend request I've found the following list a fairly common 
 9. <a href="{{ '#9.-side-effects' | url }}">Side effects</a>
 10. <a href="{{ '#10.-response' | url }}">Response</a>
 
-The order of these steps vary and not all steps apply for each type of request, nevertheless this list has served me as a good checklist for most protocols and frameworks I've used in the past.
+The order of these steps vary and not all steps apply for each type of request, nevertheless this list has served me as a good checklist in the past.
 
 In this blog I'll walk through these steps and share some learnings I've had along the way.
 
@@ -209,9 +209,9 @@ A more heavy-duty approach is <a href="https://json-schema.org/" target="_blank"
 }
 ```
 
-Parsing and validating your object against a JSON schema requires a powerful library but makes for very readable validation specs. It is part of Swagger/OpenAPI as well. I've used JSON schemas in many projects with great satisfaction.
+Parsing and validating your object against a JSON schema requires a powerful library but makes for very strict, readable and language-agnostic validation specs. It is part of Swagger/OpenAPI as well. I've used JSON schemas in many projects and it has become one of my favourite tools.
 
-A third approach is to add validation annotations/properties to the deserialisation specification or domain model. Most opinionated frameworks will promote this validation method. For example:
+A third approach is to add validation annotations/properties to the deserialisation specification or domain model. Most opinionated frameworks promote this type of validation. For example:
 
 ```csharp
 public class Movie
@@ -226,11 +226,11 @@ public class Movie
  }
 ```
 
-While usually not as powerful as JSON schema or as flexible as custom functions this approach is usually well understood by other developers and don't require additional third-party libraries. Over the years I've begun to use this method less and less, primarily because I've come to favour microframeworks which do not offer this validation out-of-the-box in which case I prefer using custom functions or more powerful JSON schemas.
+While usually not as powerful as JSON schema or as flexible as custom functions this approach is usually well understood by other developers and don't require additional third-party libraries. Over the years I've begun to use this method less and less, primarily because I've come to favour microframeworks which do not offer this validation out-of-the-box.
 
-So what about sanitization, for example trimming whitespaces from request fields? Well; **don't**. Not in the backend at least unless you have very good reason. Providing valid input is the responsibility of the client app. If whitespace isn't allowed make sure your API validation rules don't accept it.
+So what about sanitization, for example trimming whitespaces from request fields? Well; as a rule of thumb **don't sanitize in the backend**. Providing valid input is the responsibility of the client app. If whitespace isn't allowed make sure your API validation rules don't accept it.
 
-Similarly don't i18n backend error messages; showing a good error message to the end-user is better left to the client app. SPA's and mobile apps commonly run client-side validation before any request is made; your beautifully i18n backend API responses will go to waste. Similarly error messages are often tailored to the type of app (e.g. a shorter error message on mobile). Also, having full control over i18n in your client app and removing it from the backend greatly simplifies matters.
+Similarly I never translate backend error messages; showing a good error message to the end-user is better left to the client app. SPA's and mobile apps commonly run client-side validation before any request is made; your beautifully i18n backend API responses will go to waste. Similarly error messages are often tailored to the type of app (e.g. a shorter error message on mobile). Also, having full control over i18n in your client app and removing it from the backend greatly simplifies an already complex task.
 
 ## 7. Retrieve domain objects
 
@@ -275,18 +275,17 @@ I often end up asking the question; _"How bad is it if this fails?"_
 
 In an advanced application framework you might have built-in transactions across databases, requests and queues rolling back everything if something failed. But this is rare. Usually you don't have any guarantees and such mechanisms are complex to build yourself (and never 100% fail-safe). In these scenarios I tend to execute side effects *synchronously* in the following order:
 
-1. **Primary side effect**. This is the most important side effect and cannot be recovered from when failing. The service simply returns an error.
-2. **Secondary side effects**. These side effects are very difficult to recover from when failing, usually requiring technical intervention to resolve. This I'll usually implement by either rolling back the primary side effect (if at all possible at that point), put my faith in an extremely high-available queues; or accept it as very unlikely to fail and simply log the error. At a minimum I'll log an error and sometimes return an error response.
-3. **Tertiary side effects**. These are recoverable effects through good UX, automated recovery mechanisms or have only limited impact when they fail. These effects never affect the response at all; I'll log an error but the eror doesn't bubble up).
+1. **Temporary side effects**. These effects will get cleaned-up or become irrelevant automatically over time. Verification tokens and cache data are examples. When failing the service returns an error because the primary side effect hasn't taken place yet.
+2. **Primary side effect**. This is the most important side effect and cannot be recovered from when failing. The service simply returns an error.
+3. **Secondary side effects**. These side effects are very difficult to recover from when failing, usually requiring technical intervention to resolve. This I'll usually implement by either rolling back the primary side effect (if at all possible at that point), put my faith in an extremely high-available queues; or accept it as very unlikely to fail and simply log the error. At a minimum I'll log an error and sometimes return an error response.
+4. **Recoverable side effects**. These are recoverable effects through good UX, automated recovery mechanisms or have only limited impact when they fail. These effects never affect the response at all; I'll log an error but the eror doesn't bubble up).
 
-In practice most of my side effects are either primary or tertiary side effects while I'll avoid secondary effects as much as I can. This mainly because I do not want to invest time in developing and testing the complex mechanisms required for secondary side effects to work properly, let alone I'll trust those mechanisms in all possible scenarios.
+In practice I tend to avoid secondary side effects as much as possible. This mainly because I do not want to invest time in developing and testing the complex mechanisms required for secondary side effects to work properly, let alone I'll trust those mechanisms in all possible scenarios.
 
 For example; a new user makes a `POST /users`-request which executes a database transaction (the primary side effect) and sends a verification email through a third-party email service afterwards. That verification email is either a:
 
 - _secondary side effect_ when the user cannot verify his account in any other way;
-- or a _tertiary side effect_ if you show a "resend verification email"-action when this user attempts to login with the unverified account.
-
-It makes much more sense to upgrade a secondary side effect to a tertiary side effect most of the time; on the web nothing is ever guaranteed.
+- or a _recoverable side effect_ if you show a "resend verification email"-action when this user attempts to login with an unverified account.
 
 ## 10. Response
 
