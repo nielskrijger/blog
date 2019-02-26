@@ -60,7 +60,7 @@ These backend systems are usually smaller and adopt microframeworks (e.g. [Sinat
 
 ## When to prefer API-Centric Systems
 
-#### If the API is important
+#### When the API is important
 
 For me the usual order of priority when building a backend API server is (1) **API**, (2) **side-effects**, (3) **API/integration tests** and (4) **code** (least important). The reason for this order has to do with changeability:
 
@@ -69,23 +69,23 @@ For me the usual order of priority when building a backend API server is (1) **A
 3. **API/integrations tests** allows you to change with confidence the service's behaviour. Unit tests tend to be too brittle when doing structural refactoring.
 4. Changing **code** is usually fairly easy when automated testing is in place. Even if the code smells really bad you can still clean it up with confidence if the other points are taken care of.
 
-#### If your system backend development team is at most 3 developers
+#### When your backend service is developed within a single team
 
-I feel API-Centric development works best in smaller systems, perhaps up to 3 full-time developers at most. Domain-centric development pays off when a single system grows sufficiently large and involves multiple teams. At that point communication issues become more prominent, something the Domain-Centric style solves this within its "third model".
+I feel API-Centric development works best in smaller systems. Domain-centric development pays off when a single system grows sufficiently large and involves multiple teams at which point communication issues become more prominent.
 
-Assume a webshop receives a request `POST /orders { ... }` and persists this order to a database. In a domain context you'd consider the following models:
+Crafting the domain model properly is a significant effort requiring a lot of thought. Assume a webshop receives a `POST /orders { ... }`-request and persists this order to a database. In a domain context you'd consider the following models:
 
 1. **API**: the request object (JSON/XML/...) that is being received.
 2. **DB**: the order is stored in the database, decreasing stock levels and such.
 3. **DOMAIN**: captures relationships between domain object (for example, between a `User` and the `Order`) in the application code.
 
-Now the developer must translate **API** → **DOMAIN** → **DB** and back again. Commonly "controllers" are used to direct this process. How best to develop controllers has always been a tricky issue evidenced by the numerous discussions on '[Fat](http://blog.joncairns.com/2013/04/fat-model-skinny-controller-is-a-load-of-rubbish/) [models](https://stackoverflow.com/questions/14044681/fat-models-and-skinny-controllers-sounds-like-creating-god-models) [and](https://www.slideshare.net/damiansromek/thin-controllers-fat-models-proper-code-structure-for-mvc) [skinny](http://robdvr.com/fat-models-skinny-controllers-skinny-models-skinny-controllers/) [controllers](http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model)'.
+Now the developer must translate **API** → **DOMAIN** → **DB** and back again. Commonly "controllers" are used to direct this process. How best to develop controllers has always been a tricky issue evidenced by the numerous discussions on '[Fat](http://blog.joncairns.com/2013/04/fat-model-skinny-controller-is-a-load-of-rubbish/) [models](https://stackoverflow.com/questions/14044681/fat-models-and-skinny-controllers-sounds-like-creating-god-models) [and](https://www.slideshare.net/damiansromek/thin-controllers-fat-models-proper-code-structure-for-mvc) [skinny](http://robdvr.com/fat-models-skinny-controllers-skinny-models-skinny-controllers/) [controllers](http://weblog.jamisbuck.org/2006/10/18/skinny-controller-fat-model)'. On top of that a lot of shared code doesn't fit well nicely in either of those three layers and ends up in separate services.
 
 Getting your Domain-Centric software "right" is a tough challenge, requiring significant skill in abstract problem solving, discipline, communication and refactoring. A positive return on all that effort only occurs in systems with multiple development teams working on the same system.
 
-A software design with just **API** and **DB** is more straightforward, in essence becoming a set of procedural scripts (request handlers) where each scripts processes only one type of request.
+A software design with justa an **API** and **DB** is more straightforward, in essence becoming a set of procedural scripts (request handlers) where each script processes only one type of request.
 
-#### If you prefer system/integration tests over unit tests
+#### When you prefer system/integration tests over unit tests
 
 While working on API-Centric System I noticed writing fewer unit tests and more API / integration tests compared to Domain-Centric systems; to the point where I hardly write any unit tests for a basic backend CRUD API.
 
