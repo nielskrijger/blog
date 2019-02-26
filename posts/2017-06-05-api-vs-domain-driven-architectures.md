@@ -1,6 +1,6 @@
 ---
-title: API vs Domain-centric Architecture
-description: API vs Domain-centric Architecture
+title: API vs Domain-Centric Systems
+description: API vs Domain-Centric Systems
 date: 2017-06-05
 permalink: /posts/2017-06-05/api-vs-domain-centric-architectures/index.html
 tags:
@@ -18,11 +18,11 @@ While these styles are by no means exclusive, and in fact can be complimentary, 
 
 ## Domain-Centric Systems
 
-A Domain-Centric System models the business environment within the application in a "business layer" or "domain layer". This layer contains type-based objects such as a "User" with methods to mutate their state and enforce business logic. Typically after all business logic of an API request has been resolved the final state is persisted using an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) or [ODM](https://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) implementing a [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html).
+A Domain-Centric System models the business environment within the application in a "business layer" or "domain layer". This layer contains type-based objects such as a "User" with methods to mutate their state and enforce business logic. Typically after all business logic has been resolved the mutated state is persisted using an [ORM](https://en.wikipedia.org/wiki/Object-relational_mapping) or [ODM](https://stackoverflow.com/questions/12261866/what-is-the-difference-between-an-orm-and-an-odm) implementing a [Unit of Work](https://martinfowler.com/eaaCatalog/unitOfWork.html).
 
-Characteristic of these types of systems is the external API being a second-class citizen in the overall design. Sometimes the API is generated from the domain model itself or just a very thin layer on top of the domain.
+*Characteristic of these types of systems is the external API is a second-class citizen in the overall design.* Sometimes the API is generated from the domain model itself or just a very thin layer on top of the domain.
 
-Domain-Driven Design is a popular enterprise pattern language which has become the template of domain-centric development. If you search through [the DDD book](http://dddcommunity.org/book/evans_2003/) you'll have a difficult time finding any mention of "API". The core of DDD is modelling the business domain within a typically monolithic application.
+Domain-Driven Design is a popular pattern language which has become the template of modern domain-centric development. If you search through [the DDD book](http://dddcommunity.org/book/evans_2003/) you'll have a difficult time finding any mention of "API". The core of DDD is modelling the business domain within a typically monolithic application.
 
 This domain-centric development is prevalent in Java and C#, and most other programming languages offer frameworks supporting such an architecture. Many [MVC](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)-type frameworks fall into this category.
 
@@ -42,7 +42,7 @@ This domain-centric development is prevalent in Java and C#, and most other prog
 
 An API-Centric System focuses on the request/response (usually HTTP, RPC or pubsub messages).
 
-These systems are characterized by a lack of abstractions and have a strong focus on the communication protocol. It uses plain SQL or NoSQL calls and makes no or little attempt to capture domain entities and their relationships within application code.
+*These systems are characterized by a lack of abstractions and have a strong focus on the communication protocol.* They often use plain SQL or NoSQL calls and make no or little attempt to capture domain entities and their relationships within the application code.
 
 These backend systems are usually smaller and adopt microframeworks (e.g. [Sinatra](http://www.sinatrarb.com/), [Flask](http://flask.pocoo.org/) or [Express.js](https://expressjs.com/)) or no framework at all.
 
@@ -50,7 +50,6 @@ These backend systems are usually smaller and adopt microframeworks (e.g. [Sinat
 
 - Focus on the API and protocol fundamentals
 - The flow through the application is simpler with less moving parts
-- Simpler frameworks
 - Well-suited for small applications (e.g. microservices)
 
 **Weak points:**
@@ -72,7 +71,7 @@ For me the usual order of priority when building a backend API server is (1) **A
 
 #### If your system backend development team is at most 3 developers
 
-I feel API-Centric development works best in smaller systems, perhaps up to 3 full-time developers at most. Domain-centric development pays off when a single system grows really large and involves multiple teams. At that point communication issues become more and more problematic. The Domain-Centric style solves this with a "third model".
+I feel API-Centric development works best in smaller systems, perhaps up to 3 full-time developers at most. Domain-centric development pays off when a single system grows sufficiently large and involves multiple teams. At that point communication issues become more prominent, something the Domain-Centric style solves this within its "third model".
 
 Assume a webshop receives a request `POST /orders { ... }` and persists this order to a database. In a domain context you'd consider the following models:
 
@@ -86,28 +85,28 @@ Getting your Domain-Centric software "right" is a tough challenge, requiring sig
 
 A software design with just **API** and **DB** is more straightforward, in essence becoming a set of procedural scripts (request handlers) where each scripts processes only one type of request.
 
-#### If you focus on system/integration tests
+#### If you prefer system/integration tests over unit tests
 
-While working on API-Driven Architectures I noticed writing fewer unit tests and more API / integration tests compared to Domain-Centric systems; to the point where I hardly write any unit tests for a basic backend CRUD API.
+While working on API-Centric System I noticed writing fewer unit tests and more API / integration tests compared to Domain-Centric systems; to the point where I hardly write any unit tests for a basic backend CRUD API.
 
 API/integration tests provide a lot more confidence that the backend application is actually behaving correctly, has better code coverage and are easier to write. This I could do because of two reasons:
 
-1. ADA's are fairly simple to debug, there are few interacting code-paths that may fail in some unexpected way
-2. I switched to languages and tools that make running and developing such tests very fast
+1. API-Centric systems are fairly simple to debug, there are few interacting code-paths that could fail
+2. I switched to languages and toolsets that make running and developing such tests very fast
 
 In contrast, Domain-Driven systems have more shared pieces of interacting code (structured in services and layers) which require the developer to treat them more as an internal API. In that case unit tests and mocks enable you to better gradually build up your system.
 
-## When to prefer Domain-Driven Systems
+## When to prefer Domain-Centric Systems
 
-#### When your team/organization uses DD-based frameworks
+#### When your team/organization uses DDD-inspired frameworks
 
-There are plenty of frameworks supporting the domain-driven design with which developers are already familiar. Prevalent languages in business software (Java and C#) have ecosystems that have evolved to accommodate the domain-driven architecture extremely well.
+There are plenty of frameworks supporting the domain-driven design with which developers are already familiar. C# and Java in particularly have ecosystems that have evolved to accommodate the domain-driven architecture extremely well.
 
-Using an full-featured opinionated framework allows you to onboard quicker and not waste time on blogs and stackoverflow figuring out how to design stuff.
+Investing in a new (more basic) tech-stack may not be worthwhile if all developers feel more comfortable with some other framework.
 
 #### When focus is on the business logic
 
-Most business software is written with models in the vocabularly of functional analysts. These models and vocabularly are not API but rather Domain-centric. Functional analysts will discuss business constraints and logic; the home of the domain layer in an application. Even many enterprise and solution architects have little knowledge of REST, RPC or messaging contracts but rather tend to focus on the domain and system behaviour primarily; not the API.
+Most business software is designed with the help of functional analysts. Their vocabularly and designs are not API but Domain-centric. Functional analysts will discuss business constraints and logic; the home of the domain layer in an application. Even many enterprise and solution architects have little knowledge of REST, RPC or messaging contracts but rather tend to focus on the domain and system behaviour primarily instead of the API.
 
 #### When output cannot be broken down into small requests
 
