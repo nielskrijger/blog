@@ -1,7 +1,6 @@
 {
     "name": "nielskrijger",
     "version": 2,
-    "alias": ["nielskrijger.com", "www.nielskrijger.com"],
     "builds": [
         { "src": "package.json", "use": "@now/static-build" }
     ]
