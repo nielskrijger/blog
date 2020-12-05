@@ -24,10 +24,12 @@ Right now I'm learning a lot building [Metrix.io](https://metrix.io) using:
 - React
 - Kubernetes
 - Istio
+- Helm
 - Google Cloud
 - PostgreSQL
 - Redis
 - Cassandra
+- Gitlab
 
 Between 2001-2010 I've developed and managed several high-traffic game web portals and developed websites for small companies using:
 
