@@ -16,8 +16,10 @@ I am a freelance full-stack web developer from Utrecht (The Netherlands). You ca
 
 My own company for which I do work in my free time.
 
-Right now I'm focusing primarily on [Metrix.io](https://metrix.io) using:
+Right now I'm learning a lot building [Metrix.io](https://metrix.io) using:
 
+- Microservices
+- gRPC & gRPC-web
 - Golang
 - React
 - Kubernetes
@@ -26,16 +28,23 @@ Right now I'm focusing primarily on [Metrix.io](https://metrix.io) using:
 - PostgreSQL
 - Redis
 - Cassandra
-- PubSub
 
-Between 2001-2010 I developed and managed several high-traffic game web portals and developed websites for small companies using:
+Between 2001-2010 I've developed and managed several high-traffic game web portals and developed websites for small companies using:
 
 - PHP, Python, Ruby, JavaScript, Java, Scala
-- HTML/XHTML
-- SQL
+- HTML
 - MySQL, PostgreSQL, DynamoDB
 - Various web frameworks (Symfony, Zend, Grails, Ruby on Rails, Play!, DropWizard, Express.js, a custom PHP framework and Martini)
 - Drupal, Joomla
+
+### NIKE (2020)
+
+Worked as a full-stack engineer building B2B planning software using:
+
+- React & Redux (TypeScript)
+- NodeJS (TypeScript)
+- PostgreSQL
+- Websockets
 
 ### PVH (2019)
 
