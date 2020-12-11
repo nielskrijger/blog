@@ -17,7 +17,7 @@ Here's my two cents.
 
 I'm a big fan of TDD. The first properly developed (PHP) software project I encountered was in 2005 or 2006 and it was also the first project I discovered that had unit tests.
 
-At the time I hadn't got the faintest idea what their use might be. Why take the effort to test behavior that you can simply verify hitting F5 in a browser? The reasons I thought this were
+At the time I hadn't got the faintest idea what their use might be and didn't value them. This was mainly because:
 
 1. most of the projects I had done were small one-man projects
 2. I had never worked with proper QA
@@ -39,9 +39,7 @@ Phase (1) took me a couple of months when I first started coding, (2) took rough
 
 More recently I find myself doing less TDD and focusing more on automating functional/API tests instead.
 
-While working with Symfony 2 (a PHP framework) I adopted the view that controllers (in a classic MVC framework) are not worth unit testing; controllers are light weight and designed to glue the components together. As such Symfony 2 promotes writing functional tests rather than unit tests for controllers. Doing so I started to appreciate testing with real context and using a real rather than a mocked database; I found it to be a better predictor whether my software would actually work.
-
-Another reason I started focussing more on functional tests is that many testers are very bad at automating tests. Poor configuration, code duplication, hard data dependencies, poor test descriptions, unclear test dependencies, even manual setup steps (!) in "automated" tests. Soon the effort to maintain their automated tests will take a significant portion of their -and possibly your- time.
+While working with Symfony 2 (a PHP framework) I adopted the view that controllers (in a classic MVC framework) are not worth unit testing; controllers are light weight and designed to glue the components together. Meaning, integration tests are more applicable. Symfony 2 promotes writing functional tests rather than unit tests for controllers. Doing so I started to appreciate testing with real context and using a real rather than a mocked database; I found it to be a better predictor whether my software would actually work.
 
 Considering the four phases discussed earlier, I might add a fifth:
 
@@ -49,6 +47,6 @@ Considering the four phases discussed earlier, I might add a fifth:
 
 In essence I have come to favour [ATDD](https://en.wikipedia.org/wiki/Acceptance_test%E2%80%93driven_development) over TDD.
 
-I do admit this acceptance-test first approach requires a certain environment, particularly one that is very fast to deploy and run; and with fast I mean all test cases having run within 10 seconds or so.
+I do admit this acceptance-test first approach requires a certain environment, particularly one that is very fast to deploy and run; and with fast I mean a test case should run within 10 seconds or so (I am looking at you [Arquillian](https://arquillian.org/)!). 
 
-So does this mean TDD dieing for me as well? No; when building a library, algorithm or utility I'll still employ TDD. But in practice for a lot of software I've come to favour ATDD instead of (not in addition to) TDD.
+So does this mean TDD dieing for me as well? No; when building a library, algorithm or utility I'll still employ TDD. But in practice for a lot of software I've come to favour writing integration and acceptance tests instead.

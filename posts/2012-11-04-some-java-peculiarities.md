@@ -8,7 +8,7 @@ tags:
 layout: layouts/post.njk
 ---
 
-Currently I'm sharpening my Java skills for the OCP Java Programmer SE 6 exam (formarly SCJP) and as it turned out preparing for this exam turned out to be a lot of fun!
+Currently I'm sharpening my Java skills for the OCP Java Programmer SE 6 exam (formarly SCJP) and as it turns out preparing for this exam is learning me a lot.
 
 I wrote some code examples to show some of the peculiarities of Java that made me raise my eyebrows.
 

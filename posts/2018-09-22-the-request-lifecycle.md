@@ -201,7 +201,7 @@ A more heavy-duty approach is <a href="https://json-schema.org/" target="_blank"
     },
     "content": {
         "type": "string"
-    }
+    },
     "status": {
         "enum": [ "DRAFT", "PUBLISHED" ]
     },
