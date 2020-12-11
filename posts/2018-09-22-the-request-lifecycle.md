@@ -10,8 +10,6 @@ tags:
 layout: layouts/post.njk
 ---
 
-*// Update 2019-01-24: rewritten most of the article*
-
 When adding a new backend request I've found the following list a fairly common sequence of steps I should take care of:
 
 1. <a href="{{ '#1.-request' | url }}">Request</a>
@@ -25,13 +23,13 @@ When adding a new backend request I've found the following list a fairly common 
 9. <a href="{{ '#9.-side-effects' | url }}">Side effects</a>
 10. <a href="{{ '#10.-response' | url }}">Response</a>
 
-The order of these steps vary and not all steps apply for each type of request, nevertheless this list has served me as a good checklist in the past.
+The order of these steps vary and not all steps apply to each type of request, nevertheless this list has served me as a good checklist in the past.
 
 In this blog I'll walk through these steps and share some learnings I've had along the way.
 
 ## 1. Request
 
-A comparison between all available protocols is a blogpost in itself, instead I'll quickly go through the protocols and API-styles I've used or experimented with:
+Discussing all variety of requests is a blogpost in itself, instead I'll quickly go through the protocols and API-styles I've used or experimented with:
 
 1. **REST / JSON.** Used for most API's these days and relies on the fundamental principles of HTTP. I'll assume you are already familiar with REST / JSON APIs.
 
