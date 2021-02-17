@@ -1,5 +1,5 @@
 ---
-title: useContext + useReducer
+title: useContext + useReducer re-renders
 description: Why redux isn't dead just yet
 date: 2021-02-16
 permalink: /posts/2021-02-16/use-reducer-and-use-context/index.html
@@ -67,7 +67,7 @@ const ButtonIncrease = () => {
 }
 ```
 
-The button doesn't depend `state` and only uses the `dispatch` function. This `dispatch` function never changes, so there should be no need for the button to re-render when it's clicked.
+The button doesn't depend on `state`, it only uses the `dispatch` function. This `dispatch` function never changes, so there should be no need for the button to re-render when it's clicked.
 
 The root of the issue lies with how the context value is defined:
 
@@ -128,14 +128,14 @@ This seems the approach taken by most people and has been [recommended](https://
 
 Some limitations however:
 
-- Components depending on a subset of the state still re-render if other parts of the state changes. You can split `state` in multiple contexts to address that.
-- Splitting contexts makes the API more complex. A `useReducer(...)` returns both `state` and `dispatch`, but when used in context like this you'd have to grab them independently. This can be mitigated by wrapping the API in a set of hooks (e.g. `useChangeCount` and `useGetCount`).
+- Components depending on a subset of the state still re-render if other parts of the state changes. You can split `state` in even more contexts to address that.
+- Splitting contexts makes the API more complex. A `useReducer(...)` returns both `state` and `dispatch`, but when used in context like this you'd have to grab them independently. This can be mitigated by wrapping the API in a set of hooks (e.g. `useChangeCount()` and `useGetCount()`).
 
 ### 2. Memoize Context Values
 
 This solution doesn't stop the re-render but limits its impact.
 
-Basically there are two ways to do this. One is to have a parent component pass down context values and prevent the child from rerender using `memo`. For example:
+Basically there are two ways to do this. One is to have a parent component pass down context values and prevent the child from re-rendering using `memo`. For example:
 
 ```jsx
 const ButtonParent = () => {
@@ -194,9 +194,9 @@ const ButtonDecrease = () => {
 
 Memoizing context values is more flexible than splitting contexts, but comes at the cost of extra complexity throughout your app.
 
-Usually when using contexts I find myself using the context values directly within that component; which makes sense, Context is meant to easily share state between components rather than passing them down.
+Usually when using contexts I find myself using the context values directly within that component. This makes sense as Context is meant to easily share state between components rather than passing them down. But it does mean hoisting state to a parent components just to prevent re-renders doesn't always make sense.
 
-All-in-all this is not a structural solution to the problem but a very flexible and powerful patch.
+All-in-all this is not a structural solution to the problem but a very flexible and powerful fix.
 
 ### 3. Switch to Redux (or similar)
 
@@ -214,11 +214,11 @@ Redux `useSelector` has the following properties:
 > 
 > https://react-redux.js.org/api/hooks#useselector
 
-Redux is much more sensible when it comes to re-rendering. If your component uses just 1 property of the state, it will re-render only when that property changes. It's hard to mess up even for developers completely new to ReactJS.
+Redux is much more sensible when it comes to re-rendering. If your component uses just 1 property of the state, it will re-render only when that property changes. It's hard to mess up even for developers completely new to ReactJS or hooks.
 
-This, combined with the advanced dev tooling ensures Redux isn't dead just yet which I thought/hoped it was back in 2019.
+This, combined with the advanced dev tooling ensures Redux isn't dead just yet which I thought back in 2019.
 
-Alternatively, lots of other state libraries exist for ReactJS with these properties.
+Alternatively, lots of other state libraries exist for ReactJS with similar properties.
 
 ## Final Remarks
 
