@@ -16,12 +16,12 @@ A basic implementation would look like this.
 ```jsx
 const reducer = (state, action) => {
   switch (action.type) {
-  case 'increment':
-    return { count: state.count + 1 };
-  case 'decrement':
-    return { count: state.count - 1 };
-  default:
-    return state;
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      return state;
   }
 }
 
@@ -32,16 +32,16 @@ const MyContextProvider = ({ children }) => {
 
   const contextValue = { state, dispatch };
   return (
-  <MyContext.Provider value={contextValue}>
-    {children}
-  </MyContext.Provider>
+    <MyContext.Provider value={contextValue}>
+      {children}
+    </MyContext.Provider>
   );
 };
 ```
 
-By itself there is nothing wrong with this setup in most use cases, but in one use case last year we had a form with hundreds of select field, each with a long list of options. All those selects subscribed to the same context state.
+Usually there is nothing wrong with this setup, but in one case last year I had a form with hundreds of select fields each with a long list of options. All those selects subscribed to the same context state.
 
-It barely worked. Every time changing one of the select fields would make the page unresponsive for a while.
+It barely worked. Every time changing one of the select fields would make the page unresponsive for a short while.
 
 From that I learned `useContext` is fairly dumb, it simply re-renders all subscribed components. For example: 
 
@@ -56,16 +56,18 @@ const ButtonIncrease = () => {
   buttonIncreaseRenders += 1;
   const { dispatch } = useContext(MyContext);
   
+  const handleClick = () => dispatch({ type: 'increment' });
+  
   return (
     <div className="block">
-      <button type="input" onClick={() => dispatch({ type: 'increment' }) }>+ 1</button>
+      <button type="input" onClick={handleClick}>+ 1</button>
       This button rendered {buttonIncreaseRenders} times
     </div>
   );
 }
 ```
 
-It shows the button doesn't depend on the `state.count` and only uses the `dispatch` function. The `dispatch` function never changes, so there should be no need for the button to re-render when it's clicked.
+The button doesn't depend `state` and only uses the `dispatch` function. This `dispatch` function never changes, so there should be no need for the button to re-render when it's clicked.
 
 The root of the issue lies with how the context value is defined:
 
@@ -91,7 +93,7 @@ But if like me you do get noticeable performance issues, some solutions are:
 
 By splitting `dispatch` and `state` in separate contexts you can avoid unnecessary re-renders for components that only use `dispatch`:
 
-```javascript
+```jsx
 const StateContext = createContext();
 const DispatchContext = createContext();
 
@@ -124,14 +126,14 @@ const StateCount = () => {
 
 This seems the approach taken by most people and has been [recommended](https://github.com/facebook/react/issues/15156#issuecomment-474590693) by Dan Abramov.
 
-Some limitations with this however:
+Some limitations however:
 
 - Components depending on a subset of the state still re-render if other parts of the state changes. You can split `state` in multiple contexts to address that.
 - Splitting contexts makes the API more complex. A `useReducer(...)` returns both `state` and `dispatch`, but when used in context like this you'd have to grab them independently. This can be mitigated by wrapping the API in a set of hooks (e.g. `useChangeCount` and `useGetCount`).
 
 ### 2. Memoize Context Values
 
-This solution doesn't stop the re-render but limits the impact.
+This solution doesn't stop the re-render but limits its impact.
 
 Basically there are two ways to do this. One is to have a parent component pass down context values and prevent the child from rerender using `memo`. For example:
 
@@ -139,12 +141,12 @@ Basically there are two ways to do this. One is to have a parent component pass 
 const ButtonParent = () => {
   const { dispatch } = useContext(MyContext);
 
-  const handleButtonClick = useCallback(() => {
+  const handleClick = useCallback(() => {
     dispatch({ type: 'increment' });
   }, [dispatch]);
 
   return (
-    <ButtonIncrease onClick={handleButtonClick} />
+    <ButtonIncrease onClick={handleClick} />
   );
 }
 
@@ -172,7 +174,7 @@ let buttonDecreaseRenders = 0;
 const ButtonDecrease = () => {
   const { dispatch } = useContext(MyContext);
   
-  const handleButtonClick = useCallback(() => {
+  const handleClick = useCallback(() => {
     dispatch({ type: 'decrement' });
   }, [dispatch]);
   
@@ -180,7 +182,7 @@ const ButtonDecrease = () => {
     buttonDecreaseRenders += 1;
     return (
       <div className="block">
-        <button type="input" onClick={handleButtonClick}>- 1</button>
+        <button type="input" onClick={handleClick}>- 1</button>
         This button rendered {buttonDecreaseRenders} times
       </div>
     );
@@ -196,9 +198,9 @@ Usually when using contexts I find myself using the context values directly with
 
 All-in-all this is not a structural solution to the problem but a very flexible and powerful patch.
 
-### 3. Switch to Redux 
+### 3. Switch to Redux (or similar)
 
-By default Redux `useSelector` has the following properties:
+Redux `useSelector` has the following properties:
 
 > When an action is dispatched, useSelector() will do a reference comparison of the previous selector result value and the current result value. If they are different, the component will be forced to re-render. If they are the same, the component will not re-render.
 >
@@ -220,9 +222,9 @@ Alternatively, lots of other state libraries exist for ReactJS with these proper
 
 ## Final Remarks
 
-This is a problem you might not need to solve but if you do it might cause some awkward architectural changes.
+This is a problem you might not need to solve but if you do it might require awkward architectural changes.
 
-Hooks are fairly magical -a language in itself almost- so it's not weird to attribute magical properties to it when it comes to making re-render decisions. In this case however React hooks doesn't do magic, it plays dumb. That's a good thing.
+Hooks are fairly magical -a language in itself almost- so it's not weird to attribute magical properties to it when it comes to making re-render decisions. In this case however React hooks don't do magic, it's dumb. That's a good thing.
 
 But ReactJS doesn't provide a great elegant solution to solve this problem out-of-the-box.
 
