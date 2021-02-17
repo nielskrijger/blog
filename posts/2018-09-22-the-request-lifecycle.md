@@ -209,7 +209,7 @@ A more heavy-duty approach is <a href="https://json-schema.org/" target="_blank"
 
 Parsing and validating your object against a JSON schema requires a powerful library but makes for very strict, readable and language-agnostic validation specs. It is part of Swagger/OpenAPI as well. I've used JSON schemas in many projects and it has become one of my favourite tools.
 
-A third approach is to add validation annotations/properties to the deserialisation specification or domain model. Most opinionated frameworks promote this type of validation. For example:
+A third approach is to add validation annotations/properties to the deserialisation specification or domain model. Most full-stack frameworks promote this type of validation. For example:
 
 ```csharp
 public class Movie
@@ -224,9 +224,9 @@ public class Movie
  }
 ```
 
-While usually not as powerful as JSON schema or as flexible as custom functions this approach is usually well understood by other developers and don't require additional third-party libraries. Over the years I've begun to use this method less and less, primarily because I've come to favour microframeworks which do not offer this validation out-of-the-box.
+While generally not as powerful as JSON schema or as flexible as custom functions this approach is usually well understood by other developers and don't require additional third-party libraries.
 
-So what about sanitization, for example trimming whitespaces from request fields? Well; as a rule of thumb **don't sanitize in the backend**. Providing valid input is the responsibility of the client app. If whitespace isn't allowed make sure your API validation rules don't accept it.
+So what about sanitization, for example trimming whitespaces from request fields? As a rule of thumb **don't sanitize in the backend** but do so in the frontend. I.e. if whitespace isn't allowed make sure your API validation rules don't allow it. Sanitizing in the backend would change client input which is usually unexpected by the users of your API.   
 
 Similarly I never translate backend error messages; showing a good error message to the end-user is better left to the client app. SPA's and mobile apps commonly run client-side validation before any request is made; your beautifully i18n backend API responses will go to waste. Similarly error messages are often tailored to the type of app (e.g. a shorter error message on mobile). Also, having full control over i18n in your client app and removing it from the backend greatly simplifies an already complex task.
 
