@@ -41,7 +41,7 @@ const MyContextProvider = ({ children }) => {
 
 Usually there is nothing wrong with this setup, but in one case last year I had a form with hundreds of select fields each with a long list of options. All those selects subscribed to the same context state.
 
-It barely worked. Every time changing one of the select fields would make the page unresponsive for a short while.
+It barely worked. Every time changing one of the select fields would make the page unresponsive for a short time.
 
 From that I learned `useContext` is fairly dumb, it simply re-renders all subscribed components. For example: 
 
@@ -168,7 +168,7 @@ If you already have a parent component passing down props this may be an easy fi
 
 Often with contexts I find myself using the context values directly within that component. This makes sense as Context is meant to share state between components rather than passing them down. But it does mean hoisting state to a parent component just to prevent re-renders doesn't always make sense.
 
-Alternatively if you want to cram it into a single component:
+Alternatively you can cram it into a single component:
 
 ```jsx
 let buttonDecreaseRenders = 0;
@@ -196,7 +196,7 @@ const ButtonDecrease = () => {
 
 Memoizing context values is more flexible than splitting contexts, but comes at the cost of extra complexity throughout your app.
 
-All-in-all this is not a structural solution to the problem but a very flexible and powerful fix.
+All-in-all this is not a structural solution but a very flexible and powerful fix.
 
 ### 3. Switch to Redux (or similar)
 
