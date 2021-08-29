@@ -222,7 +222,7 @@ Alternatively, lots of other state libraries exist for ReactJS with similar prop
 
 ## Final Remarks
 
-This is a problem you might not need to solve but if you do it might require awkward architectural changes.
+This is a problem you might not need to solve but if you do it can cause awkward architectural changes.
 
 Hooks are fairly magical -a language in itself almost- so it's not weird to attribute magical properties to it when it comes to making re-render decisions. In this case however React hooks don't do magic, it's dumb. That's a good thing.
 
