@@ -159,7 +159,7 @@ For example:
 
 Despite `.red-child { z-index: 999 }` the blue block appears on top. This is caused by `.red-parent { position: absolute }` which creates a new stacking context for all of `.red-parent`'s children.
 
-A new stacking context only affects the element's children; the `z-index` of the positioned element itself is still part of the original stacking context.
+**A new stacking context only affects the element's _children_**; the `z-index` of the positioned element itself is still part of the original stacking context.
 
 That is why blue appears on top of red; both `.blue-parent` and `.red-parent` have the default `z-index: 0`. Because they have the same z-index value within the same root stacking context the last element in HTML is drawn on top (see [Stacking without the z-index property](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/Stacking_without_z-index)).
 
