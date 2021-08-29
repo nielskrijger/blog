@@ -111,7 +111,7 @@ The main thing to watch out for is managing your [stacking contexts](https://dev
 
 A z-index is relative to other elements within what's called a "stacking context". The main root element (`<html />`) creates such a stacking context. However, there are various ways you can (usually unknowingly) create a new stacking context. MDN [lists all possible causes](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context).
 
-As a consequence, an element with a higher z-index can be rendered beneath an element with a lower z-index. This can be quite counter-intuitive.
+As a consequence, an element with a high z-index can be rendered beneath an element with a low z-index. This can be quite counter-intuitive and confusing at first.
 
 The most common cause for this problem I've seen is when using `position` on some parent element while trying to set a `z-index` on a child.
 
