@@ -163,7 +163,7 @@ A new stacking context only affects the element's children; the `z-index` of the
 
 That is why blue appears on top of red; both `.blue-parent` and `.red-parent` have the default `z-index: 0`. Because they have the same z-index value within the same root stacking context the last element in HTML is drawn on top (see [Stacking without the z-index property](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/Stacking_without_z-index)).
 
-Often I fix this issue by moving the z-index to the positioned element. I.e:
+Often I fix this issue by moving the z-index to the positioned elements. I.e:
 
 ```css
 .red-parent {
@@ -186,7 +186,7 @@ Having only one `zIndexes`-array would logically correspond to one stacking cont
 
 In most layouts I find z-indexes can be limited to the main positioned element and one `zIndexes`-array is all I need.
 
-If I really do need a separate stacking context, I'll define a second `zIndexes`-array for that specific stacking context usually part of a Page or other high-level component (e.g. `zMenuIndexes` in `Menu.js`). My reasoning for this is it's pretty rare to require explicit z-indexes within a non-root stacking context, so it's fine -and arguably preferable- to make that explicit rather than trying to manage all `zIndexes` in one array.
+If I really do need a separate stacking context, I'll define a second `zIndexes`-array for that specific stacking context as part of that high-level component (e.g. `zMenuIndexes` in `Menu.js`). My reasoning for this is its pretty rare to require explicit z-indexes within a non-root stacking context, so it is fine -and arguably preferable- to make that explicit rather than trying to manage all `zIndexes` in a single array.
 
 ## SASS
 
