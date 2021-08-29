@@ -78,15 +78,15 @@ const zIndexOrder = [
   'popup',
 ] as const;
 
-type OrderValues = typeof zIndexOrder[number];
-type ZIndexes = Record<OrderValues, number>;
+type ZIndexValues = typeof zIndexOrder[number];
+type ZIndexRecord = Record<ZIndexValues, number>;
 
 const zIndexes = zIndexOrder.reduce(
-  (acc: ZIndexes, current: OrderValues, index: number) => {
+  (acc: ZIndexRecord, current: ZIndexValues, index: number) => {
     acc[current] = index;
     return acc;
   },
-  {} as ZIndexes
+  {} as ZIndexRecord
 );
 
 export default zIndexes;
@@ -99,7 +99,7 @@ import styled from 'styled-components';
 import zIndexes from '../style/zIndexes';
 
 // The ollowing gives an error:
-// TS2551: Property 'headr' does not exist on type 'ZIndexes'. Did you mean 'header'?
+// TS2551: Property 'headr' does not exist on type 'ZIndexRecord'. Did you mean 'header'?
 const MyHeader = styled.header`
   z-index: ${zIndexes.headr};
 `;
