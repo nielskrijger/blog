@@ -23,9 +23,9 @@ Managing z-indexes can be tricky. You'll undoubtedly be familiar with examples l
 }
 ```
 
-While it works, it's not particularly elegant. Searching through your codebase for all `z-index` values could easily yield something like `[-1, 1, 2, 3, 5, 10, 11, 19, 100, 200, 299, ..., 99999]`. Have fun choosing the next number in that sequence (or worse, adding something between `2` and `3`).
+While it works, it's not particularly elegant. Searching through your codebase for all `z-index` values could easily yield something like `[-1, 1, 2, 3, 4, 5, 10, 11, 19, 100, 200, 299, ..., 99999]`. Have fun choosing the next number in that sequence (or worse, adding something between `2` and `3`).
 
-If your CSS is generated using a CSS-in-JS library (e.g. [styled-components](https://styled-components.com/), [Linaria](https://github.com/callstack/linaria), [JSS](https://github.com/cssinjs/jss)...) a fairly neat way to organize your z-indexes is by defining them in an array:
+If your CSS is generated using a CSS-in-JS library (e.g. [styled-components](https://styled-components.com/), [Linaria](https://github.com/callstack/linaria), [JSS](https://github.com/cssinjs/jss)...) a fairly clean way to organize your z-indexes is by defining them in an array:
 
 ```js
 const zIndexOrder = [
@@ -67,9 +67,11 @@ const zIndexOrder = [
 ];
 ```
 
-The z-index numbers automatically update.
+The z-index number values automatically update.
 
-A TypeScript version would look as follows:
+## TypeScript variant
+
+In TypeScript you could do the following:
 
 ```ts
 const zIndexOrder = [
@@ -107,13 +109,11 @@ const MyHeader = styled.header`
 
 ## Beware your stacking contexts
 
-The main thing to watch out for is managing your [stacking contexts](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context).
-
 A z-index is relative to other elements within what's called a "stacking context". The main root element (`<html />`) creates such a stacking context. However, there are various ways you can (usually unknowingly) create a new stacking context. MDN [lists all possible causes](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context).
 
 As a consequence, an element with a high z-index can be rendered beneath an element with a low z-index. This can be quite counter-intuitive and confusing at first.
 
-The most common cause for this problem I've seen is when using `position` on some parent element while trying to set a `z-index` on a child.
+The most common cause for this problem I've seen is when using `position` on some parent element while trying to set a `z-index` on a child element.
 
 For example:
 
@@ -163,7 +163,7 @@ Despite `.red-child { z-index: 999 }` the blue block appears on top. This is cau
 
 That is why blue appears on top of red; both `.blue-parent` and `.red-parent` have the default `z-index: 0`. Because they have the same z-index value within the same root stacking context the last element in HTML is drawn on top (see [Stacking without the z-index property](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/Stacking_without_z-index)).
 
-Often I fix this issue by moving the z-index to the positioned elements. I.e:
+Usually I fix this issue by moving the z-index to the positioned element. I.e:
 
 ```css
 .red-parent {
@@ -180,11 +180,13 @@ Often I fix this issue by moving the z-index to the positioned elements. I.e:
 ```
 ![Red on top of blue](/img/z-index-1.png)
 
-So how does this affect the `zIndexes`-array approach?
+## Why does this matter for the `zIndexes`-array approach?
 
 Having only one `zIndexes`-array would logically correspond to one stacking context: the root stacking context.
 
-In most layouts I find z-indexes can be limited to the main positioned element and one `zIndexes`-array is all I need.
+But; since it's often unclear when a new stacking context is created you could easily end up having one `zIndexes`-array that (tries) to manage multiple stacking contexts. This could lead to unexpected results.
+
+In most layouts I find z-indexes can be limited to the main positioned element and one `zIndexes`-array is all I need for the whole app.
 
 If I really do need a separate stacking context, I'll define a second `zIndexes`-array for that secondary stacking context (e.g. `zMenuIndexes` in `Menu.js`).
 
