@@ -58,7 +58,7 @@ header {
 }
 pre,
 code {
-  font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier, monospace;
+  font-family: monospace;
 }
 pre {
   font-size: 14px;

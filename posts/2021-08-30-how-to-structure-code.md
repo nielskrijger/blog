@@ -4,7 +4,6 @@ description: How to structure code like a pro?
 date: 2021-08-30
 permalink: /posts/2021-08-30/how-to-structure-code-like-a-pro/index.html
 tags:
-- ReactJS
 - Architecture
 layout: layouts/post.njk
 ---
