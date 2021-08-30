@@ -186,9 +186,9 @@ Having only one `zIndexes`-array would logically correspond to one stacking cont
 
 In most layouts I find z-indexes can be limited to the main positioned element and one `zIndexes`-array is all I need.
 
-If I really do need a separate stacking context, I'll define a second `zIndexes`-array for that specific stacking context as part of that high-level component (e.g. `zMenuIndexes` in `Menu.js`).
+If I really do need a separate stacking context, I'll define a second `zIndexes`-array for that secondary stacking context (e.g. `zMenuIndexes` in `Menu.js`).
 
-My reasoning for this is it's pretty rare to need z-indexes in a non-root stacking context; so it is fine -and arguably preferable- to make that explicit rather than trying to manage all `zIndexes` in a single array.
+My reasoning for this is it is pretty rare to require z-indexes in a non-root stacking context; so it is fine -and arguably preferable- to make that explicit rather than trying to manage all `zIndexes` in a single array.
 
 ## SASS
 
