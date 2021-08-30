@@ -12,9 +12,9 @@ Originally I posted this in [reddit.com/r/reactjs](https://www.reddit.com/r/reac
 
 One particular sentence in that question description stood out to me: *"I still don't know how to reuse components"*.
 
-I remember myself striving for reusability in my first years of programming (and embrace any framework that prominently featured "reusability" in its marketing speak).
+I remember myself striving for reusability in my first years of programming (and embracing any framework that prominently featured "reusability" in its marketing speak).
 
-How I laugh at this now, so I was motivated me to write a decent reply. The reply consists of a bunch of tips which went as follows:
+How I laugh at this now, so I was motivated to write a decent reply to that Reddit post. The reply consists of a bunch of tips which went as follows:
 
 ## 1. Don't get blindsided by reusability
 
@@ -24,28 +24,27 @@ It's perfectly fine if the majority of the code you write is not intended for an
 
 ## 2. But... organizing code is essential
 
-Not making components reusable doesn't mean you shouldn't organize your code, these are two different things.
+Not making components reusable does not mean you shouldn't organize your code, these are two different things.
 
 Organizing code is essential for readability. Plenty of senior devs with loads of experience still struggle to organize code, including me. It's an ongoing effort.
-
 
 Reusability in software is often not that important as claimed; but organizing your code is always important.
 
 ## 3. Atomic Design
 
-I would recommend reading up on "[Atomic Web Design](https://bradfrost.com/blog/post/atomic-web-design/)". It structures code from fine-grained to high-level components with the terms "Atoms => Molecules => Organisms => Templates => Pages" (from small to big components).
+I would recommend reading up on "[Atomic Web Design](https://bradfrost.com/blog/post/atomic-web-design/)". It structures code from fine-grained to high-level components with the terms "Atoms => Molecules => Organisms => Templates => Pages" (from small to big).
 
 "Atomic Design" describes a decent foundation on how to structure components.
 
-However, I would avoid naming everything in your codebase "Atom, Molecule, Organism, Template" which quickly becomes confusing; an explicit classification of your components by their type might cause unnecessary discussion (is it a Molecule or an Organism?). Just think of Atomic Web Design as a guideline, not a set design patterns that must be followed rigorously.
+However, I would avoid naming everything in your codebase "Atom, Molecule, Organism, Template" which quickly becomes confusing; an explicit classification of your components by their type might cause unnecessary discussion (is it a Molecule or an Organism? Should or shouldn't I add this in here?). Just think of Atomic Web Design as a guideline, not a set design patterns that must be followed rigorously.
 
 ## 4. Keep it small & simple
 
-Keeping function/class/file complexity low is tricky. Code grows and deadlines are near.
+Keeping function/class/file complexity low is tricky. Code grows and the deadline is approaching.
 
-A good JavaScript plugin that helps with this is [eslint-plugin-sonarjs](https://github.com/SonarSource/eslint-plugin-sonarjs) (particularly [cognitive complexity](https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/docs/rules/cognitive-complexity.md)). Having an ESLint error yell at you is usually a good trigger to start refactoring. Other languages tend to have similar linters available (at least for Java and Golang I've used them).
+A good JavaScript plugin that helps with this is [eslint-plugin-sonarjs](https://github.com/SonarSource/eslint-plugin-sonarjs) (particularly [cognitive complexity](https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/docs/rules/cognitive-complexity.md)). Having an ESLint error yell at you is usually a good trigger to start refactoring. Other programming languages tend to have similar linters (for Java and Golang I've used them as well).
  
-Even if cognitive complexity of your functions is low; large files with lots of code are complex and daunting no matter what you do. As a rough rule of thumb I try to keep files below 300 Lines of Code (LoC), and start to consider restructuring if they grow > 150 LoC. (For Golang that might be a bit higher though ¯\_(ツ)_/¯ )
+But it's not a silver bullet. Even when the cognitive complexity of your code is low; large files with lots of code are complex and daunting no matter what you do. Hence as a rough rule of thumb I try to keep files below 300 Lines of Code (LoC), and start to consider refactoring if they grow > 150 LoC. (For Golang that might be a bit higher though ¯\_(ツ)_/¯ )
 
 ## 5. Add stable dependencies, avoid unstable dependencies
 
