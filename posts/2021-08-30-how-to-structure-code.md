@@ -8,13 +8,13 @@ tags:
 layout: layouts/post.njk
 ---
 
-Originally I posted this in [reddit.com/r/reactjs](https://www.reddit.com/r/reactjs) replying in a thread with the question **["Where can I learn to structure my code like a pro and use components wisely?"](https://www.reddit.com/r/reactjs/comments/pecpou/where_can_i_learn_to_structure_my_code_like_a_pro/hawrecu/?context=3)**
+Originally I posted this in [reddit.com/r/reactjs](https://www.reddit.com/r/reactjs) replying to a question from a Junior developer: **["Where can I learn to structure my code like a pro and use components wisely?"](https://www.reddit.com/r/reactjs/comments/pecpou/where_can_i_learn_to_structure_my_code_like_a_pro/hawrecu/?context=3)**
 
-One particular sentence in the question description stood out to me: *"I still don't know how to reuse components"*.
+One particular sentence in that question description stood out to me: *"I still don't know how to reuse components"*.
 
 I remember myself striving for reusability in my first years of programming (and embrace any framework that prominently featured "reusability" in its marketing speak).
 
-My reply consisted of a bunch of tips which went as follows:
+How I laugh at this now, so I was motivated me to write a decent reply. The reply consists of a bunch of tips which went as follows:
 
 ## 1. Don't get blindsided by reusability
 
