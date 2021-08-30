@@ -28,27 +28,24 @@ Not making components reusable doesn't mean you shouldn't organize your code, th
 
 Organizing code is essential for readability. Plenty of senior devs with loads of experience still struggle to organize code, including me. It's an ongoing effort.
 
-A human brain can only process so many things, and in practice that is quite limited. For example, try to remember the following number: 1984319879. Very few humans are able to recall that number without some tricks and/or significant effort.
 
-Hence thoughtful naming of variables and functions, filenames, directories, and splitting things up helps in navigating your code.
-
-Reusability in software is often not that important as claimed; but organizing your code is.
+Reusability in software is often not that important as claimed; but organizing your code is always important.
 
 ## 3. Atomic Design
 
-I would recommend reading up on "[Atomic Web Design](https://bradfrost.com/blog/post/atomic-web-design/)". It structures code from high-level to fine-grained with the terms "Atoms => Molecules => Organisms => Templates => Pages" (from small to big components).
+I would recommend reading up on "[Atomic Web Design](https://bradfrost.com/blog/post/atomic-web-design/)". It structures code from fine-grained to high-level components with the terms "Atoms => Molecules => Organisms => Templates => Pages" (from small to big components).
 
-"Atomic Design" makes a good foundation on how to structure components.
+"Atomic Design" describes a decent foundation on how to structure components.
 
 However, I would avoid naming everything in your codebase "Atom, Molecule, Organism, Template" which quickly becomes confusing; an explicit classification of your components by their type might cause unnecessary discussion (is it a Molecule or an Organism?). Just think of Atomic Web Design as a guideline, not a set design patterns that must be followed rigorously.
 
 ## 4. Keep it small & simple
 
-Keeping function/class/file complexity low is tricky. Often code grows and deadlines are short.
+Keeping function/class/file complexity low is tricky. Code grows and deadlines are near.
 
 A good JavaScript plugin that helps with this is [eslint-plugin-sonarjs](https://github.com/SonarSource/eslint-plugin-sonarjs) (particularly [cognitive complexity](https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/docs/rules/cognitive-complexity.md)). Having an ESLint error yell at you is usually a good trigger to start refactoring. Other languages tend to have similar linters available (at least for Java and Golang I've used them).
  
-Even if cognitive complexity of your functions is low; huge files with lots of code are complex and daunthing no matter what you do. As a rough rule of thumb I try to keep files below 300 Lines of Code (LoC), and start to consider restructuring if they grow > 150 LoC. (For Golang that might be a bit higher though ¯\_(ツ)_/¯ )
+Even if cognitive complexity of your functions is low; large files with lots of code are complex and daunting no matter what you do. As a rough rule of thumb I try to keep files below 300 Lines of Code (LoC), and start to consider restructuring if they grow > 150 LoC. (For Golang that might be a bit higher though ¯\_(ツ)_/¯ )
 
 ## 5. Add stable dependencies, avoid unstable dependencies
 
