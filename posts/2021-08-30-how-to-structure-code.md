@@ -49,7 +49,7 @@ Keeping function/class/file complexity low is tricky. Often code grows and deadl
 
 A good JavaScript plugin that helps with this is [eslint-plugin-sonarjs](https://github.com/SonarSource/eslint-plugin-sonarjs) (particularly [cognitive complexity](https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/docs/rules/cognitive-complexity.md)). Having an ESLint error yell at you is usually a good trigger to start refactoring. Other languages tend to have similar linters available (at least for Java and Golang I've used them).
  
-Even if cognitive complexity of your functions is low; huge files with lots of code are complex and daunthing no matter what you do. As a rough rule of thumb I try to keep files below 300 Lines of Code (LoC), and start to consider restructuring if they grow > 150 LoC. ((For Golang that might be a bit higher though ¯\_(ツ)_/¯ ))
+Even if cognitive complexity of your functions is low; huge files with lots of code are complex and daunthing no matter what you do. As a rough rule of thumb I try to keep files below 300 Lines of Code (LoC), and start to consider restructuring if they grow > 150 LoC. (For Golang that might be a bit higher though ¯\_(ツ)_/¯ )
 
 ## 5. Add stable dependencies, avoid unstable dependencies
 
