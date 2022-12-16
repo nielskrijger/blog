@@ -8,13 +8,11 @@ tags:
 layout: layouts/post.njk
 ---
 
-Originally I posted this in [reddit.com/r/reactjs](https://www.reddit.com/r/reactjs) replying to a question from a Junior developer: **["Where can I learn to structure my code like a pro and use components wisely?"](https://www.reddit.com/r/reactjs/comments/pecpou/where_can_i_learn_to_structure_my_code_like_a_pro/hawrecu/?context=3)**
+Originally I posted this in [reddit.com/r/reactjs](https://www.reddit.com/r/reactjs) replying to a question from a developer: **["Where can I learn to structure my code like a pro and use components wisely?"](https://www.reddit.com/r/reactjs/comments/pecpou/where_can_i_learn_to_structure_my_code_like_a_pro/hawrecu/?context=3)**
 
 One particular sentence in that question description stood out to me: *"I still don't know how to reuse components"*.
 
-I remember myself striving for reusability in my first years of programming (and embracing any framework that prominently featured "reusability" in its marketing speak).
-
-How I laugh at this now, so I was motivated to write a decent reply to that Reddit post. The reply consists of a bunch of tips which went as follows:
+Since it's such a tricky thing to do I was motivated to write a reply that went as follows:
 
 ## 1. Don't get blindsided by reusability
 
@@ -38,15 +36,7 @@ I would recommend reading up on "[Atomic Web Design](https://bradfrost.com/blog/
 
 However, I would avoid naming everything in your codebase "Atom, Molecule, Organism, Template" which quickly becomes confusing; an explicit classification of your components by their type might cause unnecessary discussion (is it a Molecule or an Organism? Should or shouldn't I add this in here?). Just think of Atomic Web Design as a guideline, not a set design patterns that must be followed rigorously.
 
-## 4. Keep it small & simple
-
-Keeping function/class/file complexity low is tricky. Code grows and the deadline is approaching.
-
-A good JavaScript plugin that helps with this is [eslint-plugin-sonarjs](https://github.com/SonarSource/eslint-plugin-sonarjs) (particularly [cognitive complexity](https://github.com/SonarSource/eslint-plugin-sonarjs/blob/master/docs/rules/cognitive-complexity.md)). Having an ESLint error yell at you is usually a good trigger to start refactoring. Other programming languages tend to have similar linters (for Java and Golang I've used them as well).
- 
-But it's not a silver bullet. Even when the cognitive complexity of your code is low; large files with lots of code are complex and daunting no matter what you do. Hence as a rough rule of thumb I try to keep files below 300 Lines of Code (LoC), and start to consider refactoring if they grow > 150 LoC. (For Golang that might be a bit higher though ¯\_(ツ)_/¯ )
-
-## 5. Add stable dependencies, avoid unstable dependencies
+## 4. Add stable dependencies, avoid unstable dependencies
 
 Try to add dependencies on stable modules, but avoid dependencies on unstable modules. This might be a bit confusing so I'll elaborate a little.
 
