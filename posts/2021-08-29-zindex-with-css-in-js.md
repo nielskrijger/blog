@@ -194,5 +194,5 @@ My reasoning for this is it is pretty rare to require z-indexes in a non-root st
 
 ## SASS
 
-You can do something similar with SASS as well, check here some examples here: [Handling z-index with SASS](https://short.is/writing/handling-z-index-with-sass).
+You can do something similar with SASS as well: [Handling z-index with SASS](https://short.is/writing/handling-z-index-with-sass).
 
