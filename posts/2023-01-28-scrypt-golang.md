@@ -169,7 +169,7 @@ func TestCompare(t *testing.T) {
 			wantErr:  "",
 		},
 		{
-			name:     "valid algorithm settings",
+			name:     "invalid algorithm settings",
 			hash:     "scrypt$32768$4$1$LKkHIXDLzEg+veXGMaIz7g==$+mDXBabQpGsWyeRhk9vgZpPXJMyZ5Zg4I/+mBdzkUx0=",
 			password: "test",
 			want:     false,
