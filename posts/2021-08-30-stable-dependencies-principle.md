@@ -8,7 +8,9 @@ tags:
 layout: layouts/post.njk
 ---
 
-I recently advised someone on how to structure components effectively and I recommended reading up on the "Stable Dependencies Principle". I phrased it as:
+I recently advised someone on how to structure components effectively and I recommended reading up on the "Stable Dependencies Principle".
+
+My take on the Stable Dependencies Principle is:
 
 > The stability of your module is limited by the stability of the modules it depends on.
 
