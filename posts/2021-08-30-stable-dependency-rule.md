@@ -10,11 +10,11 @@ layout: layouts/post.njk
 
 I recently advised someone on how to structure components effectively and I recommended what I called the "Stable Dependency Rule":
 
-> Depend on stable modules and avoid unstable ones.
+> The stability of your module is limited by the stability of the modules it depends on.
 
 A "module" in this context refers to a function, class, file, directory, or even a sub-tree of directories in a project.
 
-Assign each module a score from 1-10, where 10 is the most stable (never changes) and 1 is the least stable. Take the following module dependency graph:
+Assign each module a score from 1-10, where 10 is the most stable (never changes) and 1 is the least stable. Take for example the following module dependency graph:
 
 ```
    ┌───┐
@@ -32,7 +32,7 @@ Assign each module a score from 1-10, where 10 is the most stable (never changes
 Modules on the bottom depend on modules above.
 ```
 
-The Dependency Stability Rule is your module can't be more stable than the least stable module it depends on. In practice this is because when a dependency changes any  code using it must be retested as well.
+The Stable Dependency Rule implies your module can't be more stable than the least stable module it depends on. In practice this is because when a dependency changes any  code using it must be retested as well.
 
 In this example two modules on the bottom ("8" and "5") depend on an unstable module "4". Following the aforementioned rule the updated graph looks like:
 
