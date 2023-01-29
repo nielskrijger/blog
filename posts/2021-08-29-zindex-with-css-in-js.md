@@ -10,7 +10,7 @@ tags:
 layout: layouts/post.njk
 ---
 
-Managing z-indexes can be tricky. You'll undoubtedly be familiar with examples like these:
+Managing z-index can be challenging, as demonstrated in these common scenarios:
 
 ```css
 .header {
@@ -23,9 +23,9 @@ Managing z-indexes can be tricky. You'll undoubtedly be familiar with examples l
 }
 ```
 
-While it works, it's not particularly elegant. Searching through your codebase for all `z-index` values could easily yield something like `[-1, 1, 2, 3, 4, 5, 10, 11, 19, 100, 200, 299, ..., 99999]`. Have fun choosing the next number in that sequence (or worse, adding something between `2` and `3`).
+In a well-established codebase, the z-index values may be disorganized, such as `[-1, 1, 2, 3, 4, 5, 10, 11, 19, 100, 200, 299, ..., 99999]`, posing challenges in choosing the next value or inserting one in between.
 
-If your CSS is generated using a CSS-in-JS library (e.g. [styled-components](https://styled-components.com/), [Linaria](https://github.com/callstack/linaria), [JSS](https://github.com/cssinjs/jss)...) a fairly clean way to organize your z-indexes is by defining them in an array:
+Organizing z-index values in an array is a neat approach when using CSS-in-JS libraries (e.g. [styled-components](https://styled-components.com/), [Linaria](https://github.com/callstack/linaria), [JSS](https://github.com/cssinjs/jss), etc.).
 
 ```js
 const zIndexOrder = [
@@ -45,7 +45,7 @@ const zIndexes = zIndexOrder.reduce(
 export default zIndexes;
 ```
 
-Then use it in your component as follows:
+The array can be used in components as follows:
 
 ```jsx
 import styled from 'styled-components';
@@ -56,7 +56,7 @@ const MyHeader = styled.header`
 `;
 ```
 
-The neat thing about this is adding an additional z-index becomes trivial:
+The advantage of this is approach is that adding a new z-index is simple:
 
 ```js
 const zIndexOrder = [
@@ -67,11 +67,11 @@ const zIndexOrder = [
 ];
 ```
 
-The z-index number values automatically update.
+This keeps z-index values automatically updated.
 
 ## TypeScript variant
 
-In TypeScript you could do the following:
+With TypeScript, you can use the following approach:
 
 ```ts
 const zIndexOrder = [
@@ -94,28 +94,28 @@ const zIndexes = zIndexOrder.reduce(
 export default zIndexes;
 ```
 
-It's a bit convoluted but does guarantee type-safety in your component:
+While it may seem complex, it ensures type safety in components:
 
 ```jsx
 import styled from 'styled-components';
 import zIndexes from '../style/zIndexes';
 
-// The ollowing gives an error:
+// The following gives an error:
 // TS2551: Property 'headr' does not exist on type 'ZIndexRecord'. Did you mean 'header'?
 const MyHeader = styled.header`
   z-index: ${zIndexes.headr};
 `;
 ```
 
-## Beware your stacking contexts
+## Mind your stacking contexts
 
-A z-index is relative to other elements within what's called a "stacking context". The main root element (`<html />`) creates such a stacking context. However, there are various ways you can (usually unknowingly) create a new stacking context. MDN [lists all possible causes](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context).
+A z-index is relative to other elements in a "stacking context," which the main root element (`<html />`) automatically creates. New stacking contexts can be created intentionally and unintentionally through various means [listed on MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context).
 
-As a consequence, an element with a high z-index can be rendered beneath an element with a low z-index. This can be counter-intuitive and confusing at first.
+Consequently, an element with a high z-index may appear behind an element with a low z-index, which can be confusing.
 
-The most common cause for this problem I've seen is when using `position` on some parent element while trying to set a `z-index` on a child element.
+The most frequent cause of this is using `position` on a parent element while attempting to set a z-index on a child element.
 
-For example:
+Example:
 
 ```html
 <div class="red-parent">
@@ -133,18 +133,18 @@ For example:
 
 ```css
 .red-parent {
-  position: absolute; /* this causes a new stacking context */
+  position: absolute; /* this creates a new stacking context */
   border: 2px dashed DarkRed;
 }
 
 .red-child {
   padding: 2rem;
   background-color: IndianRed;
-  z-index: 999; /* despite this high value, red still appears below blue */
+  z-index: 999; /* despite having a high value, red appears behind blue. */
 }
 
 .blue-parent {
-  position: absolute; /* this causes a new stacking context */
+  position: absolute; /* this creates a new stacking context */
   top: 4rem;
   left: 3rem;
   border: 2px dashed DarkBlue;
@@ -157,13 +157,11 @@ For example:
 ```
 ![Blue on top of red](/img/z-index-0.png)
 
-Despite `.red-child { z-index: 999 }` the blue block appears on top. This is caused by `.red-parent { position: absolute }` which creates a new stacking context for all of `.red-parent`'s children.
+Despite the `.red-child { z-index: 999 }`, blue still appears above red because `.red-parent { position: absolute }` creates a new stacking context for `.red-parent`'s children.
 
-**A new stacking context only affects the element's _children_**; the `z-index` of the positioned element itself is still part of the original stacking context.
+A new stacking context affects only the children of an element, not the element itself. Therefore, blue appears above red as both `.blue-parent` and `.red-parent` have a z-index of 0 in the same root stacking context, and the last HTML element drawn is on top.
 
-That is why blue appears on top of red; both `.blue-parent` and `.red-parent` have the default `z-index: 0`. Because they have the same z-index value within the same root stacking context the last element in HTML is drawn on top (see [Stacking without the z-index property](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/Stacking_without_z-index)).
-
-Usually I fix this issue by moving the z-index to the positioned element. I.e:
+A common solution is to move the z-index to the positioned element, such as:
 
 ```css
 .red-parent {
@@ -182,17 +180,9 @@ Usually I fix this issue by moving the z-index to the positioned element. I.e:
 
 ## Why does this matter for the `zIndexes`-array approach?
 
-Having only one `zIndexes`-array would logically correspond to one stacking context: the root stacking context.
-
-But; since it's often unclear when a new stacking context is created you could easily end up having one `zIndexes`-array that (tries) to manage multiple stacking contexts. This could lead to unexpected results.
-
-In most layouts I find z-indexes can be limited to the main positioned element and one `zIndexes`-array is all I need for the whole app.
-
-If I really do need a separate stacking context, I'll define a second `zIndexes`-array for that secondary stacking context (e.g. `zMenuIndexes` in `Menu.js`).
-
-My reasoning for this is it is pretty rare to require z-indexes in a non-root stacking context; so it is fine -and arguably preferable- to make that explicit rather than trying to manage all `zIndexes` in a single array.
+When using a single `zIndexes`-array, it corresponds to the root stacking context, but unexpected results may occur if multiple stacking contexts exist. To avoid this, limit z-indexes to main positioned elements and use a single array for the whole app. If a separate stacking context is needed, define a separate array for that context, rather than trying to manage all z-indexes in one array.
 
 ## SASS
 
-You can do something similar with SASS as well: [Handling z-index with SASS](https://short.is/writing/handling-z-index-with-sass).
+The same approach can be applied using SASS, as shown in [Handling z-index with SASS](https://short.is/writing/handling-z-index-with-sass).
 
