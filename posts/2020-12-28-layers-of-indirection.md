@@ -6,7 +6,6 @@ permalink: /posts/2020-12-25/layers-of-indirection/index.html
 tags:
 - Control flow
 - Python
-- Layering
 - Indirection
 layout: layouts/post.njk
 ---
