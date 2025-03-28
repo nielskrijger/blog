@@ -10,7 +10,9 @@ layout: layouts/post.njk
 
 # Table sizes
 
-I always forget how to get the [size of a table] in Postgres and what the difference is between `pg_table_size`, `pg_relation_size`, and `pg_total_relation_size` (see [here](https://stackoverflow.com/questions/41991380/whats-the-difference-between-pg-table-size-pg-relation-size-pg-total-relatio)). Here is a query that lists the size of all tables in a database:
+I always forget how to get the size of a table in Postgres and what the difference is between `pg_table_size`, `pg_relation_size`, and `pg_total_relation_size`. The best visualization of it I found is in this [stackoverflow thread](https://stackoverflow.com/questions/41991380/whats-the-difference-between-pg-table-size-pg-relation-size-pg-total-relatio).
+
+Here is a query that lists the size of all tables in a database:
 
 ```sql
 -- total_relation_size = relation_size + toast_size + index_size
@@ -47,6 +49,8 @@ ORDER BY
     index_size DESC
 ;
 ```
+
+Example output:
 
 | schema | table_name  | total_size | relation_size | toast_size | index_size |
 |--------|-------------|------------|---------------|------------|------------|
