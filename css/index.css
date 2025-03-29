@@ -12,6 +12,7 @@
 }
 html,
 body {
+  font-size: 16px
   padding: 0;
   margin: 0;
   font-family: Roboto, sans-serif;
@@ -61,13 +62,6 @@ code {
   font-family: monospace;
 }
 pre {
-  font-size: 14px;
-  line-height: 1.375;
-  direction: ltr;
-  text-align: left;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
   -moz-tab-size: 2;
   -o-tab-size: 2;
   tab-size: 2;
@@ -219,7 +213,6 @@ table {
   margin-top: 1rem;
   border-collapse: collapse;
   font-family: Arial, sans-serif;
-  font-size: 14px;
   background-color: #fff;
   border: 1px solid #ddd;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05);
