@@ -1,6 +1,5 @@
 ---
 layout: layouts/page.njk
-title: Niels Krijger
 tags:
   - nav
 navtitle: About
