@@ -8,9 +8,9 @@ tags:
 layout: layouts/post.njk
 ---
 
-I often forget how to check the size of a table in Postgres, as well as the differences between `pg_table_size`, `pg_relation_size`, and `pg_total_relation_size`. The best explanation I’ve found is in this [Stack Overflow thread](https://stackoverflow.com/questions/41991380/whats-the-difference-between-pg-table-size-pg-relation-size-pg-total-relatio).
+I always forget how to check the size of a table in Postgres, as well as the differences between `pg_table_size`, `pg_relation_size`, and `pg_total_relation_size`. The best explanation I’ve found is in [this Stack Overflow thread](https://stackoverflow.com/questions/41991380/whats-the-difference-between-pg-table-size-pg-relation-size-pg-total-relatio).
 
-Here’s a query to list the size of all tables in a database:
+But since I never remember the details anyway, I just copy and paste this query to get the sizes of all tables in the database:
 
 ```sql
 -- total_relation_size = relation_size + toast_size + index_size
