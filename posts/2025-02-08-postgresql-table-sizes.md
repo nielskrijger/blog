@@ -27,7 +27,7 @@ WITH table_sizes AS (
         pg_table_size(c.oid) AS table_size,
         pg_table_size(c.oid) - pg_relation_size(c.oid) AS toast_size
     FROM pg_class c
-             JOIN pg_namespace ns ON c.relnamespace = ns.oid
+    JOIN pg_namespace ns ON c.relnamespace = ns.oid
     WHERE ns.nspname NOT LIKE 'pg_%'
       AND ns.nspname != 'information_schema'
       AND c.relkind = 'r' -- only select regular tables
