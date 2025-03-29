@@ -14,7 +14,7 @@ Recently I've found myself needing to check long-running and locked queries in P
 WITH activity_with_duration AS (
 	SELECT
 		pid,
-		age(now(), query_start) AS duration,
+		age(now(), query_start) AS age,
 		pg_blocking_pids(pid) AS blocking_pids,
 		datname,
 		state,
@@ -26,16 +26,13 @@ WITH activity_with_duration AS (
 )
 SELECT
 	pid,
-	trim(
-		BOTH ' ' FROM
-		CONCAT(
-			CASE WHEN EXTRACT(hour FROM duration) > 0
-				 THEN EXTRACT(hour FROM duration)::int || 'h ' ELSE '' END,
-			CASE WHEN EXTRACT(minute FROM duration) > 0
-				 THEN EXTRACT(minute FROM duration)::int || 'm ' ELSE '' END,
-			ROUND(EXTRACT(second FROM duration), 2) || 's'
-		)
-	) AS duration,
+	CONCAT(
+		CASE WHEN EXTRACT(hour FROM age) > 0
+			 THEN EXTRACT(hour FROM age)::int || 'h ' ELSE '' END,
+		CASE WHEN EXTRACT(minute FROM age) > 0
+			 THEN EXTRACT(minute FROM age)::int || 'm ' ELSE '' END,
+		ROUND(EXTRACT(second FROM age), 2) || 's'
+	) duration,
 	CASE
 		WHEN blocking_pids = '{}'::int[] THEN NULL
 		ELSE blocking_pids
@@ -46,7 +43,7 @@ SELECT
 	wait_event,
 	query
 FROM activity_with_duration
-ORDER BY duration DESC NULLS LAST;
+ORDER BY age DESC NULLS LAST;
 ```
 
 Example output:
