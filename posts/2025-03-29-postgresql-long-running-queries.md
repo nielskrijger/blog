@@ -11,30 +11,42 @@ layout: layouts/post.njk
 Recently I've found myself needing to check long-running and locked queries in PostgreSQL. Despite a quick search that yields lots of examples, I couldn't quickly find a query that shows *both* long-running queries and blocked statements. Hence;
 
 ```sql
+WITH activity_with_duration AS (
+	SELECT
+		pid,
+		age(now(), query_start) AS duration,
+		pg_blocking_pids(pid) AS blocking_pids,
+		datname,
+		state,
+		wait_event_type,
+		wait_event,
+		query
+	FROM pg_stat_activity
+	WHERE state != 'idle'
+)
 SELECT
 	pid,
 	trim(
 		BOTH ' ' FROM
 		CONCAT(
-			CASE WHEN EXTRACT(hour FROM age(now(), query_start)) > 0
-				THEN EXTRACT(hour FROM age(now(), query_start)) || 'h ' ELSE '' END,
-			CASE WHEN EXTRACT(minute FROM age(now(), query_start)) > 0
-				THEN EXTRACT(minute FROM age(now(), query_start)) || 'm ' ELSE '' END,
-			ROUND(EXTRACT(second FROM age(now(), query_start)), 2) || 's'
+			CASE WHEN EXTRACT(hour FROM duration) > 0
+				 THEN EXTRACT(hour FROM duration)::int || 'h ' ELSE '' END,
+			CASE WHEN EXTRACT(minute FROM duration) > 0
+				 THEN EXTRACT(minute FROM duration)::int || 'm ' ELSE '' END,
+			ROUND(EXTRACT(second FROM duration), 2) || 's'
 		)
 	) AS duration,
 	CASE
-        WHEN pg_blocking_pids(pid) = '{}'::int[] THEN NULL
-        ELSE pg_blocking_pids(pid)
-	END AS blocked_by_pids,
+		WHEN blocking_pids = '{}'::int[] THEN NULL
+		ELSE blocking_pids
+		END AS blocked_by_pids,
 	datname AS database,
 	state,
 	wait_event_type,
 	wait_event,
 	query
-FROM pg_stat_activity
-WHERE state != 'idle'
-ORDER BY now() - pg_stat_activity.query_start DESC NULLS LAST;
+FROM activity_with_duration
+ORDER BY duration DESC NULLS LAST;
 ```
 
 Example output:
