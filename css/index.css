@@ -123,7 +123,7 @@ h1.logo a {
 .nav-item {
   font-family: 'Roboto', sans-serif;
   display: inline-block;
-  margin-right: 1em;
+  margin-left: 1rem;
 }
 .nav-item a[href]:not(:hover) {
   text-decoration: none;
