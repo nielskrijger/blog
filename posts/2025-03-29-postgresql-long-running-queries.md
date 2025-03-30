@@ -11,7 +11,7 @@ layout: layouts/post.njk
 Recently I've found myself needing to check long-running and locked queries in PostgreSQL. Despite a quick search that yields lots of examples, I couldn't find a query that shows *both* long-running queries and blocked statements. Hence;
 
 ```sql
-WITH activity_with_duration AS (
+WITH activity_with_age AS (
 	SELECT
 		pid,
 		age(now(), query_start) AS age,
@@ -42,7 +42,7 @@ SELECT
 	wait_event_type,
 	wait_event,
 	query
-FROM activity_with_duration
+FROM activity_with_age
 ORDER BY age DESC NULLS LAST;
 ```
 
