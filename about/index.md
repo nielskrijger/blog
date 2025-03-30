@@ -1,5 +1,6 @@
 ---
 layout: layouts/page.njk
+title: About
 tags:
   - nav
 navtitle: About
