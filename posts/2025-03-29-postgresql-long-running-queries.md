@@ -8,7 +8,7 @@ tags:
 layout: layouts/post.njk
 ---
 
-Recently I've found myself needing to check long-running and locked queries in PostgreSQL. Despite a quick search that yields lots of examples, I couldn't quickly find a query that shows *both* long-running queries and blocked statements. Hence;
+Recently I've found myself needing to check long-running and locked queries in PostgreSQL. Despite a quick search that yields lots of examples, I couldn't find a query that shows *both* long-running queries and blocked statements. Hence;
 
 ```sql
 WITH activity_with_duration AS (
