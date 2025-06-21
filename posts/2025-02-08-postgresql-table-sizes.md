@@ -1,6 +1,6 @@
 ---
-title: PostgreSQL table sizes
-description: How to fetch the size of tables in PostgreSQL
+title: PostgreSQL high table and index sizes
+description: How to fetch the size of tables and indexes in PostgreSQL
 date: 2025-02-08
 permalink: /posts/2025-02-08/postgresql-table-sizes/index.html
 tags:
@@ -21,6 +21,7 @@ WITH table_sizes AS (
     SELECT
         ns.nspname AS schema_name,
         c.relname,
+        c.reltuples AS row_estimate, -- estimated number of rows
         pg_total_relation_size(c.oid) AS total_relation_size,
         pg_relation_size(c.oid) AS relation_size,
         pg_indexes_size(c.oid) AS index_size,
@@ -35,6 +36,7 @@ WITH table_sizes AS (
 SELECT
     schema_name AS schema,
     relname AS table_name,
+    row_estimate::bigint, -- cast to bigint for display consistency
     pg_size_pretty(total_relation_size) AS total_size,
     pg_size_pretty(relation_size) AS relation_size,
     pg_size_pretty(toast_size) AS toast_size,
@@ -44,18 +46,17 @@ ORDER BY
     total_relation_size DESC,
     relation_size DESC,
     toast_size DESC,
-    index_size DESC
-;
+    index_size DESC;
 ```
 
 Example output:
 
-| schema | table_name  | total_size | relation_size | toast_size | index_size |
-|--------|-------------|------------|---------------|------------|------------|
-| pagila | customers   | 420 MB     | 350 MB        | 40 MB      | 30 MB      |
-| pagila | orders      | 300 MB     | 250 MB        | 30 MB      | 20 MB      |
-| pagila | order_items | 800 MB     | 700 MB        | 50 MB      | 50 MB      |
-| pagila | products    | 150 MB     | 120 MB        | 10 MB      | 20 MB      |
-| pagila | categories  | 75 MB      | 60 MB         | 5 MB       | 10 MB      |
-| pagila | suppliers   | 100 MB     | 80 MB         | 5 MB       | 15 MB      |
-| pagila | payments    | 60 MB      | 50 MB         | 3 MB       | 7 MB       |
+| schema | table_name  | row_count | total_size | relation_size | toast_size | index_size |
+|--------|-------------|-----------|------------|---------------|------------|------------|
+| pagila | customers   | 12345     | 420 MB     | 350 MB        | 40 MB      | 30 MB      |
+| pagila | orders      | 78910     | 300 MB     | 250 MB        | 30 MB      | 20 MB      |
+| pagila | order_items | 450000    | 800 MB     | 700 MB        | 50 MB      | 50 MB      |
+| pagila | products    | 3200      | 150 MB     | 120 MB        | 10 MB      | 20 MB      |
+| pagila | categories  | 100       | 75 MB      | 60 MB         | 5 MB       | 10 MB      |
+| pagila | suppliers   | 500       | 100 MB     | 80 MB         | 5 MB       | 15 MB      |
+| pagila | payments    | 210000    | 60 MB      | 50 MB         | 3 MB       | 7 MB       |
